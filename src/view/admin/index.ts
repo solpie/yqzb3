@@ -1,4 +1,6 @@
 import Vue = require('vue');
+Vue.use(require('vue-resource'));
+
 import VueRouter = require('vue-router');
 Vue.use(VueRouter);
 

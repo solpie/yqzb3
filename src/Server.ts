@@ -1,10 +1,11 @@
 import {PlayerInfo} from "./model/PlayerInfo";
 import {adminRouter} from "./router/AdminRouter";
 import {initDB} from "./model/DbInfo";
-import {ServerConf,_path} from "./Env";
+import {ServerConf, _path} from "./Env";
+import {dbRouter} from "./router/DbRouter";
 var colors = require('colors');
 
-var serverConf:any;
+var dataObj:any;
 /**
  * WebServer
  */
@@ -123,11 +124,13 @@ export class WebServer {
         var fs = require('fs');
         fs.readFile(_path('app/config.json'), (err:any, data:any)=> {
             if (err) throw err;
-            serverConf = JSON.parse(data);
-            console.log(serverConf);
+            dataObj = JSON.parse(data);
+            ServerConf.host = dataObj.host;
+            ServerConf.wsPort = dataObj.wsPort;
+            console.log(dataObj);
             this.initServer();
             if (callback)
-                callback(serverConf);
+                callback(dataObj);
         });
     }
 
@@ -167,6 +170,7 @@ export class WebServer {
         });
 
         app.use('/admin', adminRouter);
+        app.use('/db', dbRouter);
 
 
         app.listen(80, () => {
@@ -175,4 +179,5 @@ export class WebServer {
         });
     }
 }
+export var serverConf = ServerConf;
 export var webServer = new WebServer();

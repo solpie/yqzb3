@@ -1,10 +1,6 @@
 import Component from "vue-class-component";
 import {Modal} from "../modal/modal";
 import {storageKey} from "../../constants";
-
-export interface Player extends vuejs.Vue {
-}
-
 @Component({
     template: require('./player.html'),
     components: {Modal},
@@ -21,7 +17,7 @@ export interface Player extends vuejs.Vue {
         }
     }
 })
-export class Player {
+export class Player extends Vue{
     year:number;
     month:number;
     date:number;
@@ -31,6 +27,9 @@ export class Player {
 
     ready() {
         console.log('player Ready!!');
+        this.$http.post('/db/player', {all: true}).then(function (res) {
+            console.log(JSON.stringify(res));
+        });
     }
 
     data():any {
