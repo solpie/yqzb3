@@ -5,7 +5,6 @@
 /// <reference path="router/AdminRouter.ts" />
 import {PlayerInfo} from "./model/PlayerInfo";
 import {adminRouter} from "./router/AdminRouter";
-
 var colors = require('colors');
 
 let isDev:Boolean;

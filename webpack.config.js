@@ -38,7 +38,9 @@ module.exports = {
             {
                 context: 'src/',
                 from: 'view/**/*.ejs'
-            }
+            },
+            {context: 'src/', from: 'static/**/*'},
+            {from: 'src/reload.html'}
         ])
     ]
 };
