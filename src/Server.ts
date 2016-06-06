@@ -146,8 +146,6 @@ export class WebServer {
 
 
         app.use(express.static(_path("./app/static")));//
-        app.use('/admin', adminRouter);
-
         // var urlencodedParser = bodyParser.urlencoded({
         //     extended: false
         //     , limit: '55mb'
@@ -171,8 +169,10 @@ export class WebServer {
         });
 
         app.get('/', function (req:any, res:any) {
-            res.render('index');
+            res.redirect('/admin');
         });
+
+        app.use('/admin', adminRouter);
 
 
         app.listen(80, () => {
