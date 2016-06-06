@@ -40,6 +40,7 @@ module.exports = {
                 from: 'view/**/*.ejs'
             },
             {context: '.', from: 'static/**/*'},
+            {context: '.', from: 'db/**/*'},
             {from: 'src/reload.html'}
         ])
     ]

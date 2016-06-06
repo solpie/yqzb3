@@ -1,20 +1,10 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
-/// <reference path="model/PlayerInfo.ts" />
-/// <reference path="router/AdminRouter.ts" />
 import {PlayerInfo} from "./model/PlayerInfo";
 import {adminRouter} from "./router/AdminRouter";
+import {initDB} from "./model/DbInfo";
+import {ServerConf,_path} from "./Env";
 var colors = require('colors');
 
-let isDev:Boolean;
-const Node_path = require("path");
 var serverConf:any;
-let _path = function (path:string) {
-    if (!isDev)
-        return Node_path.join('resources', path);
-    return path;
-};
 /**
  * WebServer
  */
@@ -109,6 +99,11 @@ export class WebServer {
         console.log("localhost:", localhost);
         this.initEnv(callback);
         this.initGlobalFunc();
+        this.initNedb()
+    }
+
+    initNedb() {
+        initDB()
     }
 
     initGlobalFunc() {
@@ -122,8 +117,8 @@ export class WebServer {
 
     initEnv(callback:any) {
         var process = require("process");
-        isDev = process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath);
-        console.log(process.execPath, isDev);
+        ServerConf.isDev = process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath);
+        console.log(process.execPath, ServerConf.isDev);
 
         var fs = require('fs');
         fs.readFile(_path('app/config.json'), (err:any, data:any)=> {
