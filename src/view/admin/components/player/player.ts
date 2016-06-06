@@ -5,11 +5,11 @@ import Vue = require('vue');
 
 @Component({
     template: require('./player.html'),
-    components: {Modal},
+    components: { Modal },
     route: {
-        data(transition:vuejs.Transition<any, any, any, any, any>) {
+        data(transition: vuejs.Transition<any, any, any, any, any>) {
             const date = new Date();
-            const messages:any[] = JSON.parse(localStorage.getItem(storageKey)) || []
+            const messages: any[] = JSON.parse(localStorage.getItem(storageKey)) || []
             transition.next({
                 year: date.getFullYear(),
                 month: date.getMonth() + 1,
@@ -19,37 +19,38 @@ import Vue = require('vue');
         }
     }
 })
-export class Player extends Vue{
-    year:number;
-    month:number;
-    date:number;
-    message:string;
-    messages:{ date:string; text:string }[];
-    isOpen:boolean;
+export class Player extends Vue {
+    year: number;
+    month: number;
+    date: number;
+    message: string;
+    messages: { date: string; text: string }[];
+    isOpen: boolean;
 
     ready() {
         console.log('player Ready!!');
-        this.$http.post('/db/player', {all: true}).then(function (res) {
+        this.$http.post('/db/player', { all: true }).then(function (res) {
             console.log(JSON.stringify(res));
         });
     }
 
-    data():any {
+    data(): any {
         return {
             year: 2015,
             month: 12,
             date: 4,
             message: "",
             messages: [],
+            playerArr: [1, 2, 3, 4, 5, 6],
             isOpen: false
         };
     }
 
-    get today():string {
+    get today(): string {
         return `${this.year}/${this.month}/${this.date}`;
     }
 
-    get isToday():boolean {
+    get isToday(): boolean {
         return this.month === 12 && this.date === 4;
     }
 
@@ -78,7 +79,7 @@ export class Player extends Vue{
         }, 0);
     }
 
-    remove(item:{ date:string, text:string }) {
+    remove(item: { date: string, text: string }) {
         this.messages.$remove(item);
         this.store();
     }
