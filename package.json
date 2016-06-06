@@ -1,0 +1,42 @@
+{
+  "name": "YuanQiTV2",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --progress --profile --colors --disZplay-error-details --display-cached --config webpack.config.view.js",
+    "watch": "webpack --watch --progress --profile --colors --display-error-details --display-cached",
+    "pack": "npm run electron-packager&&npm run copy-node_modules&&explorer YuanQiTV2-win32-x64",
+    "electron": "D:/projects/yqzb2/node_modules/electron-prebuilt/dist/electron.exe app --enable-logging",
+    "electron-packager": "electron-packager app YuanQiTV2 --ignore=node_modules/electron-* --platform=win32 --arch=x64 --overwrite",
+    "copy-node_modules": "echo D|xcopy node_modules YuanQiTV2-win32-x64\\resources\\node_modules /EXCLUDE:node_modules.ignore /e /y",
+    "copy-app": "node script/copy_app.js",
+    "dtsm": "dtsm init",
+    "dl": "npm install electron-prebuilt -g"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "colors": "^1.1.2",
+    "ejs": "^2.4.2",
+    "express": "^4.13.4",
+    "morgan": "^1.7.0",
+    "msgpack-lite": "^0.1.20",
+    "nedb": "^1.8.0",
+    "vue": "^1.0.10",
+    "vue-class-component": "^3.2.0",
+    "vue-router": "^0.7.7"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.0",
+    "copy-webpack-plugin": "^3.0.1",
+    "html-loader": "^0.3.0",
+    "ts-loader": "^0.7.1",
+    "source-map-loader": "^0.1.5",
+    "typescript": "^1.8.9",
+    "webpack": "^1.12.6",
+    "webpack-node-externals": "^1.2.0"
+  }
+}
