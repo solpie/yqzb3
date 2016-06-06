@@ -1,18 +1,20 @@
-"use strict"
-import {App} from './app';
-import {Home} from './components/home/home';
-import {Links} from './components/links/links';
-import {Settings} from './components/settings/settings';
-
-export function configureRouter(router: vuejs.Router<App>) {
+import {App} from "./app";
+import {Home} from "./components/home/home";
+import {Settings} from "./components/settings/settings";
+import {Player} from "./components/player/player";
+export function configureRouter(router:vuejs.Router<App>) {
     router.map({
         '/': {
             component: Home,
             name: 'home'
         },
-        '/links': {
-            component: Links,
-            name: 'links'
+        '/player': {
+            component: Player,
+            name: 'player'
+        },
+        '/rank': {
+            component: Player,
+            name: 'rank'
         },
         '/settings': {
             component: Settings,

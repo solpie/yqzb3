@@ -9,14 +9,21 @@ module.exports = {
         path: './app',
         filename: "[name].js"
     },
+    devtool: 'source-map',
     module: {
+        preLoaders: [
+            {
+                test: /\.js$/,
+                loader: 'source-map-loader'
+            }
+        ],
         loaders: [
             {test: /\.tsx?$/, loader: "ts-loader"},
             {test: /\.html$/, loader: "html-loader?minimize=false"}
         ]
     },
     resolve: {
-        extensions: ["", ".ts", ".tsx", ".js"]
+        extensions: ["", ".ts", ".tsx",".html", ".js"]
     },
     plugins: [
         new webpack.DefinePlugin({
