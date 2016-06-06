@@ -22,13 +22,16 @@ export interface Player extends vuejs.Vue {
     }
 })
 export class Player {
-
     year:number;
     month:number;
     date:number;
     message:string;
     messages:{ date:string; text:string }[];
     isOpen:boolean;
+
+    ready() {
+        console.log('player Ready!!');
+    }
 
     data():any {
         return {

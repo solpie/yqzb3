@@ -33,7 +33,6 @@ function getIPAddress() {
     //     }
     // }
 
-
     var os = require('os');
     var child_proc = require('child_process');
     var ls:any;

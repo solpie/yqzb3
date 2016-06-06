@@ -7,9 +7,9 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --progress --profile --colors --disZplay-error-details --display-cached --config webpack.config.view.js",
+    "watch": "npm run server&npm run view",
     "view": "webpack --watch --progress --profile --colors --disZplay-error-details --display-cached --config webpack.config.view.js",
-    "watch": "webpack --watch --progress --profile --colors --display-error-details --display-cached",
+    "server": "webpack --watch --progress --profile --colors --display-error-details --display-cached --config webpack.config.server.js",
     "pack": "npm run electron-packager&&npm run copy-node_modules&&explorer YuanQiTV2-win32-x64",
     "electron": "D:/projects/yqzb2/node_modules/electron-prebuilt/dist/electron.exe app --enable-logging",
     "electron-packager": "electron-packager app YuanQiTV2 --ignore=node_modules/electron-* --platform=win32 --arch=x64 --overwrite",
@@ -21,6 +21,7 @@
   "dependencies": {
     "body-parser": "^1.15.1",
     "colors": "^1.1.2",
+    "cropper": "^2.3.1",
     "ejs": "^2.4.2",
     "express": "^4.13.4",
     "morgan": "^1.7.0",
