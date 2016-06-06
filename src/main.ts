@@ -1,6 +1,3 @@
-// var electron = require('electron');
-// var BrowserWindow = electron.BrowserWindow;
-// var app = electron.app;
 const {app, BrowserWindow,ipcMain} = require('electron');
 var win:any;
 function onReady() {

@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --progress --profile --colors --disZplay-error-details --display-cached --config webpack.config.view.js",
+    "view": "webpack --watch --progress --profile --colors --disZplay-error-details --display-cached --config webpack.config.view.js",
     "watch": "webpack --watch --progress --profile --colors --display-error-details --display-cached",
     "pack": "npm run electron-packager&&npm run copy-node_modules&&explorer YuanQiTV2-win32-x64",
     "electron": "D:/projects/yqzb2/node_modules/electron-prebuilt/dist/electron.exe app --enable-logging",

@@ -3,7 +3,7 @@ var webpack = require('webpack')
 
 module.exports = {
     entry: {
-        "static/js/view/admin/index": "./src/view/admin/index.ts"
+        "static/admin/index": "./src/view/admin/index.ts"
     },
     output: {
         path: './app',
