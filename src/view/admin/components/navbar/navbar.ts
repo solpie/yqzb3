@@ -1,7 +1,6 @@
 "use strict"
 import Component from 'vue-class-component';
-
-export interface Navbar extends vuejs.Vue { }
+import Vue = require('vue');
 
 @Component({
     template: require('./navbar.html'),
@@ -12,7 +11,7 @@ export interface Navbar extends vuejs.Vue { }
         }
     }
 })
-export class Navbar {
+export class Navbar extends Vue{
 
     public active: string
 

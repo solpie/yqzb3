@@ -1,6 +1,8 @@
 import Component from "vue-class-component";
 import {Modal} from "../modal/modal";
 import {storageKey} from "../../constants";
+import Vue = require('vue');
+
 @Component({
     template: require('./player.html'),
     components: {Modal},
