@@ -1,11 +1,13 @@
 import Component from "vue-class-component";
 import {Modal} from "../modal/modal";
 import {storageKey} from "../../constants";
+import {Search} from "./search";
+import {Profile} from "./profile";
 import Vue = require('vue');
 
 @Component({
     template: require('./player.html'),
-    components: {Modal},
+    components: {Modal, Search, Profile},
     route: {
         data(transition:vuejs.Transition<any, any, any, any, any>) {
             const date = new Date();
@@ -26,16 +28,38 @@ export class Player extends Vue {
     message:string;
     messages:{ date:string; text:string }[];
     playerArr:{}[];
+    countPage:number[];
     isOpen:boolean;
 
     ready() {
+        // ($('#modal1')as any).leanModal({
+        //         dismissible: true, // Modal can be dismissed by clicking outside of the modal
+        //         opacity: .5, // Opacity of modal background
+        //         in_duration: 300, // Transition in duration
+        //         out_duration: 200, // Transition out duration
+        //         ready: function () {
+        //             alert('Ready');
+        //         }, // Callback for Modal open
+        //         complete: function () {
+        //             alert('Closed');
+        //         } // Callback for Modal close
+        //     }
+        // );
         console.log('player Ready!!');
         this.$http.post('/db/player', {all: true}).then((res)=> {
             console.log(JSON.stringify(res));
             // var a:Array<any> = [];
+            var pageCount = 16;
+            var count = 0;
+            this.countPage = [1];
             for (var playerId in res.data.PlayerMap) {
+                count++;
+                if (count === pageCount) {
+                    this.countPage.push(this.countPage.length + 1)
+                }
                 this.playerArr.push(res.data.PlayerMap[playerId]);
             }
+
         });
     }
 
@@ -47,6 +71,7 @@ export class Player extends Vue {
             message: "",
             messages: [],
             playerArr: [],
+            countPage: [1],
             isOpen: false
         };
     }
@@ -60,6 +85,7 @@ export class Player extends Vue {
     }
 
     onAddPlayer() {
+        ($('#modal-player') as any).openModal();
         this.message = "添加球员";
         this.isOpen = true;
     }

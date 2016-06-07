@@ -1,5 +1,4 @@
-"use strict"
-import Component from 'vue-class-component';
+import Component from "vue-class-component";
 import Vue = require('vue');
 
 @Component({
@@ -11,8 +10,7 @@ import Vue = require('vue');
         }
     }
 })
-export class Navbar extends Vue{
-
-    public active: string
+export class Navbar extends Vue {
+    public active:string
 
 }
