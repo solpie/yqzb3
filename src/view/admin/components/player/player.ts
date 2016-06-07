@@ -4,7 +4,6 @@ import {storageKey} from "../../constants";
 import {Search} from "./search";
 import {Profile} from "./profile";
 import {VueEx} from "../../../VueEx";
-
 @Component({
     template: require('./player.html'),
     components: {Modal, Search, Profile},
@@ -63,9 +62,12 @@ export class Player extends VueEx {
         });
     }
 
-    onEdit(playerId,event):any {
+    showFile(files) {
+       
+    }
+
+    onEdit(playerId, event):any {
         // var playerId = this.getAttr(e, 'value');
-        event.preventDefault();
         event.stopPropagation();
         console.log("edit player", playerId);
     }

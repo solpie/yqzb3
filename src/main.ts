@@ -1,7 +1,6 @@
 const {app, BrowserWindow,ipcMain} = require('electron');
 var win:any;
 function onReady() {
-    // new WebServer(openWin);
     openWin();
 }
 function openWin(serverConf?:any) {
