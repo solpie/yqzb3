@@ -18,7 +18,7 @@ declare namespace vuejs {
     }
 
     interface HttpResponse {
-        data:Object;
+        data:any;
         ok:boolean;
         status:number;
         statusText:string;

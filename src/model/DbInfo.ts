@@ -7,7 +7,7 @@
 // }
 /////////////////
 import {PlayerInfo} from "./PlayerInfo";
-var db:any;
+export var db:any;
 function dbPlayerInfo() {
     return db.player.dataStore;
 }

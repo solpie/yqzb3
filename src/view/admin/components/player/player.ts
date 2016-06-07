@@ -5,11 +5,11 @@ import Vue = require('vue');
 
 @Component({
     template: require('./player.html'),
-    components: { Modal },
+    components: {Modal},
     route: {
-        data(transition: vuejs.Transition<any, any, any, any, any>) {
+        data(transition:vuejs.Transition<any, any, any, any, any>) {
             const date = new Date();
-            const messages: any[] = JSON.parse(localStorage.getItem(storageKey)) || []
+            const messages:any[] = JSON.parse(localStorage.getItem(storageKey)) || []
             transition.next({
                 year: date.getFullYear(),
                 month: date.getMonth() + 1,
@@ -20,38 +20,48 @@ import Vue = require('vue');
     }
 })
 export class Player extends Vue {
-    year: number;
-    month: number;
-    date: number;
-    message: string;
-    messages: { date: string; text: string }[];
-    isOpen: boolean;
+    year:number;
+    month:number;
+    date:number;
+    message:string;
+    messages:{ date:string; text:string }[];
+    playerArr:{}[];
+    isOpen:boolean;
 
     ready() {
         console.log('player Ready!!');
-        this.$http.post('/db/player', { all: true }).then(function (res) {
+        this.$http.post('/db/player', {all: true}).then((res)=> {
             console.log(JSON.stringify(res));
+            // var a:Array<any> = [];
+            for (var playerId in res.data.PlayerMap) {
+                this.playerArr.push(res.data.PlayerMap[playerId]);
+            }
         });
     }
 
-    data(): any {
+    data():any {
         return {
             year: 2015,
             month: 12,
             date: 4,
             message: "",
             messages: [],
-            playerArr: [1, 2, 3, 4, 5, 6],
+            playerArr: [],
             isOpen: false
         };
     }
 
-    get today(): string {
+    get today():string {
         return `${this.year}/${this.month}/${this.date}`;
     }
 
-    get isToday(): boolean {
+    get isToday():boolean {
         return this.month === 12 && this.date === 4;
+    }
+
+    onAddPlayer() {
+        this.message = "添加球员";
+        this.isOpen = true;
     }
 
     open() {
@@ -79,7 +89,7 @@ export class Player extends Vue {
         }, 0);
     }
 
-    remove(item: { date: string, text: string }) {
+    remove(item:{ date:string, text:string }) {
         this.messages.$remove(item);
         this.store();
     }

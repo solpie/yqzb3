@@ -143,6 +143,8 @@ export class WebServer {
 
 
         app.use(express.static(_path("./app/static")));//
+        // app.use('/static', express.static(_path("./app/static")));//
+        app.use(express.static(_path("./app/db")));//
         // var urlencodedParser = bodyParser.urlencoded({
         //     extended: false
         //     , limit: '55mb'

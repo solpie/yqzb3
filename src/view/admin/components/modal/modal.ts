@@ -1,8 +1,5 @@
-"use strict"
+import Vue = require('vue');
 import Component from "vue-class-component";
-
-export interface Modal extends vuejs.Vue {
-}
 
 @Component({
     template: require('./modal.html'),
@@ -20,7 +17,7 @@ export interface Modal extends vuejs.Vue {
         isOpen: 'onChange'
     }
 })
-export class Modal {
+export class Modal extends Vue{
 
     isOpen:boolean;
 
@@ -31,7 +28,7 @@ export class Modal {
     };
 
     onChange(value:boolean) {
-        ($(this.$els.modal) as any).modal(value ? 'show' : 'hide');
+        // ($(this.$els.modal) as any).modal(value ? 'show' : 'hide');
     }
 
     close() {
