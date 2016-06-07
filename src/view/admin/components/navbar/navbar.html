@@ -1,18 +1,22 @@
-<nav class="navbar navbar-light bg-faded">
-  <a v-link="{name: 'home'}" class="navbar-brand">首页</a>
-  <ul class="nav navbar-nav">
-    <li class="nav-item" :class="{active: active === 'player'}">
-      <a v-link="{name: 'player'}" class="nav-link">球员管理</a>
-    </li>
-  </ul>
-  <ul class="nav navbar-nav">
-    <li class="nav-item" :class="{active: active === 'player'}">
-      <a v-link="{name: 'player'}" class="nav-link">赛程管理</a>
-    </li>
-  </ul>
-  <ul class="nav navbar-nav pull-right">
-    <li class="nav-item" :class="{active: active === 'settings'}">
-      <a v-link="{name: 'settings'}" class="nav-link">settings</a>
-    </li>
-  </ul>
-</nav>
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+            <ul class="left hide-on-med-and-down">
+                <li :class="{active: active === ''}">
+                    <a v-link="{name: 'home'}">Home</a>
+                </li>
+                <li :class="{active: active === 'player'}">
+                    <a v-link="{name: 'player'}">球员管理</a>
+                </li>
+                <li :class="{active: active === 'player'}">
+                    <a v-link="{name: 'player'}">赛程管理</a>
+                </li>
+            </ul>
+            <ul class="right hide-on-med-and-down">
+                <li :class="{active: active === 'settings'}">
+                    <a v-link="{name: 'settings'}">settings</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

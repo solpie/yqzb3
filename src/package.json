@@ -1,0 +1,10 @@
+{
+  "name": "YuanQiTV2",
+  "version": "1.0.0",
+  "description": "YuanQiTV2",
+  "main": "main.js",
+  "server": {
+    "host1": "localhost",
+    "wsPort": "8085"
+  }
+}

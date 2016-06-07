@@ -1,48 +1,60 @@
 <div>
-  <div class="jumbotron">
-    <hr class="m-y-md">
-    <p><span v-if="!isToday">{{today}}</span>........</p>
-    <p class="lead">
-      <button class="btn btn-primary btn-lg" @click="open">添加球员</button>
-    </p>
-  </div>
-  <div class="row" v-for="player in playerArr" style="margin-right: -5px;margin-left: -5px;display: inline-block;">
-    <div class="col-sm-6 col-md-4" style="width:200px">
-      <div class="thumbnail">
-        <img src="/img/180x76.svg" alt="">
-        <div class="caption">
-          <h4>PlayerName</h4>
-          <p>id:10086 score:2000</p>
-        </div>
-      </div>
+    <div class="jumbotron">
+        <p><span v-if="!isToday">{{today}}</span>........</p>
+        <p class="lead">
+            <button class="btn btn-primary btn-lg" @click="open">添加球员</button>
+        </p>
+        <hr class="m-y-md">
     </div>
-  </div>
-  <h2>最近添加</h2>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>日時</th>
-        <th>メッセージ</th>
-        <th>削除</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="message in messages">
-        <td v-text="message.date"></td>
-        <td v-text="message.text"></td>
-        <td><button type="button" class="btn btn-secondary btn-sm" @click="remove(message)">削除する</button></td>
-      </tr>
-    </tbody>
-  </table>
 
-  <modal title="メッセージを書く" :is-open="isOpen">
-    <div class="form-group" slot="body">
-      <label for="message">メッセージを書く</label>
-      <input type="text" class="form-control" name="message" id="message" v-model="message" placeholder="ここにメッセージを書く">
+    <div class="row" v-for="player in playerArr" style="display: inline-block;margin: 0">
+        <div class="col s12">
+            <div class="card small" style="width:400px;height: 400px">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" src="/img/180x76.svg">
+                </div>
+                <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4">Curry<i class="material-icons right">more_vert</i></span>
+                    <p><a href="#">历史战绩</a></p>
+                </div>
+                <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">Card Title<i
+                        class="material-icons right">close</i></span>
+                    <p>Here is some more information about this product that is only revealed once clicked on.</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div slot="footer">
-      <button class="btn btn-secondary" @click="close">閉じる</button>
-      <button class="btn btn-primary" @click="save">保存する</button>
-    </div>
-  </modal>
+
+    <h2>最近添加</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>日時</th>
+            <th>メッセージ</th>
+            <th>削除</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="message in messages">
+            <td v-text="message.date"></td>
+            <td v-text="message.text"></td>
+            <td>
+                <button type="button" class="btn btn-secondary btn-sm" @click="remove(message)">削除する</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <modal title="メッセージを書く" :is-open="isOpen">
+        <div class="form-group" slot="body">
+            <label for="message">メッセージを書く</label>
+            <input type="text" class="form-control" name="message" id="message" v-model="message"
+                   placeholder="ここにメッセージを書く">
+        </div>
+        <div slot="footer">
+            <button class="btn btn-secondary" @click="close">閉じる</button>
+            <button class="btn btn-primary" @click="save">保存する</button>
+        </div>
+    </modal>
 </div>
