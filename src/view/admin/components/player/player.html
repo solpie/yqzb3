@@ -71,13 +71,12 @@
                             <img class="activator" src="{{player.avatar}}">
                         </div>
                         <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">{{player.name}} <i
-                                    class="material-icons right">more_vert</i></span>
+                            <span class="card-title activator grey-text text-darken-4">{{player.name}}
+                                <i class="material-icons right" @click="onEdit(player.id,$event)">mode_edit</i></span>
                             id:{{player.id}}
                         </div>
                         <div class="card-reveal">
-                <span class="card-title grey-text text-darken-4">战绩<i
-                        class="material-icons right">close</i></span>
+                            <span class="card-title grey-text text-darken-4">战绩<i class="material-icons right">close</i></span>
                             <p>Here is some more information about this product that is only revealed once clicked
                                 on.</p>
                         </div>
@@ -94,6 +93,7 @@
         <Profile></Profile>
     </div>
     <div class="modal-footer">
-        <a href="/admin/#!/player" class="modal-action modal-close waves-effect waves-green btn-flat "><i class="material-icons">done</i></a>
+        <a href="/admin/#!/player" class="modal-action modal-close waves-effect waves-green btn-flat "><i
+                class="material-icons">done</i></a>
     </div>
 </div>

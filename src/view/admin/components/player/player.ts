@@ -3,7 +3,7 @@ import {Modal} from "../modal/modal";
 import {storageKey} from "../../constants";
 import {Search} from "./search";
 import {Profile} from "./profile";
-import Vue = require('vue');
+import {VueEx} from "../../../VueEx";
 
 @Component({
     template: require('./player.html'),
@@ -21,7 +21,7 @@ import Vue = require('vue');
         }
     }
 })
-export class Player extends Vue {
+export class Player extends VueEx {
     year:number;
     month:number;
     date:number;
@@ -61,6 +61,13 @@ export class Player extends Vue {
             }
 
         });
+    }
+
+    onEdit(playerId,event):any {
+        // var playerId = this.getAttr(e, 'value');
+        event.preventDefault();
+        event.stopPropagation();
+        console.log("edit player", playerId);
     }
 
     data():any {
