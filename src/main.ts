@@ -3,9 +3,11 @@ var win:any;
 function onReady() {
     openWin();
 }
+
 function openWin(serverConf?:any) {
     win = new BrowserWindow({
-        width: 500, height: 540,
+        width: 950, height: 540,
+        // width: 500, height: 540,
         resizable: false,
         frame: true,
         autoHideMenuBar: false,

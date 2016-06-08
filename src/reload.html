@@ -3,16 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>YuanQiTV2</title>
+
+    <style>
+        /* fallback */
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Material Icons'), local('MaterialIcons-Regular'), url(static/font/material-design-icons/Material-Design-Icons.woff2) format('woff2');
+        }
+
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+    <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css" media="screen,projection"/>
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/materialize.min.js"></script>
     <style>
         body {
             margin: 0;
             -webkit-app-region: drag;
+            background: black;
+        }
+
+        #dashboard {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 2;
+            color: #0acbfc;
+            width: 950px;
+        }
+
+        .console {
+            overflow-y: hidden;
+            border: hidden;
+            width: 100%;
+            height: 430px;
         }
     </style>
 </head>
 <body>
 <img src="file:///app/static/img/index.gif" style=" -webkit-app-region: no-drag;position: fixed;z-index: 1">
-<div style="position: fixed;left: 0;top: 0;z-index: 2;color: #0acbfc;">
+<div id="dashboard">
     YuanQiTV2
     <!-- All of the Node.js APIs are available in this renderer process. -->
     We are using node
@@ -26,16 +72,67 @@
     Electron
     <script>document.write(process.versions.electron)</script>
     .
-    <input type="button" value="player" onclick="onClkPlayer()">
+    <!--<input type="button" value="player" onclick="onClkPlayer()">-->
+    <!--<input type="button" value="watch" onclick="devWatch()">-->
+    <div class="row" style="margin: 0">
+        <div class="col" style="width: 500px">
+            <textarea class="console" id="consoleServer" style="opacity: .8" readonly></textarea>
+        </div>
+        <div class="col" style="width: 430px">
+            <textarea class="console" id="consoleView"  readonly></textarea>
+        </div>
+    </div>
+    <!--<a class="waves-effect waves-light btn">watch</a>-->
 </div>
 
 </body>
 <script>
+    var process = require('process');
+    var path = require('path');
+    console.log(process.getSystemMemoryInfo());
+    console.log(process.getProcessMemoryInfo());
+    var projectRoot = path.resolve(process.execPath, '../../../..');
+
+
     const {shell} = require('electron');
     function onClkPlayer() {
         shell.showItemInFolder('.');
 //        shell.showItemInFolder('./resources/db');
     }
+    const exec = require('child_process').exec;
+    const spawn = require('child_process').spawn;
+
+    var consoleView = document.getElementById('consoleView');
+    var consoleServer = document.getElementById('consoleServer');
+    function devWatch() {
+        const watchView = spawn('npm.cmd', ['run', 'view']);
+
+        function logLine(data) {
+            consoleView.value += `${data}\n`;
+            consoleView.scrollTop = consoleView.scrollHeight
+        }
+
+        watchView.stdout.on('data', logLine);
+
+        watchView.stderr.on('data', logLine);
+
+        watchView.on('close', logLine);
+
+        const watchServer = spawn('npm.cmd', ['run', 'server']);
+
+        function logServer(data) {
+            consoleServer.value += `${data}\n`;
+            consoleServer.scrollTop = consoleServer.scrollHeight
+        }
+
+        watchServer.stdout.on('data', logServer);
+
+        watchServer.stderr.on('data', logServer);
+
+        watchServer.on('close', logServer);
+//        shell.openItem('npm.cmd run view');
+    }
+    devWatch();
 
     const {remote} = require('electron');
     const {Menu, MenuItem} = remote;
@@ -69,7 +166,7 @@
 
     // You can also require other files to run in this process
     var config = require('./config.json');
-//    require('./Server.js');
+    //    require('./Server.js');
     var webServer = require('./Server.js');
     var serverConf = require('./Server.js');
     console.log(webServer);
