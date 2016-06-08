@@ -24,3 +24,28 @@ function formatSecond(sec, minStr = ":", secStr = "") {
         strSec = "0" + strSec;
     return strMin + minStr + strSec + secStr;
 }
+
+
+
+export function loadImg(path1, callback) {
+    var img = new Image();
+    img.onload = callback;
+    img.src = path1;
+}
+
+export function loadImgArr(pathArr, callback) {
+    var count = pathArr.length;
+
+    function onLoadImg() {
+        count--;
+        if (count === 0)
+            callback();
+    }
+
+    for (var i = 0; i < pathArr.length; i++) {
+        var p = pathArr[i];
+        var img = new Image();
+        img.onload = onLoadImg;
+        img.src = p;
+    }
+}

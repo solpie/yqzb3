@@ -10,8 +10,11 @@ var watchServer;
 var isWatch = false;
 var sender;
 function devWatch() {
-    if (isWatch)
+    if (isWatch) {
+        // watchServer.kill();
+        // watchView.kill();
         return;
+    }
     isWatch = true;
     function sendServer(data) {
         sender.send('logServer', data);
@@ -20,6 +23,7 @@ function devWatch() {
     function sendView(data) {
         sender.send('logView', data);
     }
+
     watchView = spawn('npm.cmd', ['run', 'view']);
 
     watchView.stdout.on('data', sendView);
@@ -47,8 +51,6 @@ function killWatch() {
 }
 
 function openWin(serverConf?:any) {
-
-
     ipcMain.on('open-devtool', (event:any, status:any) => {
         console.log(status);
         win.toggleDevTools({mode: 'detach'});

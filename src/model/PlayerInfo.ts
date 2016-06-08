@@ -113,7 +113,7 @@ export class PlayerInfo extends BaseInfo {
     }
 
     getStyleIcon() {
-        var path = '/img/panel/';
+        var path = '/img/panel/stage/';
         if (this.style() == 1) {
             path += 'feng.png'
         }

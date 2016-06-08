@@ -44,13 +44,14 @@
             left: 0;
             top: 0;
             z-index: 2;
-            /*color: #0acbfc;*/
             width: 950px;
         }
 
         .console {
-            overFlow-y: scroll;
-            /*overflow-y: hidden;*/
+            /*overFlow-y: scroll;*/
+
+            color: #0acbfc;
+            overflow-y: hidden;
             border: hidden;
             width: 100%;
             height: 430px;
@@ -106,40 +107,7 @@
 //        shell.showItemInFolder('./resources/db');
     }
     const exec = require('child_process').exec;
-    const spawn = require('child_process').spawn;
-    var consoleView = document.getElementById('consoleView');
-    var consoleServer = document.getElementById('consoleServer');
-    var ansi2html = require('ansi2html');
 
-    function logView(data) {
-        consoleView.innerHTML += ansi2html(`${data}<br>`);
-        consoleView.scrollTop = consoleView.scrollHeight
-    }
-    function logServer(data) {
-        consoleServer.innerHTML += ansi2html(`${data}<br>`);
-        consoleServer.scrollTop = consoleServer.scrollHeight
-    }
-    function devWatch() {
-        const watchView = spawn('npm.cmd', ['run', 'view']);
-
-
-        watchView.stdout.on('data', logView);
-
-        watchView.stderr.on('data', logView);
-
-        watchView.on('close', logView);
-
-        const watchServer = spawn('npm.cmd', ['run', 'server']);
-
-
-        watchServer.stdout.on('data', logServer);
-
-        watchServer.stderr.on('data', logServer);
-
-        watchServer.on('close', logServer);
-//        shell.openItem('npm.cmd run view');
-    }
-    //    devWatch();
 
     const {remote} = require('electron');
     const {Menu, MenuItem} = remote;
@@ -181,6 +149,17 @@
     console.log('%c Oh my heavens! ', 'background: #222; color: #bada55');
 
     ///start dev watch
+    var consoleView = document.getElementById('consoleView');
+    var consoleServer = document.getElementById('consoleServer');
+    var ansi2html = require('ansi2html');
+    function logView(data) {
+        consoleView.innerHTML += ansi2html(`${data}<br>`).replace('->', '<br>');
+        consoleView.scrollTop = consoleView.scrollHeight
+    }
+    function logServer(data) {
+        consoleServer.innerHTML += ansi2html(`${data}<br>`).replace('->', '<br>');
+        consoleServer.scrollTop = consoleServer.scrollHeight
+    }
     ipcRenderer.send('devWatch');
     ipcRenderer.on('logView', function (evt, arg) {
         logView(arg);
@@ -188,6 +167,5 @@
     ipcRenderer.on('logServer', function (evt, arg) {
         logServer(arg);
     });
-
 </script>
 </html>
