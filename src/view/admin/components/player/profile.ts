@@ -45,6 +45,7 @@ declare var Cropper;
 export class Profile extends VueEx {
     imagePath:string;
     playerInfo:PlayerInfo;
+    playerImgData:string;
     stage:any;
     bluePlayerCard:StagePlayerCard;
     redPlayerCard:StagePlayerCard;
@@ -52,6 +53,11 @@ export class Profile extends VueEx {
     eloScore:number;
     name:number;
     style:number;
+
+    ready() {
+        super.ready();
+        this.$parentMethods.onSubmit('sss')
+    }
 
     showFile(e) {
         var fr = new FileReader();

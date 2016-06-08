@@ -1,12 +1,12 @@
 import Component from "vue-class-component";
-import {Modal} from "../modal/modal";
+// import {Modal} from "../modal/modal";
 import {storageKey} from "../../constants";
 import {Search} from "./search";
 import {Profile} from "./profile";
 import {VueEx} from "../../../VueEx";
 @Component({
     template: require('./player.html'),
-    components: {Modal, Search, Profile},
+    components: {Search, Profile},
     route: {
         data(transition:vuejs.Transition<any, any, any, any, any>) {
             const date = new Date();
@@ -58,12 +58,15 @@ export class Player extends VueEx {
                 }
                 this.playerArr.push(res.data.PlayerMap[playerId]);
             }
-
         });
     }
 
     showFile(files) {
-       
+
+    }
+
+    onSubmit(msg) {
+        console.log('onSubmit',msg)
     }
 
     onEdit(playerId, event):any {
