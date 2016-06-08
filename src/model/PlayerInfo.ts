@@ -112,18 +112,18 @@ export class PlayerInfo extends BaseInfo {
         return (this.winpercent() * 100).toFixed(1) + "%";
     }
 
-    getStyleIcon() {
+    static getStyleIcon(style:number) {
         var path = '/img/panel/stage/';
-        if (this.style() == 1) {
+        if (style === 1) {
             path += 'feng.png'
         }
-        else if (this.style() == 2) {
+        else if (style == 2) {
             path += 'huo.png'
         }
-        else if (this.style() == 3) {
+        else if (style === 3) {
             path += 'shan.png'
         }
-        else if (this.style() == 4) {
+        else if (style === 4) {
             path += 'lin.png'
         }
         return path

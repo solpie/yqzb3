@@ -1,6 +1,6 @@
 import Component from "vue-class-component";
 import {VueEx} from "../../../VueEx";
-import {getStagePlayerCard} from "../../../panel/PlayerRender";
+import {StagePlayerCard} from "../../../panel/PlayerRender";
 import {PlayerInfo} from "../../../../model/PlayerInfo";
 declare var Cropper;
 
@@ -46,10 +46,13 @@ export class Profile extends VueEx {
     imagePath:string;
     playerInfo:PlayerInfo;
     stage:any;
+    bluePlayerCard:StagePlayerCard;
+    redPlayerCard:StagePlayerCard;
     //props
     eloScore:number;
     name:number;
     style:number;
+
     showFile(e) {
         var fr = new FileReader();
         var image = document.getElementById('image');
@@ -81,13 +84,13 @@ export class Profile extends VueEx {
 
     onUpdateCropPreview(cropData:any) {
         var scale = cropData.width / 180;
-        // leftAvatarBmp.x = -cropData.x / scale;
-        // leftAvatarBmp.y = -cropData.y / scale;
-        // leftAvatarBmp.scaleX = leftAvatarBmp.scaleY = 1 / scale;
-        //
-        // rightAvatarBmp.x = -cropData.x / scale;
-        // rightAvatarBmp.y = -cropData.y / scale;
-        // rightAvatarBmp.scaleX = rightAvatarBmp.scaleY = 1 / scale;
+        this.bluePlayerCard.avatarBmp.x = -cropData.x / scale;
+        this.bluePlayerCard.avatarBmp.y = -cropData.y / scale;
+        this.bluePlayerCard.avatarBmp.scaleX = this.bluePlayerCard.avatarBmp.scaleY = 1 / scale;
+
+        this.redPlayerCard.avatarBmp.x = -cropData.x / scale;
+        this.redPlayerCard.avatarBmp.y = -cropData.y / scale;
+        this.redPlayerCard.avatarBmp.scaleX = this.redPlayerCard.avatarBmp.scaleY = 1 / scale;
     }
 
     initCanvas(imagePath, scale) {
@@ -109,10 +112,13 @@ export class Profile extends VueEx {
         playerInfo.style(this.style);
         playerInfo.backNumber = 30;
         this.playerInfo = playerInfo;
-        stage.addChild(getStagePlayerCard(playerInfo, scale));
-        var rightAvatarCtn = getStagePlayerCard(playerInfo, scale, false);
-        rightAvatarCtn.x = 250;
-        stage.addChild(rightAvatarCtn);
+        var bluePlayerCard = new StagePlayerCard(playerInfo, scale);
+        this.bluePlayerCard = bluePlayerCard;
+        var redPlayerCard = new StagePlayerCard(playerInfo, scale, false);
+        this.redPlayerCard = redPlayerCard;
+        stage.addChild(bluePlayerCard);
+        redPlayerCard.x = 250;
+        stage.addChild(redPlayerCard);
         return stage;
     }
 }
