@@ -4,34 +4,34 @@
     <meta charset="UTF-8">
     <title>YuanQiTV2</title>
 
-    <style>
-        /* fallback */
-        @font-face {
-            font-family: 'Material Icons';
-            font-style: normal;
-            font-weight: 400;
-            src: local('Material Icons'), local('MaterialIcons-Regular'), url(static/font/material-design-icons/Material-Design-Icons.woff2) format('woff2');
-        }
+    <!--<style>-->
+        <!--/* fallback */-->
+        <!--@font-face {-->
+            <!--font-family: 'Material Icons';-->
+            <!--font-style: normal;-->
+            <!--font-weight: 400;-->
+            <!--src: local('Material Icons'), local('MaterialIcons-Regular'), url(static/font/material-design-icons/Material-Design-Icons.woff2) format('woff2');-->
+        <!--}-->
 
-        .material-icons {
-            font-family: 'Material Icons';
-            font-weight: normal;
-            font-style: normal;
-            font-size: 24px;
-            line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
-            display: inline-block;
-            white-space: nowrap;
-            word-wrap: normal;
-            direction: ltr;
-            -webkit-font-feature-settings: 'liga';
-            -webkit-font-smoothing: antialiased;
-        }
-    </style>
+        <!--.material-icons {-->
+            <!--font-family: 'Material Icons';-->
+            <!--font-weight: normal;-->
+            <!--font-style: normal;-->
+            <!--font-size: 24px;-->
+            <!--line-height: 1;-->
+            <!--letter-spacing: normal;-->
+            <!--text-transform: none;-->
+            <!--display: inline-block;-->
+            <!--white-space: nowrap;-->
+            <!--word-wrap: normal;-->
+            <!--direction: ltr;-->
+            <!-- -webkit-font-feature-settings: 'liga';-->
+            <!-- -webkit-font-smoothing: antialiased;-->
+        <!--}-->
+    <!--</style>-->
     <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css" media="screen,projection"/>
-    <script src="static/js/jquery.min.js"></script>
-    <script src="static/js/materialize.min.js"></script>
+    <!--<script src="static/js/jquery.min.js"></script>-->
+    <!--<script src="static/js/materialize.min.js"></script>-->
     <style>
         body {
             margin: 0;
@@ -76,10 +76,12 @@
     <!--<input type="button" value="watch" onclick="devWatch()">-->
     <div class="row" style="margin: 0">
         <div class="col" style="width: 500px">
-            <textarea class="console" id="consoleServer" style="opacity: .8" readonly></textarea>
+            <div id="consoleServer" style="opacity: .8"></div>
+            <!--<textarea class="console" id="consoleServer" style="opacity: .8" readonly></textarea>-->
         </div>
         <div class="col" style="width: 430px">
-            <textarea class="console" id="consoleView"  readonly></textarea>
+            <div id="consoleView"></div>
+            <!--<textarea class="console" id="consoleView" readonly></textarea>-->
         </div>
     </div>
     <!--<a class="waves-effect waves-light btn">watch</a>-->
@@ -104,11 +106,12 @@
 
     var consoleView = document.getElementById('consoleView');
     var consoleServer = document.getElementById('consoleServer');
+    var ansi2html = require('ansi2html');
     function devWatch() {
         const watchView = spawn('npm.cmd', ['run', 'view']);
 
         function logLine(data) {
-            consoleView.value += `${data}\n`;
+            consoleView.innerHTML  += ansi2html(`${data}<br>`);
             consoleView.scrollTop = consoleView.scrollHeight
         }
 
@@ -121,7 +124,7 @@
         const watchServer = spawn('npm.cmd', ['run', 'server']);
 
         function logServer(data) {
-            consoleServer.value += `${data}\n`;
+            consoleServer.innerHTML  += ansi2html(`${data}<br>`);
             consoleServer.scrollTop = consoleServer.scrollHeight
         }
 

@@ -19,6 +19,7 @@
     "dl": "npm install electron-prebuilt -g"
   },
   "dependencies": {
+    "ansi2html": "0.0.1",
     "body-parser": "^1.15.1",
     "colors": "^1.1.2",
     "cropper": "^2.3.1",
