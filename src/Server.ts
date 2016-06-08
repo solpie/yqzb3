@@ -93,7 +93,7 @@ function getIPAddress() {
 }
 export class WebServer {
     _path:any;
-
+    serverConf:any;
     constructor(callback?:any) {
         this.test();
         let localhost = getIPAddress();
@@ -127,6 +127,7 @@ export class WebServer {
             dataObj = JSON.parse(data);
             ServerConf.host = dataObj.host;
             ServerConf.wsPort = dataObj.wsPort;
+            this.serverConf = ServerConf;
             console.log(dataObj);
             this.initServer();
             if (callback)

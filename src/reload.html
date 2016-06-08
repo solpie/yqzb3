@@ -143,29 +143,35 @@
     var config = require('./config.json');
     //    require('./Server.js');
     var webServer = require('./Server.js');
-    var serverConf = require('./Server.js');
+//    var serverConf = require('./Server.js');
     console.log(webServer);
     console.log(config);
     console.log('%c Oh my heavens! ', 'background: #222; color: #bada55');
 
     ///start dev watch
-    var consoleView = document.getElementById('consoleView');
-    var consoleServer = document.getElementById('consoleServer');
-    var ansi2html = require('ansi2html');
-    function logView(data) {
-        consoleView.innerHTML += ansi2html(`${data}<br>`).replace('->', '<br>');
-        consoleView.scrollTop = consoleView.scrollHeight
+    function startDevWatch() {
+        var consoleView = document.getElementById('consoleView');
+        var consoleServer = document.getElementById('consoleServer');
+        var ansi2html = require('ansi2html');
+
+        function logView(data) {
+            consoleView.innerHTML += ansi2html(`${data}<br>`).replace('->', '<br>');
+            consoleView.scrollTop = consoleView.scrollHeight
+        }
+
+        function logServer(data) {
+            consoleServer.innerHTML += ansi2html(`${data}<br>`).replace('->', '<br>');
+            consoleServer.scrollTop = consoleServer.scrollHeight
+        }
+
+        ipcRenderer.send('devWatch');
+        ipcRenderer.on('logView', function (evt, arg) {
+            logView(arg);
+        });
+        ipcRenderer.on('logServer', function (evt, arg) {
+            logServer(arg);
+        });
     }
-    function logServer(data) {
-        consoleServer.innerHTML += ansi2html(`${data}<br>`).replace('->', '<br>');
-        consoleServer.scrollTop = consoleServer.scrollHeight
-    }
-    ipcRenderer.send('devWatch');
-    ipcRenderer.on('logView', function (evt, arg) {
-        logView(arg);
-    });
-    ipcRenderer.on('logServer', function (evt, arg) {
-        logServer(arg);
-    });
+
 </script>
 </html>
