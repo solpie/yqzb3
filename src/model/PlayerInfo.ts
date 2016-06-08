@@ -117,7 +117,7 @@ export class PlayerInfo extends BaseInfo {
         if (style === 1) {
             path += 'feng.png'
         }
-        else if (style == 2) {
+        else if (style === 2) {
             path += 'huo.png'
         }
         else if (style === 3) {

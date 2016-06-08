@@ -25,8 +25,6 @@ function formatSecond(sec, minStr = ":", secStr = "") {
     return strMin + minStr + strSec + secStr;
 }
 
-
-
 export function loadImg(path1, callback) {
     var img = new Image();
     img.onload = callback;
@@ -49,3 +47,4 @@ export function loadImgArr(pathArr, callback) {
         img.src = p;
     }
 }
+

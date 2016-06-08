@@ -1,4 +1,5 @@
 import Vue = require('vue');
+export declare function Data(): PropertyDecorator
 export class VueEx extends Vue {
     $parentMethods:any;
 

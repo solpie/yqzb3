@@ -7,6 +7,7 @@
 // }
 /////////////////
 import {PlayerInfo} from "./PlayerInfo";
+import {_path} from "../Env";
 export var db:any;
 function dbPlayerInfo() {
     return db.player.dataStore;
@@ -76,6 +77,19 @@ class BaseDB {
 
     ds() {
         return this.dataStore;
+    }
+
+    create(doc, callback) {
+        this.ds().insert(doc, (err, newDoc)=> {
+            if (!err) {
+                this.saveIdUsed();
+                this.syncDataMap(function () {
+                    callback(err, newDoc);
+                });
+            }
+            else
+                throw err;
+        });
     }
 }
 
@@ -221,10 +235,6 @@ class GameDB extends BaseDB {
 
 }
 class PlayerDB extends BaseDB {
-    getNewId() {
-        return this.config.idUsed;
-    }
-
     clearGameDataByPlayerId(playerId) {
         var playerData = this.dataMap[playerId];
         if (playerData) {
@@ -299,13 +309,12 @@ class PlayerDB extends BaseDB {
         });
     }
 }
-import {_path} from "../Env";
 
 export function initDB() {
 // Fetch a collection to insert document into
-    var playerDb:string = _path('db/player.db');
-    var activityDb:string = _path('db/activity.db');
-    var gameDbPath:string = _path('db/game.db');
+    var playerDb:string = _path('app/db/player.db');
+    var activityDb:string = _path('app/db/activity.db');
+    var gameDbPath:string = _path('app/db/game.db');
 
     db = {};
     db.player = new PlayerDB({filename: playerDb, autoload: true});

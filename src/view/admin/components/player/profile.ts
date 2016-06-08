@@ -2,8 +2,9 @@ import Component from "vue-class-component";
 import {VueEx} from "../../../VueEx";
 import {StagePlayerCard} from "../../../panel/PlayerRender";
 import {PlayerInfo} from "../../../../model/PlayerInfo";
+import WatchOption = vuejs.WatchOption;
 declare var Cropper;
-
+var _this:Profile;
 @Component({
     template: require('./profile.html'),
     props: {
@@ -40,6 +41,20 @@ declare var Cropper;
             required: true,
             default: 1
         }
+    },
+    watch: {
+        name: (val)=> {
+            _this.bluePlayerCard.setName(val);
+            _this.redPlayerCard.setName(val);
+        },
+        eloScore: (val)=> {
+            _this.bluePlayerCard.setEloScore(val);
+            _this.redPlayerCard.setEloScore(val);
+        },
+        style: (val)=> {
+            _this.bluePlayerCard.setStyle(val);
+            _this.redPlayerCard.setStyle(val);
+        },
     }
 })
 export class Profile extends VueEx {
@@ -49,14 +64,42 @@ export class Profile extends VueEx {
     stage:any;
     bluePlayerCard:StagePlayerCard;
     redPlayerCard:StagePlayerCard;
+    cropper:any;
     //props
     eloScore:number;
-    name:number;
+    name:string;
+    realName:string;
     style:number;
+    phone:number;
+    weight:number;
+    height:number;
+    qq:number;
 
     ready() {
-        super.ready();
-        this.$parentMethods.onSubmit('sss')
+        _this = this;
+    }
+
+    onSubmitInfo() {
+        // this.$parentMethods.onSubmit('sss');
+        // var playerAvatar = document.getElementById('playerAvatar');
+        this.playerImgData = this.cropper.getCroppedCanvas().toDataURL();
+        console.log('onSubmitInfo', this.playerImgData);
+        // document.getElementById('playerAvatarData').value = playerAvatar.src;
+        $(".cropper-container").hide();
+        // isChangeImage = true;
+        var playerData:any = {};
+        playerData.style = this.style;
+        playerData.name = this.name;
+        playerData.realName = this.realName;
+        playerData.phone = this.phone;
+        playerData.qq = this.qq;
+        playerData.weight = this.weight;
+        playerData.height = this.height;
+        playerData.eloScore = this.eloScore;
+        playerData.avatar = this.cropper.getCroppedCanvas().toDataURL();
+        this.$http.post('/admin/player/add', {playerData:playerData}, function (res) {
+            console.log(res);
+        })
     }
 
     showFile(e) {
@@ -72,7 +115,7 @@ export class Profile extends VueEx {
 
             this.stage = this.initCanvas(this.imagePath, 1);
 
-            var cropper = new Cropper(image, {
+            this.cropper = new Cropper(image, {
                 aspectRatio: 180 / 76,
                 crop: (e) => {
                     // console.log(e.detail.x);
@@ -90,13 +133,15 @@ export class Profile extends VueEx {
 
     onUpdateCropPreview(cropData:any) {
         var scale = cropData.width / 180;
-        this.bluePlayerCard.avatarBmp.x = -cropData.x / scale;
-        this.bluePlayerCard.avatarBmp.y = -cropData.y / scale;
-        this.bluePlayerCard.avatarBmp.scaleX = this.bluePlayerCard.avatarBmp.scaleY = 1 / scale;
+        if (this.bluePlayerCard && this.bluePlayerCard.avatarBmp) {
+            this.bluePlayerCard.avatarBmp.x = -cropData.x / scale;
+            this.bluePlayerCard.avatarBmp.y = -cropData.y / scale;
+            this.bluePlayerCard.avatarBmp.scaleX = this.bluePlayerCard.avatarBmp.scaleY = 1 / scale;
 
-        this.redPlayerCard.avatarBmp.x = -cropData.x / scale;
-        this.redPlayerCard.avatarBmp.y = -cropData.y / scale;
-        this.redPlayerCard.avatarBmp.scaleX = this.redPlayerCard.avatarBmp.scaleY = 1 / scale;
+            this.redPlayerCard.avatarBmp.x = -cropData.x / scale;
+            this.redPlayerCard.avatarBmp.y = -cropData.y / scale;
+            this.redPlayerCard.avatarBmp.scaleX = this.redPlayerCard.avatarBmp.scaleY = 1 / scale;
+        }
     }
 
     initCanvas(imagePath, scale) {
