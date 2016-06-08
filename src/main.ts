@@ -1,10 +1,64 @@
-const {app, BrowserWindow,ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 var win:any;
 function onReady() {
     openWin();
+
+}
+const spawn = require('child_process').spawn;
+var watchView;
+var watchServer;
+var isWatch = false;
+var sender;
+function devWatch() {
+    if (isWatch)
+        return;
+    isWatch = true;
+    function sendServer(data) {
+        sender.send('logServer', data);
+    }
+
+    function sendView(data) {
+        sender.send('logView', data);
+    }
+    watchView = spawn('npm.cmd', ['run', 'view']);
+
+    watchView.stdout.on('data', sendView);
+
+    watchView.stderr.on('data', sendView);
+
+    watchView.on('close', sendView);
+
+    watchServer = spawn('npm.cmd', ['run', 'server']);
+
+
+    watchServer.stdout.on('data', sendServer);
+
+    watchServer.stderr.on('data', sendServer);
+
+    watchServer.on('close', sendServer);
+}
+function killWatch() {
+    if (isWatch) {
+        if (watchView)
+            watchView.kill();
+        if (watchServer)
+            watchServer.kill();
+    }
 }
 
 function openWin(serverConf?:any) {
+
+
+    ipcMain.on('open-devtool', (event:any, status:any) => {
+        console.log(status);
+        win.toggleDevTools({mode: 'detach'});
+    });
+
+    ipcMain.on('devWatch', (event:any, arg:any) => {
+        sender = event.sender;
+        devWatch();
+    });
+
     win = new BrowserWindow({
         width: 950, height: 540,
         // width: 500, height: 540,
@@ -21,18 +75,13 @@ function openWin(serverConf?:any) {
     win.on('closed', function () {
         win = null;
     });
-
-    ipcMain.on('open-devtool', (event:any, status:any) => {
-        console.log(status);
-        win.toggleDevTools({mode: 'detach'});
-    });
-
     //todo print
     // http://electron.atom.io/docs/api/web-contents/
 }
 
 app.on('ready', onReady);
 app.on('window-all-closed', function () {
+    killWatch();
     if (process.platform !== 'darwin') {
         app.quit();
     }

@@ -5,29 +5,29 @@
     <title>YuanQiTV2</title>
 
     <!--<style>-->
-        <!--/* fallback */-->
-        <!--@font-face {-->
-            <!--font-family: 'Material Icons';-->
-            <!--font-style: normal;-->
-            <!--font-weight: 400;-->
-            <!--src: local('Material Icons'), local('MaterialIcons-Regular'), url(static/font/material-design-icons/Material-Design-Icons.woff2) format('woff2');-->
-        <!--}-->
+    <!--/* fallback */-->
+    <!--@font-face {-->
+    <!--font-family: 'Material Icons';-->
+    <!--font-style: normal;-->
+    <!--font-weight: 400;-->
+    <!--src: local('Material Icons'), local('MaterialIcons-Regular'), url(static/font/material-design-icons/Material-Design-Icons.woff2) format('woff2');-->
+    <!--}-->
 
-        <!--.material-icons {-->
-            <!--font-family: 'Material Icons';-->
-            <!--font-weight: normal;-->
-            <!--font-style: normal;-->
-            <!--font-size: 24px;-->
-            <!--line-height: 1;-->
-            <!--letter-spacing: normal;-->
-            <!--text-transform: none;-->
-            <!--display: inline-block;-->
-            <!--white-space: nowrap;-->
-            <!--word-wrap: normal;-->
-            <!--direction: ltr;-->
-            <!-- -webkit-font-feature-settings: 'liga';-->
-            <!-- -webkit-font-smoothing: antialiased;-->
-        <!--}-->
+    <!--.material-icons {-->
+    <!--font-family: 'Material Icons';-->
+    <!--font-weight: normal;-->
+    <!--font-style: normal;-->
+    <!--font-size: 24px;-->
+    <!--line-height: 1;-->
+    <!--letter-spacing: normal;-->
+    <!--text-transform: none;-->
+    <!--display: inline-block;-->
+    <!--white-space: nowrap;-->
+    <!--word-wrap: normal;-->
+    <!--direction: ltr;-->
+    <!-- -webkit-font-feature-settings: 'liga';-->
+    <!-- -webkit-font-smoothing: antialiased;-->
+    <!--}-->
     <!--</style>-->
     <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css" media="screen,projection"/>
     <!--<script src="static/js/jquery.min.js"></script>-->
@@ -44,12 +44,13 @@
             left: 0;
             top: 0;
             z-index: 2;
-            color: #0acbfc;
+            /*color: #0acbfc;*/
             width: 950px;
         }
 
         .console {
-            overflow-y: hidden;
+            overFlow-y: scroll;
+            /*overflow-y: hidden;*/
             border: hidden;
             width: 100%;
             height: 430px;
@@ -59,28 +60,31 @@
 <body>
 <img src="file:///app/static/img/index.gif" style=" -webkit-app-region: no-drag;position: fixed;z-index: 1">
 <div id="dashboard">
-    YuanQiTV2
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using node
-    <script>document.write(process.versions.node)</script>
-    ,
-    <br>
-    Chromium
-    <script>document.write(process.versions.chrome)</script>
-    ,
-    <br>
-    Electron
-    <script>document.write(process.versions.electron)</script>
+    <div style="color: #0acbfc">
+        YuanQiTV2
+        <!-- All of the Node.js APIs are available in this renderer process. -->
+        We are using node
+        <script>document.write(process.versions.node)</script>
+        ,
+        <br>
+        Chromium
+        <script>document.write(process.versions.chrome)</script>
+        ,
+        <br>
+        Electron
+        <script>document.write(process.versions.electron)</script>
+    </div>
+
     .
     <!--<input type="button" value="player" onclick="onClkPlayer()">-->
     <!--<input type="button" value="watch" onclick="devWatch()">-->
     <div class="row" style="margin: 0">
         <div class="col" style="width: 500px">
-            <div id="consoleServer" style="opacity: .8"></div>
+            <div class="console" id="consoleServer" style="opacity: .8"></div>
             <!--<textarea class="console" id="consoleServer" style="opacity: .8" readonly></textarea>-->
         </div>
         <div class="col" style="width: 430px">
-            <div id="consoleView"></div>
+            <div class="console" id="consoleView"></div>
             <!--<textarea class="console" id="consoleView" readonly></textarea>-->
         </div>
     </div>
@@ -103,30 +107,30 @@
     }
     const exec = require('child_process').exec;
     const spawn = require('child_process').spawn;
-
     var consoleView = document.getElementById('consoleView');
     var consoleServer = document.getElementById('consoleServer');
     var ansi2html = require('ansi2html');
+
+    function logView(data) {
+        consoleView.innerHTML += ansi2html(`${data}<br>`);
+        consoleView.scrollTop = consoleView.scrollHeight
+    }
+    function logServer(data) {
+        consoleServer.innerHTML += ansi2html(`${data}<br>`);
+        consoleServer.scrollTop = consoleServer.scrollHeight
+    }
     function devWatch() {
         const watchView = spawn('npm.cmd', ['run', 'view']);
 
-        function logLine(data) {
-            consoleView.innerHTML  += ansi2html(`${data}<br>`);
-            consoleView.scrollTop = consoleView.scrollHeight
-        }
 
-        watchView.stdout.on('data', logLine);
+        watchView.stdout.on('data', logView);
 
-        watchView.stderr.on('data', logLine);
+        watchView.stderr.on('data', logView);
 
-        watchView.on('close', logLine);
+        watchView.on('close', logView);
 
         const watchServer = spawn('npm.cmd', ['run', 'server']);
 
-        function logServer(data) {
-            consoleServer.innerHTML  += ansi2html(`${data}<br>`);
-            consoleServer.scrollTop = consoleServer.scrollHeight
-        }
 
         watchServer.stdout.on('data', logServer);
 
@@ -135,7 +139,7 @@
         watchServer.on('close', logServer);
 //        shell.openItem('npm.cmd run view');
     }
-    devWatch();
+    //    devWatch();
 
     const {remote} = require('electron');
     const {Menu, MenuItem} = remote;
@@ -175,5 +179,15 @@
     console.log(webServer);
     console.log(config);
     console.log('%c Oh my heavens! ', 'background: #222; color: #bada55');
+
+    ///start dev watch
+    ipcRenderer.send('devWatch');
+    ipcRenderer.on('logView', function (evt, arg) {
+        logView(arg);
+    });
+    ipcRenderer.on('logServer', function (evt, arg) {
+        logServer(arg);
+    });
+
 </script>
 </html>
