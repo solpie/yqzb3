@@ -34,10 +34,10 @@ module.exports = {
                 context: 'src/',
                 from: 'view/**/*.ejs'
             },
-            {
-                context: 'src/',
-                from: 'proto/**/*'
-            },
+            // {
+            //     context: 'src/',
+            //     from: 'proto/**/*'
+            // },
             {context: '.', from: 'static/**/*'},
             // {context: '.', from: 'db/**/*'},
             {from: 'src/reload.html'}
