@@ -1,6 +1,6 @@
 /// <reference path="./BaseInfo.ts"/>
 import {BaseInfo, obj2Class, prop} from "./BaseInfo";
-class PlayerData {
+class PlayerDoc {
     id:number = 0;
     name:string = '';
     phone:number = 0;
@@ -19,7 +19,7 @@ class PlayerData {
 }
 
 export class PlayerInfo extends BaseInfo {
-    playerData:PlayerData = new PlayerData();
+    playerData:PlayerDoc = new PlayerDoc();
     pos:number;
     isRed:Boolean = true;
     isMvp:Boolean = false;
@@ -30,17 +30,17 @@ export class PlayerInfo extends BaseInfo {
         if (playerData) {
             if (playerData['playerData'] != null)//playerInfo data
             {
-                this.playerData = obj2Class(playerData.playerData, PlayerData);
-                this.setPlayerInfofromData(playerData);
+                this.playerData = obj2Class(playerData.playerData, PlayerDoc);
+                this.setPlayerInfoFromData(playerData);
             }
             else {//playerData with isRed isMvp etc.
-                this.playerData = obj2Class(playerData, PlayerData);
-                this.setPlayerInfofromData(playerData);
+                this.playerData = obj2Class(playerData, PlayerDoc);
+                this.setPlayerInfoFromData(playerData);
             }
         }
     }
 
-    setPlayerInfofromData(data:any) {
+    setPlayerInfoFromData(data:any) {
         if (data['isRed'] != null)
             this.isRed = data.isRed;
         if (data['isMvp'] != null)
