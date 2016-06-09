@@ -320,4 +320,10 @@ export function initDB() {
     db.player = new PlayerDB({filename: playerDb, autoload: true});
     db.activity = new ActivityDB({filename: activityDb, autoload: true});
     db.game = new GameDB({filename: gameDbPath, autoload: true});
+
+    var ProtoBuf = require('protobufjs');
+    var builder = ProtoBuf.loadProtoFile(_path('app/proto/player.proto'));
+    var Player:any = builder.build('Player');
+    var player1 = new Player();
+    console.log("builder", JSON.stringify(player1))
 }

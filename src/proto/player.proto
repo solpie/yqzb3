@@ -1,0 +1,17 @@
+message Player {
+    required int32 id = 1;
+    required string name = 2;
+    required string nickName = 3;
+    required string avatar = 4;
+    required int32 eloScore = 5;
+    required int32 style = 6; //风林火山 1 2 3 4
+    required int32 height = 7;
+    required int32 weight = 8;
+    required double winPercent = 9;
+    repeated int32 gameRecArr = 10;//game id arr
+    required int32 winCount = 11;//count win game
+    required int32 loseCount = 12;//count lose game
+
+    required int32 phone = 13;
+    required int32 qq = 14;
+}
