@@ -52,7 +52,6 @@ function killWatch() {
 
 function openWin(serverConf?:any) {
     ipcMain.on('open-devtool', (event:any, status:any) => {
-        console.log(status);
         win.toggleDevTools({mode: 'detach'});
     });
 
