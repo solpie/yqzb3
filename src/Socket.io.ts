@@ -1,14 +1,15 @@
+import {PanelId}  from './event/Const'
 export class SocketIOSrv {
     constructor() {
         var io = require('socket.io')(6969);
-        var chat = io
-            .of('/chat')
+        var stage = io
+            .of('/' + PanelId.stage)
             .on('connection', function (socket) {
                 socket.emit('a message', {
                     that: 'only'
                     , '/chat': 'will get'
                 });
-                chat.emit('a message', {
+                stage.emit('a message', {
                     everyone: 'in'
                     , '/chat': 'will get'
                 });
@@ -17,7 +18,7 @@ export class SocketIOSrv {
         var news = io
             .of('/news')
             .on('connection', function (socket) {
-                socket.emit('item', {news: 'item'});
+                socket.emit('item', { news: 'item' });
             });
     }
 }

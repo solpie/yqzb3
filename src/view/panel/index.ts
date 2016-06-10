@@ -2,12 +2,12 @@ declare var io:any;
 class Panel {
     constructor() {
         console.log("init panel!!!");
-        var chat = io.connect('ws://192.168.1.73:6969/chat')
+        var stage = io.connect('ws://192.168.1.73:6969/stage')
             , news = io.connect('ws://192.168.1.73:6969/news');
 
-        chat.on('connect', function () {
+        stage.on('connect', function () {
             console.log("connect");
-            chat.emit('hi!');
+            stage.emit('hi!');
         });
 
         news.on('news', function (data) {
