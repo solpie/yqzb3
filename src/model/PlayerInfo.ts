@@ -17,7 +17,6 @@ class PlayerDoc {
     loseGameCount:number = 0;
     winGameCount:number = 0;
 }
-
 export class PlayerInfo extends BaseInfo {
     playerData:PlayerDoc = new PlayerDoc();
     pos:number;
