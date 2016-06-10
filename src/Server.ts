@@ -3,6 +3,8 @@ import {adminRouter} from "./router/AdminRouter";
 import {initDB} from "./model/DbInfo";
 import {ServerConf, _path} from "./Env";
 import {dbRouter} from "./router/DbRouter";
+import {SocketIOSrv} from "./Socket.io";
+import {panelRouter} from "./router/PanelRouter";
 var colors = require('colors');
 
 var dataObj:any;
@@ -94,6 +96,8 @@ function getIPAddress() {
 export class WebServer {
     _path:any;
     serverConf:any;
+    socketIO:SocketIOSrv;
+
     constructor(callback?:any) {
         this.test();
         let localhost = getIPAddress();
@@ -173,13 +177,19 @@ export class WebServer {
         });
 
         app.use('/admin', adminRouter);
+        app.use('/panel', panelRouter);
         app.use('/db', dbRouter);
 
 
         app.listen(80, () => {
+            this.initSocketIO();
             //and... we're live
             console.log("server on:  ws port:");
         });
+    }
+
+    initSocketIO() {
+        this.socketIO = new SocketIOSrv();
     }
 }
 export var serverConf = ServerConf;

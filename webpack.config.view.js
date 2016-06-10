@@ -1,9 +1,10 @@
 "use strict"
-var webpack = require('webpack')
+var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        "static/admin/index": "./src/view/admin/index.ts"
+        "static/admin/index": "./src/view/admin/index.ts",
+        "static/panel/index": "./src/view/panel/index.ts"
     },
     output: {
         path: './app',
