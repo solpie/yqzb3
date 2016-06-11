@@ -1,10 +1,10 @@
 import {EventDispatcher} from "../event/EventDispatcher";
-import {PanelId} from "./ElemID";
 import {CommandId} from "../event/Command";
 import {PlayerInfo} from "./PlayerInfo";
 import {TeamInfo} from "./TeamInfo";
 import {GameInfo} from "./GameInfo";
 import {RoundInfo} from "./RoundInfo";
+import {PanelId} from "../event/Const";
 declare var cmd;
 declare var db;
 class PanelInfo {

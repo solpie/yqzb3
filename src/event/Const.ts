@@ -1,3 +1,6 @@
 export const PanelId = {
-    stage: 'stage'
-}
+    stagePanel: 'stage',
+    winPanel: 'win',
+    actPanel: 'act',
+    playerPanel: 'player'
+};
