@@ -19,5 +19,9 @@ export class StagePanelView extends BasePanelView {
         io.on(`${CommandId.initPanel}`, function (data) {
             console.log(`${CommandId.initPanel}`, data);
         });
+        var bg = new createjs.Shape();
+        bg.graphics.beginFill("#333")
+            .drawRect(0, 0, this.stageWidth, this.stageHeight)
+        this.ctn.addChild(bg);
     }
 }

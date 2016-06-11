@@ -2,13 +2,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel</title>
+    <style>
+        body {
+            overflow-x: hidden;
+            overflow-y: hidden;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 <div id="panel">
-    <canvas id="stage-canvas"></canvas>
+    <canvas id="stage"></canvas>
     <router-view></router-view>
 </div>
 <script src="/js/socket.io-1.4.5.min.js"></script>
+<script src="/js/createjs/createjs.min.js"></script>
+<script src="/js/createjs/easeljs.min.js"></script>
+<script src="/js/createjs/tweenjs.min.js"></script>
 <script src="/panel/index.js">
 </script>
 </body>
