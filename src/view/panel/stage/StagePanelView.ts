@@ -23,4 +23,29 @@ export class StagePanelView extends BasePanelView {
             .drawRect(0, 0, this.stageWidth, this.stageHeight)
         this.ctn.addChild(bg);
     }
+
+    onToggleTimer() {
+        console.log('onToggleTimer');
+    }
+    onResetTimer() {
+        console.log('onResetTimer');
+    }
+    onAddLeftScore() {
+        console.log('onAddLeftScore');
+    }
+    onAddRightScore() {
+        console.log('onAddRightScore');
+    }
+    onMinRightScore() {
+        console.log('onMinRightScore');
+    }
+    onMinLeftScore() {
+        console.log('onMinLeftScore');
+    }
+    onShowWin() {
+        console.log('onShowWin');
+    }
+    onRefresh() {
+        console.log('onRefresh');
+    }
 }

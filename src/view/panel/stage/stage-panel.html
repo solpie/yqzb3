@@ -1,3 +1,16 @@
 <div v-if="op">
-   stage panel op
+    <div class="row">
+        <a class="modal-trigger waves-effect waves-light btn" @click="onToggleTimer">Start</a>
+        <a class="modal-trigger waves-effect waves-light btn" @click="onResetTimer">Reset</a>
+    </div>
+    <div class="row">
+        <a class="modal-trigger waves-effect waves-light btn" @click="onAddLeftScore">Left++</a>
+        <a class="modal-trigger waves-effect waves-light btn" @click="onMinLeftScore">Left--</a>
+        <a class="modal-trigger waves-effect waves-light btn" @click="onMinRightScore">Right--</a>
+        <a class="modal-trigger waves-effect waves-light btn" @click="onAddRightScore">Right++</a>
+    </div>
+    <div class="row">
+        <a class="modal-trigger waves-effect waves-light btn" @click="onShowWin">Show Win</a>
+        <a class="modal-trigger waves-effect waves-light btn" @click="onRefresh">Refresh</a>
+    </div>
 </div>
