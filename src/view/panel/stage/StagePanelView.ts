@@ -13,7 +13,6 @@ import {BasePanelView} from "../BasePanelView";
     }
 })
 export class StagePanelView extends BasePanelView {
-
     ready() {
         var io = super.ready();
         io.on(`${CommandId.initPanel}`, function (data) {

@@ -8,12 +8,21 @@
             overflow-y: hidden;
             margin: 0;
         }
+
+        #op {
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+        }
     </style>
 </head>
 <body>
 <div id="panel">
     <canvas id="stage"></canvas>
-    <router-view></router-view>
+    <div id="op">
+        <router-view></router-view>
+    </div>
 </div>
 <script src="/js/socket.io-1.4.5.min.js"></script>
 <script src="/js/createjs/createjs.min.js"></script>
