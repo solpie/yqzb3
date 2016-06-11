@@ -6,7 +6,7 @@ export class StagePanelHandle {
     io:Server;
 
     constructor(io:Server) {
-        console.log('StagePanelHandle');
+        console.log('StagePanelHandle!!');
         this.io = io;
         io.of(`/${ PanelId.stagePanel}`)
             .on("connect", function (socket:Socket) {

@@ -1,18 +1,23 @@
 import {CommandId} from "../../../event/Command";
 import Component from "vue-class-component";
+import {BasePanelView} from "../BasePanelView";
 
-import Socket = SocketIO.Socket;
 @Component({
-    template: require('./stage-op.html')
+    template: require('./stage-panel.html'),
+    props: {
+        op: {
+            type: Boolean,
+            required: true,
+            default: false
+        }
+    }
 })
-export class StagePanelView {
-    // constructor(panel:Socket, op:boolean) {
-    //     console.log("StagePanelView");
-    //     panel.on(`${CommandId.initPanel}`, function (data) {
-    //         console.log("on Res init ", data);
-    //     });
-    // }
-    ready(){
-        console.log("StagePanelView");
+export class StagePanelView extends BasePanelView {
+
+    ready() {
+        var io = super.ready();
+        io.on(`${CommandId.initPanel}`, function (data) {
+            console.log(`${CommandId.initPanel}`, data);
+        });
     }
 }
