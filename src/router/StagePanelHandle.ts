@@ -6,6 +6,7 @@ import {panelRouter} from "./PanelRouter";
 import {GameInfo} from "../model/GameInfo";
 import {Response} from "express-serve-static-core";
 import {Request} from "express";
+import {ScParam} from "../Socket.io";
 import Socket = SocketIO.Socket;
 export class StagePanelHandle {
     io:any;
@@ -18,7 +19,7 @@ export class StagePanelHandle {
         this.io = io.of(`/${ PanelId.stagePanel}`);
         this.io
             .on("connect", (socket:Socket)=> {
-                socket.emit(`${CommandId.initPanel}`, {gameInfo: this.gameInfo, isDev: ServerConf.isDev});
+                socket.emit(`${CommandId.initPanel}`, ScParam({gameInfo: this.gameInfo, isDev: ServerConf.isDev}));
             })
             .on('disconnect', function (socket:Socket) {
                 console.log('disconnect');
@@ -34,8 +35,15 @@ export class StagePanelHandle {
             console.log(`/stage/${cmdId}`);
             this.io.emit('broadcast', req.body);
             if (cmdId == `${CommandId.cs_addLeftScore}`) {
-                this.gameInfo.addLeftScore();
-                this.io.emit(`${CommandId.addLeftScore}`, {leftScore: this.gameInfo.leftScore});
+                var straight = this.gameInfo.addLeftScore();
+                if (straight == 3) {
+                    console.log("straight score 3");
+                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: "left"}));
+                }
+                if (straight == 5) {
+
+                }
+                this.io.emit(`${CommandId.addLeftScore}`, ScParam({leftScore: this.gameInfo.leftScore}));
             }
             res.sendStatus(200);
         });

@@ -11,3 +11,9 @@ export class SocketIOSrv {
             });
     }
 }
+
+//for refactor
+export function ScParam(param) {
+    return param
+}
+

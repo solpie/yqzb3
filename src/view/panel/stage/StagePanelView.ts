@@ -24,7 +24,7 @@ export class StagePanelView extends BasePanelView {
         io.on(`${CommandId.initPanel}`, (data)=> {
             console.log(`${CommandId.initPanel}`, data);
             // ServerConf.isDev = data.isDev;
-            this.initStage();
+            this.initStage(data.gameInfo);
         });
 
         io.on(`${CommandId.addLeftScore}`, (data)=> {
@@ -34,8 +34,9 @@ export class StagePanelView extends BasePanelView {
     }
 
 
-    initStage() {
+    initStage(gameInfo:any) {
         this.scorePanel = new ScorePanel(this);
+        this.scorePanel.init(gameInfo);
     }
 
     onToggleTimer() {
@@ -85,6 +86,8 @@ function blink(target) {
         .to({alpha: 0}, blink)
         .to({alpha: 1}, blink);
 }
+
+///////////////////////////////////////////////////////////////////////////////
 class ScorePanel {
     timeText:Text;
     leftScoreText:BitmapText;
@@ -105,8 +108,8 @@ class ScorePanel {
         scoreCtn.addChild(bg);
 
         var timeText:Text = new createjs.Text("99:99", "28px Arial", "#e2e2e2");
-        timeText.x = parent.stageWidth * .5 - 32;
-        timeText.y = parent.stageHeight - 30;
+        timeText.x = parent.stageWidth * .5 - 30;
+        timeText.y = 100;
         this.timeText = timeText;
         scoreCtn.addChild(timeText);
 
@@ -153,10 +156,12 @@ class ScorePanel {
         this.rightScoreTextX = rightScoreNum.x;
         scoreCtn.addChild(rightScoreNum);
 
+
+        //////
         this.leftCircleArr = [];
         this.rightCircleArr = [];
-        var px = 205 + 470;
-        var py = 43;
+        var px = 675;
+        var py = 88;
         for (var i = 0; i < 7; i++) {
             var leftScoreBg = new createjs.Bitmap("/img/panel/stage/leftScoreBg.png");//694x132
             leftScoreBg.x = px + i * 20;
@@ -205,5 +210,9 @@ class ScorePanel {
             }
         }
         // console.log(leftScore);
+    }
+
+    init(gameInfo:any) {
+        this.setLeftScore(gameInfo.leftScore);
     }
 }
