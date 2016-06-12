@@ -6,7 +6,8 @@
                 <input id="player{{$index}}" type="text" @keyup.enter="onQueryPlayer($index)" style="width: 75px">
                 <a class="modal-trigger waves-effect waves-light btn" style="width: 75px;height: 25px"
                    @click="onUpdatePlayer($index)">↓</a>
-                <input name="mvp" type="radio" id="mvp{{$index}}"/>
+                <p>
+                <input name="mvp" type="radio" id="mvp{{$index}}"  value="{{$index}}" v-model="mvpIdx"/>
                 <label for="mvp{{$index}}">mvp{{$index}}</label>
             </div>
         </div>

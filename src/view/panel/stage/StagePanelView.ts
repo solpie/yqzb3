@@ -20,6 +20,11 @@ import Container = createjs.Container;
             type: String,
             default: "start"
         },
+        mvpIdx: {
+            type: Number,
+            required: true,
+            default: 0
+        },
         playerInfoArr: {
             type: Array,
             default: [1, 2, 3, 4, 5, 6, 7, 8]
@@ -28,6 +33,7 @@ import Container = createjs.Container;
 })
 export class StagePanelView extends BasePanelView {
     scorePanel:ScorePanel;
+    mvpIdx:number;
     timerName:string;
     isInit:boolean;
     playerInfoArr:any;
@@ -108,7 +114,7 @@ export class StagePanelView extends BasePanelView {
     }
 
     onShowWin() {
-        console.log('onShowWin');
+        console.log('onShowWin mvp ', this.mvpIdx);
     }
 
     onRefresh() {
