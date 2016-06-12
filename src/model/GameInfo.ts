@@ -16,7 +16,8 @@ export class GameInfo {
     isFinish:any = null;
     _timer:number = 0;
     gameState:number = 0;//0 未确认胜负 1 确认胜负未录入数据 2确认胜负并录入数据
-
+    unLimitScore:number=0;///
+    
     _winTeam:TeamInfo;
     _loseTeam:TeamInfo;
 
@@ -26,7 +27,28 @@ export class GameInfo {
     constructor() {
 
     }
+    addLeftScore() {
+        if (this.unLimitScore === 1)
+            this.leftScore += 1;
+        else
+            this.leftScore = (this.leftScore + 1) % (this.winScore + 1);
+        // cmd.emit(CommandId.addLeftScore, this.gameInfo.leftScore, this.pid);
 
+        this.straightScoreRight = 0;
+        this.straightScoreLeft++;
+        if (this.leftScore == 0)
+            this.straightScoreLeft = 0;
+        if (this.straightScoreLeft == 3) {
+            console.log("straight score 3");
+            // cmd.emit(CommandId.straightScore3, {team: "left"}, this.pid);
+        }
+        if (this.straightScoreLeft == 5)
+        {
+            
+        }
+            // cmd.emit(CommandId.straightScore5, {team: "left"}, this.pid);
+    }
+    
     getGameId() {
         return this.gameId;
     }
@@ -120,7 +142,6 @@ export class GameInfo {
     getPlayerDataArr():Array<any> {
         return this.playerDataArr;
     }
-
 
     getLeftTeam(start = 0) {
         var team = [];

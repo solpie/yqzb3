@@ -7,6 +7,8 @@ export class BasePanelView extends VueEx {
     stageHeight:number;
     stage:Stage;
     ctn:Container;
+    opReq:(cmdId:string, param:any, callback:any)=>void;
+
     initCanvas() {
         this.stageWidth = 1920;
         this.stageHeight = 1080;
@@ -25,9 +27,13 @@ export class BasePanelView extends VueEx {
         this.stage = stage;
     }
 
-    ready() {
+    ready(pid?:string) {
         this.initCanvas();
-
+        this.opReq = (cmdId:string, param:any, callback:any)=> {
+            this.$http.post(`/panel/${pid}/${cmdId}`,
+                param,
+                callback);
+        };
         var panel:any = this.$parent;
         this.op = panel.isOp;
         console.log("BasePanelView.ready", panel.isOp);

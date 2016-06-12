@@ -2,7 +2,6 @@ const {app, BrowserWindow, ipcMain} = require('electron');
 var win:any;
 function onReady() {
     openWin();
-
 }
 const spawn = require('child_process').spawn;
 var watchView;
@@ -49,6 +48,8 @@ function killWatch() {
             watchServer.kill();
     }
 }
+// var process:any= require("process");
+var isDev = /[\\/]electron-prebuilt[\\/]/.test(process.execPath);
 
 function openWin(serverConf?:any) {
     ipcMain.on('open-devtool', (event:any, status:any) => {
@@ -71,7 +72,10 @@ function openWin(serverConf?:any) {
     // win.setMenu(null);
     win.setMenuBarVisibility(false);
     // win.loadURL('http://127.0.0.1');
-    win.loadURL(`file://${__dirname}app/reload.html`);
+    if (isDev)
+        win.loadURL(`file://${__dirname}app/reload.html`);
+    else
+        win.loadURL(`file:///resources/app/reload.html`);
     // win.loadURL(`file:///app/reload.html`);
     win.on('closed', function () {
         win = null;

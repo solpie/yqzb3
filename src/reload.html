@@ -59,7 +59,7 @@
     </style>
 </head>
 <body>
-<img src="file:///app/static/img/index.gif" style=" -webkit-app-region: no-drag;position: fixed;z-index: 1">
+<img src="http://localhost/img/index.gif" style=" -webkit-app-region: no-drag;position: fixed;z-index: 1">
 <div id="dashboard">
     <div style="color: #0acbfc">
         YuanQiTV2
@@ -94,11 +94,11 @@
 
 </body>
 <script>
-    var process = require('process');
+//    var process = require('process');
     var path = require('path');
     console.log(process.getSystemMemoryInfo());
     console.log(process.getProcessMemoryInfo());
-    var projectRoot = path.resolve(process.execPath, '../../../..');
+//    var projectRoot = path.resolve(process.execPath, '../../../..');
 
 
     const {shell} = require('electron');
@@ -106,7 +106,7 @@
         shell.showItemInFolder('.');
 //        shell.showItemInFolder('./resources/db');
     }
-    const exec = require('child_process').exec;
+//    const exec = require('child_process').exec;
 
 
     const {remote} = require('electron');
@@ -140,12 +140,12 @@
     }, false);
 
     // You can also require other files to run in this process
-    var config = require('./config.json');
+//    var config = require('./config.json');
     //    require('./Server.js');
     var webServer = require('./Server.js');
     //    var serverConf = require('./Server.js');
     console.log(webServer);
-    console.log(config);
+//    console.log(config);
     console.log('%c Oh my heavens! ', 'background: #222; color: #bada55');
 
     ///start dev watch
