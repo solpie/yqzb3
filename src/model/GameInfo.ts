@@ -44,6 +44,26 @@ export class GameInfo {
         // cmd.emit(CommandId.straightScore5, {team: "left"}, this.pid);
     }
 
+    addRightScore() {
+        if (this.unLimitScore === 1)
+            this.rightScore += 1;
+        else
+            this.rightScore = (this.rightScore + 1) % (this.winScore + 1);
+        // cmd.emit(CommandId.addRightScore, this.rightScore, this.pid);
+
+        this.straightScoreLeft = 0;
+        this.straightScoreRight++;
+        
+        if (this.rightScore == 0)
+            this.straightScoreRight = 0;
+
+        return this.straightScoreRight;
+        // if (this.gameInfo.straightScoreRight == 3)
+        //     cmd.emit(CommandId.straightScore3, {team: "right"}, this.pid);
+        // if (this.gameInfo.straightScoreRight == 5)
+        //     cmd.emit(CommandId.straightScore5, {team: "right"}, this.pid);
+    }
+
     getGameId() {
         return this.gameId;
     }

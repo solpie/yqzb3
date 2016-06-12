@@ -34,7 +34,9 @@ export class StagePanelHandle {
             var cmdId = req.params.cmdId;
             console.log(`/stage/${cmdId}`);
             this.io.emit('broadcast', req.body);
-            if (cmdId == `${CommandId.cs_addLeftScore}`) {
+
+            var cmdMap:any = {};
+            cmdMap[`${CommandId.cs_addLeftScore}`] = ()=> {
                 var straight = this.gameInfo.addLeftScore();
                 if (straight == 3) {
                     console.log("straight score 3");
@@ -44,7 +46,32 @@ export class StagePanelHandle {
 
                 }
                 this.io.emit(`${CommandId.addLeftScore}`, ScParam({leftScore: this.gameInfo.leftScore}));
-            }
+            };
+
+            cmdMap[`${CommandId.cs_addRightScore}`] = ()=> {
+                var straight = this.gameInfo.addRightScore();
+                if (straight == 3) {
+                    console.log("straight score 3");
+                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: "right"}));
+                }
+                if (straight == 5) {
+
+                }
+                this.io.emit(`${CommandId.addRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
+            };
+
+            cmdMap[`${CommandId.cs_toggleTimer}`] = ()=> {
+                this.gameInfo.toggleTimer();
+                this.io.emit(`${CommandId.toggleTimer}`);
+            };
+
+            cmdMap[`${CommandId.cs_resetTimer}`] = ()=> {
+                this.gameInfo.resetTimer();
+                this.io.emit(`${CommandId.resetTimer}`);
+            };
+
+            cmdMap[cmdId]();
+
             res.sendStatus(200);
         });
     }

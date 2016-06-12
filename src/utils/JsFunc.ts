@@ -13,17 +13,17 @@ function sortProp(prop) {
     }
 }
 
-function formatSecond(sec, minStr = ":", secStr = "") {
-    var min = Math.floor(sec / 60);
-    var s = sec % 60;
-    var strMin = min + "";
-    var strSec = s + "";
-    if (min < 10)
-        strMin = "0" + strMin;
-    if (s < 10)
-        strSec = "0" + strSec;
-    return strMin + minStr + strSec + secStr;
-}
+// function formatSecond(sec, minStr = ":", secStr = "") {
+//     var min = Math.floor(sec / 60);
+//     var s = sec % 60;
+//     var strMin = min + "";
+//     var strSec = s + "";
+//     if (min < 10)
+//         strMin = "0" + strMin;
+//     if (s < 10)
+//         strSec = "0" + strSec;
+//     return strMin + minStr + strSec + secStr;
+// }
 
 export function loadImg(path1, callback) {
     var img = new Image();
@@ -48,3 +48,14 @@ export function loadImgArr(pathArr, callback) {
     }
 }
 
+export function formatSecond(sec, minStr = ":", secStr = "") {
+    var min = Math.floor(sec / 60);
+    var s = sec % 60;
+    var strMin = min + "";
+    var strSec = s + "";
+    if (min < 10)
+        strMin = "0" + strMin;
+    if (s < 10)
+        strSec = "0" + strSec;
+    return strMin + minStr + strSec + secStr;
+}

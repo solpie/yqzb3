@@ -7,7 +7,7 @@ export class BasePanelView extends VueEx {
     stageHeight:number;
     stage:Stage;
     ctn:Container;
-    opReq:(cmdId:string, param:any, callback:any)=>void;
+    opReq:(cmdId:string, param?:any, callback?:any)=>void;
 
     initCanvas() {
         this.stageWidth = 1920;

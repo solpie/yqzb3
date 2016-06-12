@@ -1,13 +1,13 @@
-<div class="card-panel grey lighten-3" v-if="op" style="position:absolute;width:800px;left: 300px;top: 300px">
+<div class="card-panel grey lighten-3" v-if="op" style="position:absolute;width:800px;left: 100px;top: 300px">
     <div class="row">
-        <a class="modal-trigger waves-effect waves-light btn" @click="onToggleTimer">Start</a>
+        <a class="modal-trigger waves-effect waves-light btn" @click="onToggleTimer">{{timerName}}</a>
         <a class="modal-trigger waves-effect waves-light btn" @click="onResetTimer">Reset</a>
     </div>
     <div class="row">
         <a class="modal-trigger waves-effect waves-light btn" @click="onAddLeftScore">Left++</a>
         <a class="modal-trigger waves-effect waves-light btn" @click="onMinLeftScore">Left--</a>
         <input type="checkbox" id="test5"/>
-        <label for="test5">不限制分数>>>>>>>>></label>
+        <label for="test5">>>>>>>>不限制分数>>>>>>></label>
         <a class="modal-trigger waves-effect waves-light btn" @click="onMinRightScore">Right--</a>
         <a class="modal-trigger waves-effect waves-light btn" @click="onAddRightScore">Right++</a>
     </div>

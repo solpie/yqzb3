@@ -2,6 +2,7 @@ import {CommandId} from "../../../event/Command";
 import Component from "vue-class-component";
 import {BasePanelView} from "../BasePanelView";
 import {PanelId} from "../../../event/Const";
+import {formatSecond} from "../../../utils/JsFunc";
 import Text = createjs.Text;
 import BitmapText = createjs.BitmapText;
 import Container = createjs.Container;
@@ -13,52 +14,74 @@ import Container = createjs.Container;
             type: Boolean,
             required: true,
             default: false
+        },
+        timerName: {
+            type: String,
+            default: "start"
         }
     }
 })
 export class StagePanelView extends BasePanelView {
     scorePanel:ScorePanel;
+    timerName:string;
+    isInit:boolean;
 
     ready() {
         var io = super.ready(PanelId.stagePanel);
         io.on(`${CommandId.initPanel}`, (data)=> {
             console.log(`${CommandId.initPanel}`, data);
             // ServerConf.isDev = data.isDev;
-            this.initStage(data.gameInfo);
+            if (!this.isInit)
+                this.initStage(data.gameInfo);
         });
 
-        io.on(`${CommandId.addLeftScore}`, (data)=> {
-            console.log(`${CommandId.addLeftScore}`, data);
-            this.scorePanel.setLeftScore(data.leftScore);
-        });
+        io
+            .on(`${CommandId.addLeftScore}`, (data)=> {
+                console.log(`${CommandId.addLeftScore}`, data);
+                this.scorePanel.setLeftScore(data.leftScore);
+            })
+            .on(`${CommandId.addRightScore}`, (data)=> {
+                this.scorePanel.setRightScore(data.rightScore);
+            })
+            .on(`${CommandId.toggleTimer}`, (data)=> {
+                if (this.timerName === 'start')
+                    this.timerName = 'pause';
+                else
+                    this.timerName = 'start';
+                this.scorePanel.toggleTimer1();
+            })
+            .on(`${CommandId.resetTimer}`, (data)=> {
+                this.timerName = 'start';
+                this.scorePanel.resetTimer();
+            })
     }
 
 
     initStage(gameInfo:any) {
+        this.isInit = true;
         this.scorePanel = new ScorePanel(this);
         this.scorePanel.init(gameInfo);
     }
 
     onToggleTimer() {
+        this.opReq(`${CommandId.cs_toggleTimer}`);
         console.log('onToggleTimer');
     }
 
     onResetTimer() {
         console.log('onResetTimer');
+        this.opReq(`${CommandId.cs_resetTimer}`);
     }
 
     onAddLeftScore() {
         console.log('onAddLeftScore');
         this.opReq(`${CommandId.cs_addLeftScore}`,
-            {param: 'addLeftScore'},
-            function (res) {
-                console.log(res);
-            });
-        // this.socketReq(`${CommandId.cs_addLeftScore}`, {param: "add left"});
+            {param: 'addLeftScore'});
     }
 
     onAddRightScore() {
         console.log('onAddRightScore');
+        this.opReq(`${CommandId.cs_addRightScore}`);
     }
 
     onMinRightScore() {
@@ -96,8 +119,14 @@ class ScorePanel {
     rightScoreTextX:number;
     leftCircleArr:any;
     rightCircleArr:any;
+    timeOnSec:number;
+
+    timerId:any;
+    timerState:number;
 
     constructor(parent:StagePanelView) {
+        this.timeOnSec = 0;
+
         var scoreCtn = new createjs.Container();
         scoreCtn.y = parent.stageHeight - 132;
 
@@ -212,7 +241,58 @@ class ScorePanel {
         // console.log(leftScore);
     }
 
+    setRightScore(rightScore) {
+        if (rightScore > 9)
+            this.rightScoreText.x = this.rightScoreTextX - 18;
+        else
+            this.rightScoreText.x = this.rightScoreTextX;
+        this.rightScoreText.text = rightScore + "";
+
+        var len = this.rightCircleArr.length;
+        for (var i = 0; i < len; i++) {
+            if (i < rightScore) {
+                if (this.rightCircleArr[i].alpha == 0)
+                    blink(this.rightCircleArr[i]);
+                // createjs.Tween.get(this.rightCircleArr[len - 1 - i]).to({alpha: 1}, 200);
+            }
+            else {
+                createjs.Tween.get(this.rightCircleArr[i]).to({alpha: 0}, 200);
+            }
+        }
+    }
+
+    resetTimer() {
+        this.timeOnSec = 0;
+        this.timerState = 0;
+        this.timeText.text = formatSecond(this.timeOnSec);
+    }
+
+    toggleTimer1() {
+        if (this.timerId) {
+            clearInterval(this.timerId);
+            this.timerId = 0;
+            this.timerState = 0;
+        }
+        else {
+            this.timerId = setInterval(()=> {
+                this.timeOnSec++;
+                this.timeText.text = formatSecond(this.timeOnSec);
+            }, 1000);
+            this.timerState = 1;
+        }
+    }
+
+    setTime(time, state:number) {
+        this.timeText.text = formatSecond(time);
+        this.timeOnSec = time;
+        if (state) {
+            this.toggleTimer1();
+            // cmd.emit(CommandId.toggleTimer);
+        }
+    }
+
     init(gameInfo:any) {
         this.setLeftScore(gameInfo.leftScore);
+        this.setRightScore(gameInfo.rightScore);
     }
 }
