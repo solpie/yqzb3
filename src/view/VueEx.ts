@@ -1,5 +1,5 @@
 import Vue = require('vue');
-export declare function Data(): PropertyDecorator
+export declare function Data():PropertyDecorator
 export class VueEx extends Vue {
     $parentMethods:any;
 
@@ -16,5 +16,12 @@ export class VueEx extends Vue {
         return null;
     }
 
+    getElem(val:string):any {
+        var _0 = val[0];
+        console.log(_0, val.substr(1));
+        if (_0 == "#") {
+            return document.getElementById(val.substr(1));
+        }
+    }
 
 }

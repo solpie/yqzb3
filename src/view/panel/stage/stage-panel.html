@@ -1,4 +1,16 @@
-<div class="card-panel grey lighten-3" v-if="op" style="position:absolute;width:800px;left: 100px;top: 300px">
+<div class="card-panel grey lighten-3" v-if="op" style="position:absolute;width:950px;left: 100px;top: 200px">
+    <div class="row">
+        <div class="col" v-for="playerInfo in playerInfoArr">
+            <div class="col" style="width: 85px">
+                <img src="/img/panel/stage/blue.png" style="width: 80px">
+                <input id="player{{$index}}" type="text" @keyup.enter="onQueryPlayer($index)" style="width: 75px">
+                <a class="modal-trigger waves-effect waves-light btn" style="width: 75px;height: 25px"
+                   @click="onUpdatePlayer($index)">↓</a>
+                <input name="mvp" type="radio" id="mvp{{$index}}"/>
+                <label for="mvp{{$index}}">mvp{{$index}}</label>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <a class="modal-trigger waves-effect waves-light btn" @click="onToggleTimer">{{timerName}}</a>
         <a class="modal-trigger waves-effect waves-light btn" @click="onResetTimer">Reset</a>

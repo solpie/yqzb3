@@ -3,6 +3,7 @@ import Component from "vue-class-component";
 import {BasePanelView} from "../BasePanelView";
 import {PanelId} from "../../../event/Const";
 import {formatSecond} from "../../../utils/JsFunc";
+import {PlayerInfo} from "../../../model/PlayerInfo";
 import Text = createjs.Text;
 import BitmapText = createjs.BitmapText;
 import Container = createjs.Container;
@@ -18,6 +19,10 @@ import Container = createjs.Container;
         timerName: {
             type: String,
             default: "start"
+        },
+        playerInfoArr: {
+            type: Array,
+            default: [1, 2, 3, 4, 5, 6, 7, 8]
         }
     }
 })
@@ -25,6 +30,7 @@ export class StagePanelView extends BasePanelView {
     scorePanel:ScorePanel;
     timerName:string;
     isInit:boolean;
+    playerInfoArr:any;
 
     ready() {
         var io = super.ready(PanelId.stagePanel);
@@ -84,6 +90,15 @@ export class StagePanelView extends BasePanelView {
         this.opReq(`${CommandId.cs_addRightScore}`);
     }
 
+    onQueryPlayer(idx) {
+        var queryId = this.getElem("#player" + idx).value;
+        console.log('onQueryPlayer', idx, queryId);
+    }
+
+    onUpdatePlayer(idx) {
+        console.log('onUpdatePlayer', idx);
+    }
+
     onMinRightScore() {
         console.log('onMinRightScore');
     }
@@ -113,6 +128,8 @@ function blink(target) {
 ///////////////////////////////////////////////////////////////////////////////
 class ScorePanel {
     timeText:Text;
+    leftAvgEloScoreText:Text;
+    rightAvgEloScoreText:Text;
     leftScoreText:BitmapText;
     rightScoreText:BitmapText;
     leftScoreTextX:number;
@@ -136,8 +153,8 @@ class ScorePanel {
         bg.x = 1;
         scoreCtn.addChild(bg);
 
-        var timeText:Text = new createjs.Text("99:99", "28px Arial", "#e2e2e2");
-        timeText.x = parent.stageWidth * .5 - 30;
+        var timeText:Text = new createjs.Text("99:99", "28px Arial", "#fff");
+        timeText.x = parent.stageWidth * .5 - 31;
         timeText.y = 100;
         this.timeText = timeText;
         scoreCtn.addChild(timeText);
@@ -145,16 +162,8 @@ class ScorePanel {
 
         var sheet = new createjs.SpriteSheet({
             animations: {
-                "0": 1,
-                "1": 2,
-                "2": 3,
-                "3": 4,
-                "4": 5,
-                "5": 6,
-                "6": 7,
-                "7": 8,
-                "8": 9,
-                "9": 0
+                "0": 1, "1": 2, "2": 3, "3": 4, "4": 5,
+                "5": 6, "6": 7, "7": 8, "8": 9, "9": 0
             },
             images: ["/img/panel/stage/scoreNum.png"],
             frames: [[0, 0, 40, 54],
@@ -215,6 +224,23 @@ class ScorePanel {
             scoreCtn.addChild(rightScore);
             this.rightCircleArr.push(rightScore);
         }
+
+        px = 770;
+        var lTxt = new createjs.Text("", "28px Arial", "#fff");
+        lTxt.text = '0'
+        lTxt.textAlign = 'center';
+        lTxt.x = px;
+        lTxt.y = 22;
+        this.leftAvgEloScoreText = lTxt;
+        scoreCtn.addChild(lTxt);
+
+        var rTxt = new createjs.Text("", "28px Arial", "#fff");
+        rTxt.text = '0'
+        rTxt.textAlign = 'center';
+        rTxt.x = lTxt.x + 385;
+        rTxt.y = lTxt.y;
+        this.rightAvgEloScoreText = rTxt;
+        scoreCtn.addChild(rTxt);
     }
 
     setLeftScore(leftScore) {
@@ -259,6 +285,25 @@ class ScorePanel {
                 createjs.Tween.get(this.rightCircleArr[i]).to({alpha: 0}, 200);
             }
         }
+    }
+
+    setAvgEloScore(playerInfoArr:Array<PlayerInfo>) {
+        function getAvgRight(start, playerInfoArr) {
+            var sum = 0;
+            var count = 0;
+            for (var i = start; i < start + 4; i++) {
+                var playerInfo:PlayerInfo = playerInfoArr[i];
+                if (playerInfo) {
+                    count++;
+                    sum += playerInfo.eloScore();
+                }
+            }
+            var ret = Math.floor(sum / count);
+            return ret ? ret : 0;
+        }
+
+        this.leftAvgEloScoreText.text = getAvgRight(0, playerInfoArr) + "";
+        this.rightAvgEloScoreText.text = getAvgRight(4, playerInfoArr) + "";
     }
 
     resetTimer() {

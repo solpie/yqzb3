@@ -59,7 +59,6 @@ export class WebServer {
         app.set('views', _path("./app/view"));
         app.set('view engine', 'ejs');
 
-
         app.use(express.static(_path("./app/static")));//
         // app.use('/static', express.static(_path("./app/static")));//
         app.use(express.static(_path("./app/db")));//
