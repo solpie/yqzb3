@@ -4,6 +4,7 @@ import {ViewConst} from "../../../event/Const";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {TeamInfo} from "../../../model/TeamInfo";
 import Container = createjs.Container;
+import Text = createjs.Text;
 export class EventPanel {
     ctn:Container;
 
@@ -200,7 +201,7 @@ export class EventPanel {
         }
         ctn.addChild(eloScoreDt);
 
-        var winpercent = new createjs.Text("胜率" + p.winpercent().toFixed(3) * 100 + "%", "18px Arial", col);
+        var winpercent:Text = new createjs.Text("胜率" + p.getWinPercent(), "18px Arial", col);
         winpercent.textAlign = 'center';
         winpercent.x = name.x;
         winpercent.y = 320;
@@ -225,5 +226,15 @@ export class EventPanel {
         }
         ctn.addChild(style);
         return ctn;
+    }
+
+    fadeOutWinPanel() {
+        console.log(this, "show fade Out WinPanel");
+        var ctn = this.ctn;
+        createjs.Tween.get(ctn).to({alpha: 0}, 200)
+            .call(function () {
+                ctn.alpha = 1;
+                ctn.removeAllChildren();
+            });
     }
 }

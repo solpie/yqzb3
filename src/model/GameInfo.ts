@@ -1,5 +1,6 @@
 import {TeamInfo} from "./TeamInfo";
 import {PlayerInfo} from "./PlayerInfo";
+import {setPropTo} from "./BaseInfo";
 declare var db;
 export class GameInfo {
     gameId:number = 0;
@@ -22,8 +23,15 @@ export class GameInfo {
     _winTeam:TeamInfo;
     _loseTeam:TeamInfo;
 
-    constructor() {
-
+    constructor(gameDoc?:Object) {
+        if (gameDoc) {
+            setPropTo(gameDoc, this);
+            var playerDocArr = this.playerInfoArr;
+            this.playerInfoArr = [];
+            for (var i = 0; i < playerDocArr.length; i++) {
+                this.playerInfoArr.push(new PlayerInfo(playerDocArr[i]));
+            }
+        }
     }
 
     getAvgEloScore() {

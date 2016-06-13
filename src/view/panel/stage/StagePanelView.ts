@@ -6,6 +6,7 @@ import {formatSecond} from "../../../utils/JsFunc";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {PlayerPanel} from "./PlayerPanel";
 import {EventPanel} from "./EventPanel";
+import {GameInfo} from "../../../model/GameInfo";
 import Text = createjs.Text;
 import BitmapText = createjs.BitmapText;
 import Container = createjs.Container;
@@ -104,6 +105,9 @@ export class StagePanelView extends BasePanelView {
                 var mvpIdx = param.mvpIdx;
                 this.eventPanel.fadeInWinPanel(teamInfo, mvpIdx);
             })
+            .on(`${CommandId.fadeOutWinPanel}`, (param)=> {
+                this.eventPanel.fadeOutWinPanel();
+            })
 
     }
 
@@ -185,6 +189,11 @@ export class StagePanelView extends BasePanelView {
     onShowWin() {
         console.log('onShowWin mvp ', this.mvpIdx);
         this.opReq(`${CommandId.cs_fadeInWinPanel}`, {mvpIdx: this.mvpIdx});
+    }
+
+    onHideWin() {
+        console.log('onHideWin mvp ');
+        this.opReq(`${CommandId.cs_fadeOutWinPanel}`);
     }
 
     onRefresh() {
@@ -412,12 +421,13 @@ class ScorePanel {
         this.timeOnSec = time;
         if (state) {
             this.toggleTimer1();
-            // cmd.emit(CommandId.toggleTimer);
         }
     }
 
     init(gameInfo:any) {
         this.setLeftScore(gameInfo.leftScore);
         this.setRightScore(gameInfo.rightScore);
+        var gameInfoClone:GameInfo = new GameInfo(gameInfo);
+        this.setAvgEloScore(gameInfoClone.getAvgEloScore());
     }
 }

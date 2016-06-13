@@ -10,7 +10,6 @@ class PlayerDoc {
     height:number = 0;
     weight:number = 0;
     dtScore:number = 0;//最近一场天梯分变化
-    winpercent:number = 0;//  胜率  100/100.0%
     activityId:number = 0;//赛事id
     gameRec:Array<number> = [];//比赛记录
     loseGameCount:number = 0;
@@ -92,7 +91,7 @@ export class PlayerInfo extends BaseInfo {
     }
 
     winpercent(val?:any) {
-        return prop(this.playerData, "winpercent", val);
+        return this.winGameCount() / this.gameCount();
     }
 
     gameCount(val?:any) {
@@ -107,7 +106,7 @@ export class PlayerInfo extends BaseInfo {
         return prop(this.playerData, "loseGameCount", val);
     }
 
-    getWinPercent() {
+    getWinPercent():string {
         return (this.winpercent() * 100).toFixed(1) + "%";
     }
 
@@ -172,8 +171,8 @@ export class PlayerInfo extends BaseInfo {
         }
         else
             this.loseGameCount(this.loseGameCount() + 1);
-        this.gameCount(this.gameCount() + 1);
-        this.winpercent(this.getCurWinningPercent());
+        // this.gameCount(this.gameCount() + 1);
+        // this.winpercent(this.getCurWinningPercent());
     }
 
     getCurWinningPercent():number {

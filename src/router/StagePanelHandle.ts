@@ -98,6 +98,9 @@ export class StagePanelHandle {
                 var winTeam:TeamInfo = this.gameInfo.setWinByMvpIdx(param.mvpIdx);
                 this.io.emit(`${CommandId.fadeInWinPanel}`, ScParam({teamInfo: winTeam, mvpIdx: param.mvpIdx}));
             };
+            cmdMap[`${CommandId.cs_fadeOutWinPanel}`] = (param)=> {
+                this.io.emit(`${CommandId.fadeOutWinPanel}`);
+            };
 
             cmdMap[cmdId](param);
 
