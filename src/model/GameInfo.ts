@@ -11,21 +11,46 @@ export class GameInfo {
     data:Date;//开始时间
     straightScoreLeft:number = 0;//连杀判定
     straightScoreRight:number = 0;//连杀判定
-    playerInfoArr:any = new Array(8);
+    playerInfoArr:PlayerInfo[] = new Array(8);
     playerRecArr:any = [];
     isFinish:any = null;
     _timer:number = 0;
     gameState:number = 0;//0 未确认胜负 1 确认胜负未录入数据 2确认胜负并录入数据
     unLimitScore:number = 0;///
+    mvpPlayerId:number;
 
     _winTeam:TeamInfo;
     _loseTeam:TeamInfo;
 
-    _teamLeft:TeamInfo;
-    _teamRight:TeamInfo;
-
     constructor() {
 
+    }
+
+    getAvgEloScore() {
+        var sum = 0;
+        var count = 0;
+        var leftPlayerArr = this.getLeftTeam();
+        for (var i = 0; i < leftPlayerArr.length; i++) {
+            var obj:PlayerInfo = leftPlayerArr[i];
+            if (obj) {
+                count++;
+                sum += obj.eloScore();
+            }
+        }
+        var left = Math.floor(sum / count);
+        sum = 0;
+        count = 0;
+        var playerArr = this.getRightTeam();
+        for (var i = 0; i < playerArr.length; i++) {
+            var obj:PlayerInfo = playerArr[i];
+            if (obj) {
+                count++;
+                sum += obj.eloScore();
+            }
+        }
+        var right = Math.floor(sum / count);
+
+        return {left: left, right: right};
     }
 
     addLeftScore() {
@@ -125,7 +150,18 @@ export class GameInfo {
         return playerInfo;
     }
 
-    _setGameResult(isLeftWin) {
+    setWinByMvpIdx(mvpIdx):TeamInfo {
+        var isBlueWin = (mvpIdx < 4);
+        this.mvpPlayerId = this.playerInfoArr[mvpIdx].id();
+        if (isBlueWin) {
+            return this.setLeftTeamWin();
+        }
+        else {
+            return this.setRightTeamWin();
+        }
+    }
+
+    _setGameResult(isLeftWin):TeamInfo {
         var teamLeft = new TeamInfo();
         teamLeft.setPlayerArr(this.getLeftTeam());
 
@@ -148,11 +184,11 @@ export class GameInfo {
     }
 
 
-    setLeftTeamWin() {
+    setLeftTeamWin():TeamInfo {
         return this._setGameResult(true);
     }
 
-    setRightTeamWin() {
+    setRightTeamWin():TeamInfo {
         return this._setGameResult(false);
     }
 

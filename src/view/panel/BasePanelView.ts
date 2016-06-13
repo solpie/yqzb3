@@ -1,6 +1,7 @@
 import {VueEx} from "../VueEx";
 import Stage = createjs.Stage;
 import Container = createjs.Container;
+import {ViewConst} from "../../event/Const";
 export class BasePanelView extends VueEx {
     op:boolean;
     stageWidth:number;
@@ -10,8 +11,8 @@ export class BasePanelView extends VueEx {
     opReq:(cmdId:string, param?:any, callback?:any)=>void;
 
     initCanvas() {
-        this.stageWidth = 1920;
-        this.stageHeight = 1080;
+        this.stageWidth = ViewConst.STAGE_WIDTH;
+        this.stageHeight = ViewConst.STAGE_HEIGHT;
         var canvas = document.getElementById("stage");
         canvas.setAttribute("width", this.stageWidth + "");
         canvas.setAttribute("height", this.stageHeight + "");

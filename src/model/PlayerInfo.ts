@@ -13,7 +13,6 @@ class PlayerDoc {
     winpercent:number = 0;//  胜率  100/100.0%
     activityId:number = 0;//赛事id
     gameRec:Array<number> = [];//比赛记录
-    // gameCount:number = 0;//场数
     loseGameCount:number = 0;
     winGameCount:number = 0;
 }
@@ -144,7 +143,7 @@ export class PlayerInfo extends BaseInfo {
     }
 
     getWinStyleIcon() {
-        var path = '/img/panel/';
+        var path = '/img/panel/stage/win/';
         if (this.style() == 1) {
             path += 'fengWin.png'
         }

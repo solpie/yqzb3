@@ -5,10 +5,10 @@ import {PanelId, ViewEvent} from "../../../event/Const";
 import {formatSecond} from "../../../utils/JsFunc";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {PlayerPanel} from "./PlayerPanel";
+import {EventPanel} from "./EventPanel";
 import Text = createjs.Text;
 import BitmapText = createjs.BitmapText;
 import Container = createjs.Container;
-import {EventPanel} from "./EventPanel";
 
 @Component({
     template: require('./stage-panel.html'),
@@ -88,14 +88,23 @@ export class StagePanelView extends BasePanelView {
             .on(`${CommandId.updatePlayer}`, (data)=> {
                 // this.getElem('#playerImg' + data.idx).src = data.playerDoc.avatar;
                 this.playerPanel.setPlayer(data.idx, new PlayerInfo(data.playerDoc));
+                this.scorePanel.setAvgEloScore(data.avgEloScore);
             })
             .on(`${CommandId.updatePlayerAll}`, (param)=> {
+                //todo effect
                 for (var i = 0; i < param.playerInfoArr.length; i++) {
                     var playerInfo:PlayerInfo = new PlayerInfo(param.playerInfoArr[i]);
                     this.playerPanel.setPlayer(i, playerInfo);
                 }
+                this.scorePanel.setAvgEloScore(param.avgEloScore);
                 // this.getElem('#playerImg' + data.idx).src = data.playerDoc.avatar;
             })
+            .on(`${CommandId.fadeInWinPanel}`, (param)=> {
+                var teamInfo = param.teamInfo;
+                var mvpIdx = param.mvpIdx;
+                this.eventPanel.fadeInWinPanel(teamInfo, mvpIdx);
+            })
+
     }
 
 
@@ -175,6 +184,7 @@ export class StagePanelView extends BasePanelView {
 
     onShowWin() {
         console.log('onShowWin mvp ', this.mvpIdx);
+        this.opReq(`${CommandId.cs_fadeInWinPanel}`, {mvpIdx: this.mvpIdx});
     }
 
     onRefresh() {
@@ -357,23 +367,23 @@ class ScorePanel {
         }
     }
 
-    setAvgEloScore(playerInfoArr:Array<PlayerInfo>) {
-        function getAvgRight(start, playerInfoArr) {
-            var sum = 0;
-            var count = 0;
-            for (var i = start; i < start + 4; i++) {
-                var playerInfo:PlayerInfo = playerInfoArr[i];
-                if (playerInfo) {
-                    count++;
-                    sum += playerInfo.eloScore();
-                }
-            }
-            var ret = Math.floor(sum / count);
-            return ret ? ret : 0;
-        }
+    setAvgEloScore(data) {
+        // function getAvgRight(start, playerInfoArr) {
+        //     var sum = 0;
+        //     var count = 0;
+        //     for (var i = start; i < start + 4; i++) {
+        //         var playerInfo:PlayerInfo = playerInfoArr[i];
+        //         if (playerInfo) {
+        //             count++;
+        //             sum += playerInfo.eloScore();
+        //         }
+        //     }
+        //     var ret = Math.floor(sum / count);
+        //     return ret ? ret : 0;
+        // }
 
-        this.leftAvgEloScoreText.text = getAvgRight(0, playerInfoArr) + "";
-        this.rightAvgEloScoreText.text = getAvgRight(4, playerInfoArr) + "";
+        this.leftAvgEloScoreText.text = data.left + "";
+        this.rightAvgEloScoreText.text = data.right + "";
     }
 
     resetTimer() {

@@ -8,6 +8,7 @@ import {Response} from "express-serve-static-core";
 import {Request} from "express";
 import {ScParam} from "../Socket.io";
 import {db} from "../model/DbInfo";
+import {TeamInfo} from "../model/TeamInfo";
 import Socket = SocketIO.Socket;
 export class StagePanelHandle {
     io:any;
@@ -75,6 +76,7 @@ export class StagePanelHandle {
             cmdMap[`${CommandId.cs_updatePlayer}`] = (param)=> {
                 param.playerDoc = db.player.dataMap[param.playerId];
                 this.gameInfo.setPlayerInfoByIdx(param.idx, db.player.getPlayerInfoById(param.playerId));
+                param.avgEloScore = this.gameInfo.getAvgEloScore();
                 this.io.emit(`${CommandId.updatePlayer}`, ScParam(param))
             };
 
@@ -86,7 +88,15 @@ export class StagePanelHandle {
                     this.gameInfo.setPlayerInfoByIdx(i, playerInfo);
                     playerInfoArr.push(playerInfo);
                 }
-                this.io.emit(`${CommandId.updatePlayerAll}`, ScParam({playerInfoArr: playerInfoArr}));
+                this.io.emit(`${CommandId.updatePlayerAll}`, ScParam({
+                    avgEloScore: this.gameInfo.getAvgEloScore(),
+                    playerInfoArr: playerInfoArr
+                }));
+            };
+
+            cmdMap[`${CommandId.cs_fadeInWinPanel}`] = (param)=> {
+                var winTeam:TeamInfo = this.gameInfo.setWinByMvpIdx(param.mvpIdx);
+                this.io.emit(`${CommandId.fadeInWinPanel}`, ScParam({teamInfo: winTeam, mvpIdx: param.mvpIdx}));
             };
 
             cmdMap[cmdId](param);

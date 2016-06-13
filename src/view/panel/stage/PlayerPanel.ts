@@ -4,7 +4,7 @@ import {PlayerInfo} from "../../../model/PlayerInfo";
 import {StagePlayerCard} from "../PlayerRender";
 export class PlayerPanel {
     playerCardArr:StagePlayerCard[];
-
+    
     constructor(parent:StagePanelView) {
         this.playerCardArr = [];
         var ctn = parent.scorePanel.ctn;

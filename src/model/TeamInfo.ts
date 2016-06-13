@@ -1,4 +1,5 @@
 import {PlayerInfo} from "./PlayerInfo";
+import {EloConf} from "../event/Const";
 export class TeamInfo {
     name:string;
     score:number;
