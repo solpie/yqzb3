@@ -9,13 +9,16 @@
                     <canvas id="avatarPreview"></canvas>
                 </div>
                 <div class="row">
-                    <input name="style" v-model="style" value="1" number class="with-gap blue" type="radio" id="style1"/>
+                    <input name="style" v-model="style" value="1" number class="with-gap blue" type="radio"
+                           id="style1"/>
                     <label for="style1">风</label>
-                    <input name="style" v-model="style" value="2" number class="with-gap green" type="radio" id="style2"/>
+                    <input name="style" v-model="style" value="2" number class="with-gap green" type="radio"
+                           id="style2"/>
                     <label for="style2">林</label>
                     <input name="style" v-model="style" value="3" number class="with-gap red" type="radio" id="style3"/>
                     <label for="style3">火</label>
-                    <input name="style" v-model="style" value="4" number class="with-gap yellow" type="radio" id="style4"/>
+                    <input name="style" v-model="style" value="4" number class="with-gap yellow" type="radio"
+                           id="style4"/>
                     <label for="style4">山</label>
                 </div>
                 <div class="row">
@@ -92,7 +95,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="/admin/#!/player" @click="onSubmitInfo($event)" class="modal-action modal-close waves-effect waves-green btn-flat">
+        <a @click="onSubmitInfo($event)" class="modal-action modal-close waves-effect waves-green btn-flat">
             <i class="material-icons">done</i>
         </a>
     </div>

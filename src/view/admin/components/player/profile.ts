@@ -126,6 +126,9 @@ export class Profile extends VueEx {
                 this.post('/admin/player/update', {playerDoc: playerDoc}, (res)=> {
                     console.log(res);
                     this.isEdit = false;
+                    if (res) {
+                        window.location.reload();
+                    }
                 })
             };
 
@@ -145,6 +148,9 @@ export class Profile extends VueEx {
             playerDoc.avatar = this.cropper.getCroppedCanvas().toDataURL();
             this.$http.post('/admin/player/add', {playerData: playerDoc}, (res) => {
                 console.log(res);
+                if (res) {
+                    window.location.reload();
+                }
             })
         }
 
