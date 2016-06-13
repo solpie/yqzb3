@@ -18,6 +18,13 @@ export var obj2Class = function (obj:any, cls:any) {
     }
     return c;
 };
+export function setPropTo(data, obj) {
+    for (var key in data) {
+        if (obj.hasOwnProperty(key))
+            obj[key] = data[key];
+    }
+}
+
 export class BaseInfo {
 
 }

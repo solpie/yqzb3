@@ -1,4 +1,5 @@
 import Vue = require('vue');
+import HttpOptions = vuejs.HttpOptions;
 export declare function Data():PropertyDecorator
 export class VueEx extends Vue {
     $parentMethods:any;
@@ -14,6 +15,13 @@ export class VueEx extends Vue {
             return a[1];
         }
         return null;
+    }
+
+    post(url:string, data?:any, option?:HttpOptions) {
+        if (data)
+            this.$http.post(url, data, option);
+        else
+            this.$http.post(url, option)
     }
 
     getElem(val:string):any {

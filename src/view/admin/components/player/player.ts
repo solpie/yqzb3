@@ -1,9 +1,9 @@
 import Component from "vue-class-component";
-// import {Modal} from "../modal/modal";
 import {storageKey} from "../../constants";
 import {Search} from "./search";
 import {Profile} from "./profile";
 import {VueEx} from "../../../VueEx";
+import {ViewEvent} from "../../../../event/Const";
 @Component({
     template: require('./player.html'),
     components: {Search, Profile},
@@ -66,13 +66,21 @@ export class Player extends VueEx {
     }
 
     onSubmit(msg) {
-        console.log('onSubmit',msg)
+        console.log('onSubmit', msg)
+    }
+
+    onAddPlayer() {
+        ($('#modal-player') as any).openModal();
+        this.message = "添加球员";
+        this.isOpen = true;
     }
 
     onEdit(playerId, event):any {
-        // var playerId = this.getAttr(e, 'value');
         event.stopPropagation();
-        console.log("edit player", playerId);
+        console.log("onEdit", playerId);
+        ($('#modal-player') as any).openModal();
+        this.message = "编辑球员";
+        this.$broadcast(ViewEvent.PLAYER_EDIT, playerId);
     }
 
     data():any {
@@ -96,11 +104,6 @@ export class Player extends VueEx {
         return this.month === 12 && this.date === 4;
     }
 
-    onAddPlayer() {
-        ($('#modal-player') as any).openModal();
-        this.message = "添加球员";
-        this.isOpen = true;
-    }
 
     open() {
         this.message = "";

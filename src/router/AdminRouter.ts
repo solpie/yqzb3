@@ -11,12 +11,14 @@ adminRouter.get('/', function (req:any, res:any) {
 //     res.render('admin/admin-player', {playerDataArr: []});
 // });
 // post /admin/player/add
+
 adminRouter.post('/player/add', function (req:any, res:any) {
     if (!req.body) return res.sendStatus(400);
 
     var playerData = req.body.playerData;
     var playerInfo = new PlayerInfo(playerData);
     playerInfo.id(db.player.getIdNew());
+
     var avatarPath = 'img/player/' + playerInfo.id() + '.png';
     var dbImgPath = "app/db/" + avatarPath;
     console.log('/admin/player/add');
@@ -32,4 +34,39 @@ adminRouter.post('/player/add', function (req:any, res:any) {
                 res.sendStatus(400);
         });
     });
+});
+
+adminRouter.post('/player/update', function (req:any, res:any) {
+    if (!req.body) return res.sendStatus(400);
+    var playerDocUpdate:any = req.body.playerDoc;
+    console.log('/player/update', playerDocUpdate);
+
+    var playerDoc = db.player.dataMap[playerDocUpdate.id];
+    if (playerDoc) {
+        var avatarPathOld = playerDoc.avatar;
+
+        function updatePlayer() {
+            playerDocUpdate.avatar = avatarPathOld;
+            console.log('/player/update playerDoc', playerDocUpdate);
+            db.player.ds().update({id: playerDocUpdate.id}, playerDocUpdate, {}, (err, newDoc) => {
+                db.player.syncDataMap();
+                res.sendStatus(200);
+            });
+        }
+
+        if (playerDocUpdate.avatar) {
+            var avatarPath = 'img/player/' + playerDocUpdate.id + '.png';
+            var dbImgPath = "app/db/" + avatarPath;
+            base64ToPng(dbImgPath, playerDocUpdate.avatar, (imgPath)=> {
+                console.log('/player/update base64ToPng');
+                updatePlayer();
+            });
+        }
+        else {
+            updatePlayer();
+        }
+    }
+    else {
+        console.log('/player/update no playerDoc in map');
+    }
 });

@@ -117,15 +117,29 @@ export class PlayerInfo extends BaseInfo {
             path += 'feng.png'
         }
         else if (style === 2) {
-            path += 'huo.png'
-        }
-        else if (style === 3) {
-            path += 'shan.png'
-        }
-        else if (style === 4) {
             path += 'lin.png'
         }
-        return path
+        else if (style === 3) {
+            path += 'huo.png'
+        }
+        else if (style === 4) {
+            path += 'shan.png'
+        }
+        return path;
+        // var path = '/img/panel/stage/';
+        // if (style === 1) {
+        //     path += 'feng.png'
+        // }
+        // else if (style === 2) {
+        //     path += 'huo.png'
+        // }
+        // else if (style === 3) {
+        //     path += 'shan.png'
+        // }
+        // else if (style === 4) {
+        //     path += 'lin.png'
+        // }
+        // return path
     }
 
     getWinStyleIcon() {
@@ -134,13 +148,13 @@ export class PlayerInfo extends BaseInfo {
             path += 'fengWin.png'
         }
         else if (this.style() == 2) {
-            path += 'huoWin.png'
+            path += 'linWin.png'
         }
         else if (this.style() == 3) {
-            path += 'shanWin.png'
+            path += 'huoWin.png'
         }
         else if (this.style() == 4) {
-            path += 'linWin.png'
+            path += 'shanWin.png'
         }
         return path
     }

@@ -4,3 +4,8 @@ export const PanelId = {
     actPanel: 'act',
     playerPanel: 'player'
 };
+
+
+export const ViewEvent = {
+    PLAYER_EDIT: 'edit player'
+};

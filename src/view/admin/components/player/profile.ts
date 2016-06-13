@@ -2,9 +2,11 @@ import Component from "vue-class-component";
 import {VueEx} from "../../../VueEx";
 import {StagePlayerCard} from "../../../panel/PlayerRender";
 import {PlayerInfo} from "../../../../model/PlayerInfo";
+import {ViewEvent} from "../../../../event/Const";
+import {loadImg} from "../../../../utils/JsFunc";
 import WatchOption = vuejs.WatchOption;
 declare var Cropper;
-var _this:Profile;
+var _this_:Profile;
 @Component({
     template: require('./profile.html'),
     props: {
@@ -44,16 +46,16 @@ var _this:Profile;
     },
     watch: {
         name: (val)=> {
-            _this.bluePlayerCard.setName(val);
-            _this.redPlayerCard.setName(val);
+            _this_.bluePlayerCard.setName(val);
+            _this_.redPlayerCard.setName(val);
         },
         eloScore: (val)=> {
-            _this.bluePlayerCard.setEloScore(val);
-            _this.redPlayerCard.setEloScore(val);
+            _this_.bluePlayerCard.setEloScore(val);
+            _this_.redPlayerCard.setEloScore(val);
         },
         style: (val)=> {
-            _this.bluePlayerCard.setStyle(val);
-            _this.redPlayerCard.setStyle(val);
+            _this_.bluePlayerCard.setStyle(val);
+            _this_.redPlayerCard.setStyle(val);
         },
     }
 })
@@ -74,32 +76,91 @@ export class Profile extends VueEx {
     weight:number;
     height:number;
     qq:number;
+    avatar:string;
+    //
+
+    isEdit:boolean;
+    editPlayerId:number;
+    isChangeAvatar:boolean;
 
     ready() {
-        _this = this;
+        _this_ = this;
+
+        this.isEdit = false;
+        this.isChangeAvatar = false;
+
+        this.$on(ViewEvent.PLAYER_EDIT, (playerId)=> {
+            this.isEdit = true;
+            this.isChangeAvatar = false;
+            this.post(`/db/player/${playerId}`, (data)=> {
+                console.log('res: ', data);
+                var playerDoc = data.playerDoc;
+                this.editPlayerId = playerDoc.id;
+                this.stage = this.initCanvas(playerDoc.avatar, 1);
+                this.setProp(playerDoc, this);
+                this.avatar = playerDoc.avatar;
+            });
+            console.log(ViewEvent.PLAYER_EDIT, playerId);
+        })
+    }
+
+    setProp(data, toObj) {
+        toObj.style = data.style;
+        toObj.name = data.name;
+        toObj.realName = data.realName;
+        toObj.phone = data.phone;
+        toObj.qq = data.qq;
+        toObj.weight = data.weight;
+        toObj.height = data.height;
+        toObj.eloScore = data.eloScore;
     }
 
     onSubmitInfo() {
         // this.$parentMethods.onSubmit('sss');
         // var playerAvatar = document.getElementById('playerAvatar');
-        this.playerImgData = this.cropper.getCroppedCanvas().toDataURL();
-        console.log('onSubmitInfo', this.playerImgData);
+        // this.playerImgData = this.cropper.getCroppedCanvas().toDataURL();
+        console.log('onSubmitInfo');
         // document.getElementById('playerAvatarData').value = playerAvatar.src;
         $(".cropper-container").hide();
         // isChangeImage = true;
-        var playerData:any = {};
-        playerData.style = this.style;
-        playerData.name = this.name;
-        playerData.realName = this.realName;
-        playerData.phone = this.phone;
-        playerData.qq = this.qq;
-        playerData.weight = this.weight;
-        playerData.height = this.height;
-        playerData.eloScore = this.eloScore;
-        playerData.avatar = this.cropper.getCroppedCanvas().toDataURL();
-        this.$http.post('/admin/player/add', {playerData:playerData}, function (res) {
-            console.log(res);
-        })
+        var playerDoc:any = {};
+        this.setProp(this, playerDoc);
+
+        if (this.isEdit) {
+            var postUpdate = ()=> {
+                this.post('/admin/player/update', {playerDoc: playerDoc}, (res)=> {
+                    console.log(res);
+                    this.isEdit = false;
+                })
+            };
+            playerDoc.id = this.editPlayerId;
+            if (this.isChangeAvatar) {
+                // loadImg(this.cropper.getCroppedCanvas().toDataURL(), (e)=> {
+                //   
+                //     // this.post('/admin/player/update', {playerDoc: playerDoc}, (res)=> {
+                //     //     console.log(res);
+                //     //     this.isEdit = false;
+                //     // })
+                // });
+
+                playerDoc.avatar = this.cropper.getCroppedCanvas().toDataURL();
+                // console.log('toDataURL complete ', e.target.src);
+                postUpdate();
+                console.log('isChangeAvatar', playerDoc.avatar);
+            }
+            else {
+                postUpdate();
+                // playerDoc.avatar = this.avatar;
+            }
+
+        }
+        else {
+            playerDoc.avatar = this.cropper.getCroppedCanvas().toDataURL();
+            this.$http.post('/admin/player/add', {playerData: playerDoc}, (res) => {
+                console.log(res);
+            })
+        }
+
     }
 
     showFile(e) {
@@ -108,6 +169,7 @@ export class Profile extends VueEx {
         console.log("showFile", e.target.files[0]);
         fr.readAsDataURL(e.target.files[0]);
         fr.onload = (e)=> {
+            this.isChangeAvatar = true;
 //            document.getElementById("playerAvatar").src = e.target.result;
             ///init
             this.imagePath = (e.target as any).result;
