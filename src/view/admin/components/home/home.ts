@@ -11,9 +11,9 @@ export class Home {
     data():any {
         return {
             links: [
-                {title: "activity op", url: "/panel/act/op"},
-                {title: "stage op", url: "/panel/stage/op"},
-                {title: "player op", url: "/panel/player/op"}
+                {title: "activity op", url: "/panel/#!/act/op"},
+                {title: "stage op", url: "/panel/#!/stage/op"},
+                {title: "player op", url: "/panel/#!/player/op"}
             ]
         };
     }

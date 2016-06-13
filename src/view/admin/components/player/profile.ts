@@ -3,7 +3,6 @@ import {VueEx} from "../../../VueEx";
 import {StagePlayerCard} from "../../../panel/PlayerRender";
 import {PlayerInfo} from "../../../../model/PlayerInfo";
 import {ViewEvent} from "../../../../event/Const";
-import {loadImg} from "../../../../utils/JsFunc";
 import WatchOption = vuejs.WatchOption;
 declare var Cropper;
 var _this_:Profile;
@@ -115,42 +114,30 @@ export class Profile extends VueEx {
         toObj.eloScore = data.eloScore;
     }
 
-    onSubmitInfo() {
-        // this.$parentMethods.onSubmit('sss');
-        // var playerAvatar = document.getElementById('playerAvatar');
-        // this.playerImgData = this.cropper.getCroppedCanvas().toDataURL();
+    onSubmitInfo(event) {
+        event.stopPropagation();
         console.log('onSubmitInfo');
-        // document.getElementById('playerAvatarData').value = playerAvatar.src;
         $(".cropper-container").hide();
-        // isChangeImage = true;
         var playerDoc:any = {};
         this.setProp(this, playerDoc);
-
         if (this.isEdit) {
+
             var postUpdate = ()=> {
                 this.post('/admin/player/update', {playerDoc: playerDoc}, (res)=> {
                     console.log(res);
                     this.isEdit = false;
                 })
             };
+
+
             playerDoc.id = this.editPlayerId;
             if (this.isChangeAvatar) {
-                // loadImg(this.cropper.getCroppedCanvas().toDataURL(), (e)=> {
-                //   
-                //     // this.post('/admin/player/update', {playerDoc: playerDoc}, (res)=> {
-                //     //     console.log(res);
-                //     //     this.isEdit = false;
-                //     // })
-                // });
-
                 playerDoc.avatar = this.cropper.getCroppedCanvas().toDataURL();
-                // console.log('toDataURL complete ', e.target.src);
                 postUpdate();
-                console.log('isChangeAvatar', playerDoc.avatar);
+                console.log('isChangeAvatar');
             }
             else {
                 postUpdate();
-                // playerDoc.avatar = this.avatar;
             }
 
         }
