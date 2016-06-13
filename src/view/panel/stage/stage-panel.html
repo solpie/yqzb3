@@ -4,7 +4,8 @@
             <div class="col" style="width: 85px">
                 <img src="/img/panel/stage/blue.png" id="playerImg{{$index}}" style="width: 80px">
                 <input id="player{{$index}}" type="text" @keyup.enter="onQueryPlayer($index)" style="width: 75px">
-                <input id="playerNum{{$index}}" type="text" @keyup.enter="onUpdatePlayerNum($index)" style="width: 35px">
+                <input id="playerNum{{$index}}" type="text" @keyup.enter="onUpdatePlayerNum($index)"
+                       style="width: 35px">
                 <a class="modal-trigger waves-effect waves-light btn" style="width: 75px;height: 25px"
                    @click="onUpdatePlayer($index)">↓</a>
                 <p>
@@ -31,4 +32,16 @@
         <a class="modal-trigger waves-effect waves-light btn" @click="onShowWin">Show Win</a>
         <a class="modal-trigger waves-effect waves-light btn" @click="onRefresh">Refresh</a>
     </div>
+</div>
+<div style="display: none">
+    <img src="/img/panel/stage/win/playerBgWinBlue.png">
+    <img src="/img/panel/stage/win/playerBgWinBlueMvp.png">
+    <img src="/img/panel/stage/win/playerBgWinRed.png">
+    <img src="/img/panel/stage/win/playerBgWinRedMvp.png">
+    <img src="/img/panel/stage/win/winPanelTitleBlue.png">
+    <img src="/img/panel/stage/win/winPanelTitleRed.png">
+    <img src="/img/panel/stage/win/fengWin.png">
+    <img src="/img/panel/stage/win/huoWin.png">
+    <img src="/img/panel/stage/win/shanWin.png">
+    <img src="/img/panel/stage/win/linWin.png">
 </div>

@@ -1,19 +1,7 @@
-/////
-// var appExecPath = M_path.dirname(process.execPath);
-// var isDev;
-// //path for external
-// function pathEx(p) {
-//     return isDev ? p : M_path.join(appExecPath, p);
-// }
-/////////////////
 import {PlayerInfo} from "./PlayerInfo";
 import {_path} from "../Env";
+import {EloConf} from "../event/Const";
 export var db:any;
-function dbPlayerInfo() {
-    return db.player.dataStore;
-}
-
-// var Document = require('camo').Document;
 var Datastore = require('nedb');
 
 class BaseDB {

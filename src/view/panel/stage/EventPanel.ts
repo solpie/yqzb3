@@ -2,8 +2,8 @@ import {StagePanelView} from "./StagePanelView";
 import {loadImg} from "../../../utils/JsFunc";
 import {ViewConst} from "../../../event/Const";
 import {PlayerInfo} from "../../../model/PlayerInfo";
-import Container = createjs.Container;
 import {TeamInfo} from "../../../model/TeamInfo";
+import Container = createjs.Container;
 export class EventPanel {
     ctn:Container;
 
@@ -152,7 +152,7 @@ export class EventPanel {
         }
         else {
             bg.x = -116;
-            bg.y = -110 + 30;
+            bg.y = -80;
         }
         ctn.addChild(bg);
 
