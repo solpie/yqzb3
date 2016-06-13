@@ -7,6 +7,7 @@ import {GameInfo} from "../model/GameInfo";
 import {Response} from "express-serve-static-core";
 import {Request} from "express";
 import {ScParam} from "../Socket.io";
+import {db} from "../model/DbInfo";
 import Socket = SocketIO.Socket;
 export class StagePanelHandle {
     io:any;
@@ -32,8 +33,9 @@ export class StagePanelHandle {
         panelRouter.post(`/stage/:cmdId`, (req:Request, res:Response) => {
             if (!req.body) return res.sendStatus(400);
             var cmdId = req.params.cmdId;
+            var param = req.body;
             console.log(`/stage/${cmdId}`);
-            this.io.emit('broadcast', req.body);
+            // this.io.emit('broadcast', req.body);
 
             var cmdMap:any = {};
             cmdMap[`${CommandId.cs_addLeftScore}`] = ()=> {
@@ -70,7 +72,24 @@ export class StagePanelHandle {
                 this.io.emit(`${CommandId.resetTimer}`);
             };
 
-            cmdMap[cmdId]();
+            cmdMap[`${CommandId.cs_updatePlayer}`] = (param)=> {
+                param.playerDoc = db.player.dataMap[param.playerId];
+                this.gameInfo.setPlayerInfoByIdx(param.idx, db.player.getPlayerInfoById(param.playerId));
+                this.io.emit(`${CommandId.updatePlayer}`, ScParam(param))
+            };
+
+            cmdMap[`${CommandId.cs_updatePlayerAll}`] = (param)=> {
+                var playerInfoArr = [];
+                for (var i = 0; i < param.playerIdArr.length; i++) {
+                    var playerId = param.playerIdArr[i];
+                    var playerInfo = db.player.getPlayerInfoById(playerId);
+                    this.gameInfo.setPlayerInfoByIdx(i, playerInfo);
+                    playerInfoArr.push(playerInfo);
+                }
+                this.io.emit(`${CommandId.updatePlayerAll}`, ScParam({playerInfoArr: playerInfoArr}));
+            };
+
+            cmdMap[cmdId](param);
 
             res.sendStatus(200);
         });

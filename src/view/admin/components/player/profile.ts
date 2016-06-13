@@ -61,7 +61,6 @@ var _this_:Profile;
 export class Profile extends VueEx {
     imagePath:string;
     playerInfo:PlayerInfo;
-    playerImgData:string;
     stage:any;
     bluePlayerCard:StagePlayerCard;
     redPlayerCard:StagePlayerCard;

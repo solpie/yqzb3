@@ -109,11 +109,10 @@ class ActivityPanelInfo extends BasePanelInfo {
             else//未开始的比赛
                 playerIdArr = game.playerIdArr;
 
-
             for (var i = 0; i < playerIdArr.length; i++) {
                 var playerId = playerIdArr[i];
                 var playerInfo:PlayerInfo = new PlayerInfo(db.player.getDataById(playerId));
-                gameInfo.setPlayerInfoByPos(i, playerInfo);
+                gameInfo.setPlayerInfoByIdx(i, playerInfo);
                 console.log('push playerInfo');
             }
             this.roundInfo.gameInfoArr.push(gameInfo);
@@ -206,14 +205,14 @@ class StagePanelInfo extends BasePanelInfo {
             time: this.gameInfo.time,
             state: this.gameInfo.timerState,
             ctnXY: this.ctnXY,
-            unLimitScore: this.unLimitScore,
-            playerInfoArr: this.getPlayerDataArr()
+            unLimitScore: this.unLimitScore
+            // playerInfoArr: this.getPlayerDataArr()
         }
     }
 
-    getPlayerDataArr():Array<any> {
-        return this.gameInfo.getPlayerDataArr();
-    }
+    // getPlayerDataArr():Array<any> {
+    //     return this.gameInfo.getPlayerDataArr();
+    // }
 
     addLeftScore() {
         if (this.unLimitScore === 1)
@@ -282,82 +281,82 @@ class StagePanelInfo extends BasePanelInfo {
         var pos = param.pos;
         param.playerInfo.pos = pos;
         // this.playerInfoArr[pos] = param.playerInfo;
-        this.gameInfo.setPlayerInfoByPos(pos, param.playerInfo);
+        this.gameInfo.setPlayerInfoByIdx(pos, param.playerInfo);
         db.game.updatePlayerByPos(this.gameInfo.gameId, pos, param.playerInfo.id);
         console.log(this, "updatePlayer", JSON.stringify(param.playerInfo), param.playerInfo.pos);
         cmd.emit(CommandId.updatePlayer, param, this.pid);
     }
 
-    showWinPanel(param:any) {
-        var winTeam:TeamInfo;
-        if (param.mvp < 4) {
-            winTeam = this.gameInfo.setLeftTeamWin();
-        }
-        else {
-            winTeam = this.gameInfo.setRightTeamWin();
-        }
-        console.log("showWinPanel param:", param, "mvp:", param.mvp, this.getPlayerDataArr());
-        for (var i = 0; i < winTeam.playerInfoArr.length; i++) {
-            var obj:PlayerInfo = winTeam.playerInfoArr[i];
-            if (!obj)
-                return;
-            if (obj.pos == param.mvp)
-                obj.isMvp = true;
-            console.log(JSON.stringify(obj));
-        }
-        cmd.emit(CommandId.fadeInWinPanel, {mvp: param.mvp, playerDataArr: winTeam.playerInfoArr}, this.pid);
-    }
+    // showWinPanel(param:any) {
+    //     var winTeam:TeamInfo;
+    //     if (param.mvp < 4) {
+    //         winTeam = this.gameInfo.setLeftTeamWin();
+    //     }
+    //     else {
+    //         winTeam = this.gameInfo.setRightTeamWin();
+    //     }
+    //     console.log("showWinPanel param:", param, "mvp:", param.mvp, this.getPlayerDataArr());
+    //     for (var i = 0; i < winTeam.playerInfoArr.length; i++) {
+    //         var obj:PlayerInfo = winTeam.playerInfoArr[i];
+    //         if (!obj)
+    //             return;
+    //         if (obj.pos == param.mvp)
+    //             obj.isMvp = true;
+    //         console.log(JSON.stringify(obj));
+    //     }
+    //     cmd.emit(CommandId.fadeInWinPanel, {mvp: param.mvp, playerDataArr: winTeam.playerInfoArr}, this.pid);
+    // }
 
     hideWinPanel(param:any) {
         cmd.emit(CommandId.fadeOutWinPanel, param, this.pid);
     }
 
-    updatePlayerAll(playerDataArr:any) {
-        for (var i = 0; i < playerDataArr.length; i++) {
-            var obj = playerDataArr[i];
-            this.gameInfo.setPlayerInfoByPos(obj.pos, obj.playerData);
-            console.log(this, "updatePlayer", JSON.stringify(obj.playerData), obj.pos);
-        }
-        cmd.emit(CommandId.updatePlayerAll, this.getPlayerDataArr(), this.pid);
-    }
+    // updatePlayerAll(playerDataArr:any) {
+    //     for (var i = 0; i < playerDataArr.length; i++) {
+    //         var obj = playerDataArr[i];
+    //         this.gameInfo.setPlayerInfoByIdx(obj.pos, obj.playerData);
+    //         console.log(this, "updatePlayer", JSON.stringify(obj.playerData), obj.pos);
+    //     }
+    //     cmd.emit(CommandId.updatePlayerAll, this.getPlayerDataArr(), this.pid);
+    // }
 
     notice(param:any) {
         param.img = this.getNoticeImg(param.notice);
         cmd.emit(CommandId.notice, param, this.pid);
     }
 
-    saveGameRec(param:any) {
-        var mvp = param.mvp;
-        var blueScore = param.blueScore;
-        var redScore = param.redScore;
-        var isRedWin = (mvp > 3);
-        // function savePlayerDataToGame()
-        if (db.game.isGameFinish(param.gameId)) {
-
-        }
-        else {
-            this.gameInfo.saveGameRecToPlayer(param.gameId, isRedWin, ()=> {
-                // console.log("submitGame player dataMap:", JSON.stringify(db.player.dataMap));
-                console.log("saveGameRecToPlayer callback!!", param.gameId);
-                var playerRecArr = [];
-                for (var i = 0; i < this.getPlayerDataArr().length; i++) {
-                    var playerData = this.getPlayerDataArr()[i];
-                    var newPlayerInfo:PlayerInfo = new PlayerInfo(db.player.getDataById(playerData.id));
-                    playerRecArr.push(newPlayerInfo.getRec());
-                    console.log("push rec", JSON.stringify(newPlayerInfo.getRec()));
-                }
-                db.game.submitGame(param.gameId, isRedWin, mvp, blueScore, redScore, playerRecArr, (isSus)=> {
-                    if (isSus) {
-                        console.log("submit Game sus");
-                    }
-                    else {
-                        console.log("submit Game failed!!");
-                    }
-                })
-            });
-        }
-
-    }
+    // saveGameRec(param:any) {
+    //     var mvp = param.mvp;
+    //     var blueScore = param.blueScore;
+    //     var redScore = param.redScore;
+    //     var isRedWin = (mvp > 3);
+    //     // function savePlayerDataToGame()
+    //     if (db.game.isGameFinish(param.gameId)) {
+    //
+    //     }
+    //     else {
+    //         this.gameInfo.saveGameRecToPlayer(param.gameId, isRedWin, ()=> {
+    //             // console.log("submitGame player dataMap:", JSON.stringify(db.player.dataMap));
+    //             console.log("saveGameRecToPlayer callback!!", param.gameId);
+    //             var playerRecArr = [];
+    //             for (var i = 0; i < this.getPlayerDataArr().length; i++) {
+    //                 var playerData = this.getPlayerDataArr()[i];
+    //                 var newPlayerInfo:PlayerInfo = new PlayerInfo(db.player.getDataById(playerData.id));
+    //                 playerRecArr.push(newPlayerInfo.getRec());
+    //                 console.log("push rec", JSON.stringify(newPlayerInfo.getRec()));
+    //             }
+    //             db.game.submitGame(param.gameId, isRedWin, mvp, blueScore, redScore, playerRecArr, (isSus)=> {
+    //                 if (isSus) {
+    //                     console.log("submit Game sus");
+    //                 }
+    //                 else {
+    //                     console.log("submit Game failed!!");
+    //                 }
+    //             })
+    //         });
+    //     }
+    //
+    // }
 
     resetGame() {
         // this.gameInfo = new GameInfo();

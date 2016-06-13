@@ -308,6 +308,13 @@ class PlayerDB extends BaseDB {
             callback();
         });
     }
+
+    getPlayerInfoById(id) {
+        var playerDoc = this.dataMap[id];
+        if (playerDoc)
+            return new PlayerInfo(playerDoc);
+        return null;
+    }
 }
 
 export function initDB() {

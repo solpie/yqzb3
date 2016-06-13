@@ -21,8 +21,9 @@ export class PlayerInfo extends BaseInfo {
     playerData:PlayerDoc = new PlayerDoc();
     pos:number;
     isRed:Boolean = true;
+    isBlue:Boolean;
     isMvp:Boolean = false;
-    backNumber:number;//当场球衣号码 
+    backNumber:number = 0;//当场球衣号码 
 
     constructor(playerData?:any) {
         super();

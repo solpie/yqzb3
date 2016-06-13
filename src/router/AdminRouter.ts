@@ -11,6 +11,9 @@ adminRouter.get('/', function (req:any, res:any) {
 //     res.render('admin/admin-player', {playerDataArr: []});
 // });
 // post /admin/player/add
+adminRouter.post('/player/wx/add', function (req:any, res:any) {
+
+});
 
 adminRouter.post('/player/add', function (req:any, res:any) {
     if (!req.body) return res.sendStatus(400);

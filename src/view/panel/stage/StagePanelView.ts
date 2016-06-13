@@ -4,6 +4,7 @@ import {BasePanelView} from "../BasePanelView";
 import {PanelId} from "../../../event/Const";
 import {formatSecond} from "../../../utils/JsFunc";
 import {PlayerInfo} from "../../../model/PlayerInfo";
+import {PlayerPanel} from "./PlayerPanel";
 import Text = createjs.Text;
 import BitmapText = createjs.BitmapText;
 import Container = createjs.Container;
@@ -25,6 +26,11 @@ import Container = createjs.Container;
             required: true,
             default: 0
         },
+        gameId: {
+            type: Number,
+            required: true,
+            default: 0
+        },
         playerInfoArr: {
             type: Array,
             default: [1, 2, 3, 4, 5, 6, 7, 8]
@@ -33,9 +39,11 @@ import Container = createjs.Container;
 })
 export class StagePanelView extends BasePanelView {
     scorePanel:ScorePanel;
+    playerPanel:PlayerPanel;
     mvpIdx:number;
     timerName:string;
     isInit:boolean;
+    gameId:number;
     playerInfoArr:any;
 
     ready() {
@@ -66,13 +74,28 @@ export class StagePanelView extends BasePanelView {
                 this.timerName = 'start';
                 this.scorePanel.resetTimer();
             })
+            .on(`${CommandId.updatePlayer}`, (data)=> {
+                // this.getElem('#playerImg' + data.idx).src = data.playerDoc.avatar;
+                this.playerPanel.setPlayer(data.idx, new PlayerInfo(data.playerDoc));
+            })
+            .on(`${CommandId.updatePlayerAll}`, (param)=> {
+                for (var i = 0; i < param.playerInfoArr.length; i++) {
+                    var playerInfo:PlayerInfo = new PlayerInfo(param.playerInfoArr[i]);
+                    this.playerPanel.setPlayer(i, playerInfo);
+                }
+                // this.getElem('#playerImg' + data.idx).src = data.playerDoc.avatar;
+            })
     }
 
 
-    initStage(gameInfo:any) {
+    initStage(gameDoc:any) {
         this.isInit = true;
         this.scorePanel = new ScorePanel(this);
-        this.scorePanel.init(gameInfo);
+        this.scorePanel.init(gameDoc);
+        // console.log(gameDoc);
+        this.playerPanel = new PlayerPanel(this);
+        this.playerPanel.init(gameDoc);
+        this.gameId = gameDoc.id;
     }
 
     onToggleTimer() {
@@ -99,10 +122,35 @@ export class StagePanelView extends BasePanelView {
     onQueryPlayer(idx) {
         var queryId = this.getElem("#player" + idx).value;
         console.log('onQueryPlayer', idx, queryId);
+        this.post(`/db/player/${queryId}`, (data)=> {
+            console.log('res: ', data);
+            var playerDoc = data.playerDoc;
+            this.getElem('#playerImg' + idx).src = playerDoc.avatar;
+        });
+    }
+
+    onUpdatePlayerNum(idx) {
+        var playerNum = this.getElem("#playerNum" + idx).value;
+        console.log('onQueryPlayer', idx, playerNum);
+    }
+
+    onStarting() {
+        console.log('onStarting');
+        var playerIdArr = [];
+        for (var i = 0; i < 8; i++) {
+            var queryId = Number(this.getElem("#player" + i).value);
+            playerIdArr.push(queryId);
+        }
+        playerIdArr = [10002, 10003, 10004, 10005,
+            10008, 10010, 10011, 10012];
+        this.opReq(`${CommandId.cs_updatePlayerAll}`, {playerIdArr: playerIdArr});
     }
 
     onUpdatePlayer(idx) {
         console.log('onUpdatePlayer', idx);
+        var queryId = Number(this.getElem("#player" + idx).value);
+        console.log('onQueryPlayer', idx, queryId);
+        this.opReq(`${CommandId.cs_updatePlayer}`, {idx: idx, playerId: queryId});
     }
 
     onMinRightScore() {
@@ -119,6 +167,7 @@ export class StagePanelView extends BasePanelView {
 
     onRefresh() {
         console.log('onRefresh');
+        window.location.reload()
     }
 }
 function blink(target) {
@@ -131,7 +180,8 @@ function blink(target) {
         .to({alpha: 1}, blink);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////ScorePanel///////////////////////////////////////////////
 class ScorePanel {
     timeText:Text;
     leftAvgEloScoreText:Text;
@@ -146,11 +196,13 @@ class ScorePanel {
 
     timerId:any;
     timerState:number;
+    ctn:Container;
 
     constructor(parent:StagePanelView) {
         this.timeOnSec = 0;
 
         var scoreCtn = new createjs.Container();
+        this.ctn = scoreCtn;
         scoreCtn.y = parent.stageHeight - 132;
 
         parent.stage.addChild(scoreCtn);

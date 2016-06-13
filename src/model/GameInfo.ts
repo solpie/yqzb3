@@ -11,7 +11,7 @@ export class GameInfo {
     data:Date;//开始时间
     straightScoreLeft:number = 0;//连杀判定
     straightScoreRight:number = 0;//连杀判定
-    playerDataArr:any = new Array(8);
+    playerInfoArr:any = new Array(8);
     playerRecArr:any = [];
     isFinish:any = null;
     _timer:number = 0;
@@ -39,7 +39,7 @@ export class GameInfo {
         this.straightScoreLeft++;
         if (this.leftScore == 0)
             this.straightScoreLeft = 0;
-       
+
         return this.straightScoreLeft;
         // cmd.emit(CommandId.straightScore5, {team: "left"}, this.pid);
     }
@@ -53,7 +53,7 @@ export class GameInfo {
 
         this.straightScoreLeft = 0;
         this.straightScoreRight++;
-        
+
         if (this.rightScore == 0)
             this.straightScoreRight = 0;
 
@@ -118,9 +118,11 @@ export class GameInfo {
         this._timer = 0;
     }
 
-    setPlayerInfoByPos(pos, playerData) {
-        playerData.isRed = (pos > 3);
-        this.playerDataArr[pos] = playerData;
+    setPlayerInfoByIdx(pos, playerInfo:PlayerInfo) {
+        playerInfo.isRed = (pos > 3);
+        playerInfo.isBlue = (pos < 4);
+        this.playerInfoArr[pos] = playerInfo;
+        return playerInfo;
     }
 
     _setGameResult(isLeftWin) {
@@ -140,7 +142,7 @@ export class GameInfo {
             this._winTeam = teamRight;
             this._loseTeam = teamLeft;
         }
-        console.log("playerData", JSON.stringify(this.playerDataArr));
+        // console.log("playerData", JSON.stringify(this.playerDataArr));
         this.gameState = 1;
         return this._winTeam;
     }
@@ -154,14 +156,15 @@ export class GameInfo {
         return this._setGameResult(false);
     }
 
-    getPlayerDataArr():Array<any> {
-        return this.playerDataArr;
-    }
+    // getPlayerDataArr():Array<any> {
+    //     return this.playerDataArr;
+    // }
 
     getLeftTeam(start = 0) {
         var team = [];
         for (var i = start; i < 4 + start; i++) {
-            var pInfo = new PlayerInfo(this.playerDataArr[i]);
+            // var pInfo = new PlayerInfo(this.playerDataArr[i]);
+            var pInfo = this.playerInfoArr[i];
             team.push(pInfo);
             pInfo.isRed = (start > 0)
         }

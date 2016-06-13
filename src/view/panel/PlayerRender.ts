@@ -9,7 +9,7 @@ export class StagePlayerCard extends Container {
     eloScoreText:Text;
     backNumText:Text;
     _styleCtn:Container;
-
+    isBlue:boolean;
     avatarBmp:Bitmap;
 
     constructor(playerInfo:PlayerInfo, scale = 1, isBlue = true) {
@@ -36,6 +36,7 @@ export class StagePlayerCard extends Container {
     }
 
     setPlayerInfo(playerInfo:PlayerInfo, scale = 1, isBlue = true) {
+        this.isBlue = isBlue;
         //width 150
         var ctn = this;
         this.removeAllChildren();
