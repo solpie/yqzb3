@@ -5,11 +5,7 @@ import Component from "vue-class-component";
     template: require('./rank.html')
 })
 export class Rank extends Vue {
-    links:{ title:string; url:string }[];
-
-    data():any {
-        return {
-            playerDataArr: []
-        };
+    ready() {
+        console.log("rank")
     }
 }
