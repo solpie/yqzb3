@@ -1,15 +1,16 @@
 import {StagePanelView} from "./stage/StagePanelView";
+import {ActivityPanelView} from "./act/ActivityPanelView";
 import {PanelId} from "../../event/Const";
 import {CommandId} from "../../event/Command";
 import {VueEx} from "../VueEx";
 
-declare var io:any;
-declare var pid:string;
-declare var op:boolean;
-export class Panel extends VueEx{
-    pid:string;
-    isOp:boolean;
-    panel:any;
+declare var io: any;
+declare var pid: string;
+declare var op: boolean;
+export class Panel extends VueEx {
+    pid: string;
+    isOp: boolean;
+    panel: any;
     connect() {
         var wsUrl = `http://192.168.1.73:6969/${this.pid}`;
         console.log("init panel!!!", this.pid, this.isOp, wsUrl);
@@ -55,6 +56,10 @@ router.map({
     '/stage/:op': {
         component: StagePanelView,
         name: 'stage'
+    },
+    '/act/:op': {
+        component: ActivityPanelView,
+        name: 'act'
     }
 });
 router.afterEach((transition) => {

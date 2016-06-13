@@ -1,4 +1,6 @@
 import {BasePanelView} from "../BasePanelView";
+import {PanelId, ViewEvent} from "../../../event/Const";
+
 import Component from "vue-class-component";
 @Component({
     template: require('./activity-panel.html'),
@@ -11,5 +13,7 @@ import Component from "vue-class-component";
     }
 })
 export class ActivityPanelView extends BasePanelView {
-
+    ready() {
+        var io = super.ready(PanelId.actPanel);
+    }
 }
