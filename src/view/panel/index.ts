@@ -16,25 +16,7 @@ export class Panel extends VueEx {
         console.log("init panel!!!", this.pid, this.isOp, wsUrl);
         return io.connect(wsUrl)
     }
-    // ready() {
-    //
-    //
-    //     // stage.on('connect', function () {
-    //     //     console.log("connect");
-    //     //     stage.emit('hi!');
-    //     // });
-    //     //
-    //     // news.on('news', function (data) {
-    //     //     console.log(data);
-    //     //     news.emit('woot');
-    //     // });
-    //
-    //     // socket.on('disconnect', function () {
-    //     //     io.emit('user disconnected');
-    //     // });
-    // }
 }
-
 
 //router
 
@@ -47,7 +29,6 @@ Vue.use(VueRouter);
 
 const router = new VueRouter<Panel>();
 
-// function configureRouter(router:vuejs.Router<Panel>) {
 router.map({
     // '/': {
     //     component: StagePanelView,
@@ -69,9 +50,6 @@ router.afterEach((transition) => {
         router.app.pid = PanelId.stagePanel;
     }
     console.log('after each!!!', toPath);
-    // router.app.active = transition.to.path.split("/")[1];
 });
-// }
-// configureRouter(router);
 router.start(Panel, '#panel');
 console.log('start router');
