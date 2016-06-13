@@ -7,5 +7,7 @@ export const PanelId = {
 
 
 export const ViewEvent = {
-    PLAYER_EDIT: 'edit player'
+    PLAYER_EDIT: 'edit player',
+    STRAIGHT3_LEFT: 'STRAIGHT3_LEFT',
+    STRAIGHT3_RIGHT: 'STRAIGHT3_RIGHT'
 };

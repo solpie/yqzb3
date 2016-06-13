@@ -1,13 +1,14 @@
 import {CommandId} from "../../../event/Command";
 import Component from "vue-class-component";
 import {BasePanelView} from "../BasePanelView";
-import {PanelId} from "../../../event/Const";
+import {PanelId, ViewEvent} from "../../../event/Const";
 import {formatSecond} from "../../../utils/JsFunc";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {PlayerPanel} from "./PlayerPanel";
 import Text = createjs.Text;
 import BitmapText = createjs.BitmapText;
 import Container = createjs.Container;
+import {EventPanel} from "./EventPanel";
 
 @Component({
     template: require('./stage-panel.html'),
@@ -40,6 +41,8 @@ import Container = createjs.Container;
 export class StagePanelView extends BasePanelView {
     scorePanel:ScorePanel;
     playerPanel:PlayerPanel;
+    eventPanel:EventPanel;
+
     mvpIdx:number;
     timerName:string;
     isInit:boolean;
@@ -62,6 +65,14 @@ export class StagePanelView extends BasePanelView {
             })
             .on(`${CommandId.addRightScore}`, (data)=> {
                 this.scorePanel.setRightScore(data.rightScore);
+            })
+            .on(`${CommandId.straightScore3}`, (param)=> {
+                if (param.team === ViewEvent.STRAIGHT3_LEFT) {
+                    this.eventPanel.fadeInStraight3(false);
+                }
+                else if (param.team === ViewEvent.STRAIGHT3_RIGHT) {
+                    this.eventPanel.fadeInStraight3(true);
+                }
             })
             .on(`${CommandId.toggleTimer}`, (data)=> {
                 if (this.timerName === 'start')
@@ -96,6 +107,7 @@ export class StagePanelView extends BasePanelView {
         this.playerPanel = new PlayerPanel(this);
         this.playerPanel.init(gameDoc);
         this.gameId = gameDoc.id;
+        this.eventPanel = new EventPanel(this);
     }
 
     onToggleTimer() {

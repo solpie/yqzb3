@@ -1,6 +1,6 @@
 import Server = SocketIO.Server;
 import {CommandId} from "../event/Command";
-import {PanelId} from "../event/Const";
+import {PanelId, ViewEvent} from "../event/Const";
 import {ServerConf} from "../Env";
 import {panelRouter} from "./PanelRouter";
 import {GameInfo} from "../model/GameInfo";
@@ -42,7 +42,7 @@ export class StagePanelHandle {
                 var straight = this.gameInfo.addLeftScore();
                 if (straight == 3) {
                     console.log("straight score 3");
-                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: "left"}));
+                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: ViewEvent.STRAIGHT3_LEFT}));
                 }
                 if (straight == 5) {
 
@@ -53,8 +53,8 @@ export class StagePanelHandle {
             cmdMap[`${CommandId.cs_addRightScore}`] = ()=> {
                 var straight = this.gameInfo.addRightScore();
                 if (straight == 3) {
-                    console.log("straight score 3");
-                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: "right"}));
+                    console.log("straight score 3 right");
+                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: ViewEvent.STRAIGHT3_RIGHT}));
                 }
                 if (straight == 5) {
 
