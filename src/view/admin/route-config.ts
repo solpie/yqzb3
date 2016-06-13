@@ -2,6 +2,7 @@ import {App} from "./app";
 import {Home} from "./components/home/home";
 import {Settings} from "./components/settings/settings";
 import {Player} from "./components/player/player";
+import {Activity} from "./components/activity/activity";
 export function configureRouter(router:vuejs.Router<App>) {
     router.map({
         '/': {
@@ -12,9 +13,9 @@ export function configureRouter(router:vuejs.Router<App>) {
             component: Player,
             name: 'player'
         },
-        '/rank': {
-            component: Player,
-            name: 'rank'
+        '/activity': {
+            component: Activity,
+            name: 'activity'
         },
         '/settings': {
             component: Settings,

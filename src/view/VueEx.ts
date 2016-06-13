@@ -1,6 +1,8 @@
 import Vue = require('vue');
+import Component from "vue-class-component";
 import HttpOptions = vuejs.HttpOptions;
-export declare function Data():PropertyDecorator
+export declare function Data(): PropertyDecorator
+export {Component}
 export class VueEx extends Vue {
     $parentMethods:any;
 
