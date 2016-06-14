@@ -16,3 +16,20 @@ dbRouter.post('/player/:playerId', function (req:any, res:any) {
         res.send({playerDoc: db.player.dataMap[playerId]});
     }
 });
+
+dbRouter.post('/act/', function (req:any, res:any) {
+    if (!req.body) return res.sendStatus(400);
+    res.send({activityMap: db.activity.dataMap});
+});
+
+dbRouter.post('/act/combine', function (req:any, res:any) {
+    res.send({
+        activityMap: db.activity.dataMap,
+        gameMap: db.game.dataMap
+    });
+});
+
+dbRouter.post('/game/', function (req:any, res:any) {
+    if (!req.body) return res.sendStatus(400);
+    res.send({gameMap: db.game.dataMap});
+});

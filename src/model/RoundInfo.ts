@@ -4,7 +4,8 @@ export class RoundInfo {
     static LOW_SECTION:string = 'low';
     date:number;//比赛日
     gameInfoArr:Array<GameInfo>;
-    roundId:number;
+    id:number;
+    section:number;
     curGameId:number;
     constructor() {
         this.gameInfoArr = [];

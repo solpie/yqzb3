@@ -1,4 +1,13 @@
-<div class="card-panel grey lighten-3" v-if="op" style="position:absolute;width:950px;left: 100px;top: 200px">
+<style>
+    #stage-panel {
+        position: absolute;
+        width: 950px;
+        left: 100px;
+        top: 80px;
+        opacity: .8;
+    }
+</style>
+<div id="stage-panel" class="card-panel grey lighten-3" v-if="op">
     <div class="row">
         <div class="col" v-for="playerInfo in playerInfoArr">
             <div class="col" style="width: 85px">
@@ -16,15 +25,24 @@
     </div>
     <div class="row">
         game id:{{gameId}}
-        <a class="modal-trigger waves-effect waves-light btn" @click="onStarting">starting line</a>
-        <a class="modal-trigger waves-effect waves-light btn" @click="onToggleTimer">{{timerName}}</a>
+        <div class="switch">
+            <label>
+                pause
+                <input type="checkbox" @click="onToggleTimer">
+                <span class="lever"></span>
+                start
+            </label>
+        </div>
+        //////////////////////////////////////////<a class="modal-trigger waves-effect waves-light btn"
+                                                     @click="onStarting">starting line</a>
+        <!--<a class="modal-trigger waves-effect waves-light btn" @click="onToggleTimer">{{timerName}}</a>-->
         <a class="modal-trigger waves-effect waves-light btn" @click="onResetTimer">Reset</a>
     </div>
     <div class="row">
         <a class="modal-trigger waves-effect waves-light btn" @click="onAddLeftScore">Left++</a>
         <a class="modal-trigger waves-effect waves-light btn" @click="onMinLeftScore">Left--</a>
         <input type="checkbox" id="test5"/>
-        <label for="test5">>>>>>>>不限制分数>>>>>>></label>
+        <label for="test5">///////不限制分数\\\\\\\</label>
         <a class="modal-trigger waves-effect waves-light btn" @click="onMinRightScore">Right--</a>
         <a class="modal-trigger waves-effect waves-light btn" @click="onAddRightScore">Right++</a>
     </div>

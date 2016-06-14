@@ -1,6 +1,6 @@
 import Component from "vue-class-component";
 import {VueEx} from "../../../VueEx";
-import {StagePlayerCard} from "../../../panel/PlayerRender";
+import {StagePlayerCard} from "../../../panel/render/PlayerRender";
 import {PlayerInfo} from "../../../../model/PlayerInfo";
 import {ViewEvent} from "../../../../event/Const";
 import WatchOption = vuejs.WatchOption;

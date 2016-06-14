@@ -1,4 +1,3 @@
-import {PlayerInfo} from "./model/PlayerInfo";
 import {adminRouter} from "./router/AdminRouter";
 import {initDB} from "./model/DbInfo";
 import {ServerConf, _path} from "./Env";
@@ -39,13 +38,13 @@ export class WebServer {
         console.log(process.execPath, ServerConf.isDev);
 
         var fs = require('fs');
-        fs.readFile(_path('app/config.json'), (err:any, data:any)=> {
+        fs.readFile(_path('app/package.json'), (err:any, data:any)=> {
             if (err) throw err;
             dataObj = JSON.parse(data);
-            ServerConf.host = dataObj.host;
-            ServerConf.wsPort = dataObj.wsPort;
+            ServerConf.host = dataObj.server.host;
+            ServerConf.wsPort = dataObj.server.wsPort;
             this.serverConf = ServerConf;
-            console.log(dataObj);
+            console.log("server config:",ServerConf);
             this.initServer();
             if (callback)
                 callback(dataObj);

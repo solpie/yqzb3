@@ -1,11 +1,11 @@
 import Component from "vue-class-component";
 
-export interface Home extends vuejs.Vue {
+export interface OpLinks extends vuejs.Vue {
 }
 @Component({
     template: require('./home.html')
 })
-export class Home {
+export class OpLinks {
     links:{ title:string; url:string }[];
 
     data():any {

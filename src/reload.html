@@ -64,7 +64,6 @@
     <div style="color: #0acbfc">
         YuanQiTV2
         <!-- All of the Node.js APIs are available in this renderer process. -->
-        We are using node
         <script>document.write(process.versions.node)</script>
         ,
         <br>
@@ -74,8 +73,15 @@
         <br>
         Electron
         <script>document.write(process.versions.electron)</script>
+        <br>
+        <script>
+            var isDev = process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath);
+            if (isDev)
+                document.write("dev version");
+            //            else
+            //                document.write("release");
+        </script>
     </div>
-
     .
     <!--<input type="button" value="player" onclick="onClkPlayer()">-->
     <!--<input type="button" value="watch" onclick="devWatch()">-->
@@ -94,11 +100,11 @@
 
 </body>
 <script>
-//    var process = require('process');
+    //    var process = require('process');
     var path = require('path');
     console.log(process.getSystemMemoryInfo());
     console.log(process.getProcessMemoryInfo());
-//    var projectRoot = path.resolve(process.execPath, '../../../..');
+    //    var projectRoot = path.resolve(process.execPath, '../../../..');
 
 
     const {shell} = require('electron');
@@ -106,7 +112,7 @@
         shell.showItemInFolder('.');
 //        shell.showItemInFolder('./resources/db');
     }
-//    const exec = require('child_process').exec;
+    //    const exec = require('child_process').exec;
 
 
     const {remote} = require('electron');
@@ -140,15 +146,10 @@
     }, false);
 
     // You can also require other files to run in this process
-//    var config = require('./config.json');
+    //    var config = require('./config.json');
     //    require('./Server.js');
     var webServer = require('./Server.js');
     //    var serverConf = require('./Server.js');
-    console.log(webServer);
-//    console.log(config);
-    console.log('%c Oh my heavens! ', 'background: #222; color: #bada55');
-
-    ///start dev watch
     function startDevWatch() {
         var consoleView = document.getElementById('consoleView');
         var consoleServer = document.getElementById('consoleServer');
@@ -172,6 +173,7 @@
             logServer(arg);
         });
     }
-    startDevWatch();
+//    if (isDev)
+//        startDevWatch();
 </script>
 </html>

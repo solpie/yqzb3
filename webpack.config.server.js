@@ -40,6 +40,7 @@ module.exports = {
             // },
             {context: '.', from: 'static/**/*'},
             // {context: '.', from: 'db/**/*'},
+            {from: 'src/package.json'},
             {from: 'src/reload.html'}
         ])
     ]

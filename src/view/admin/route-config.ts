@@ -1,5 +1,5 @@
 import {App} from "./app";
-import {Home} from "./components/home/home";
+import {OpLinks} from "./components/home/home";
 import {Settings} from "./components/settings/settings";
 import {Player} from "./components/player/player";
 import {Activity} from "./components/activity/activity";
@@ -7,7 +7,7 @@ import {Rank} from "./components/rank/rank";
 export function configureRouter(router:vuejs.Router<App>) {
     router.map({
         '/': {
-            component: Home,
+            component: OpLinks,
             name: 'home'
         },
         '/player': {

@@ -4,7 +4,7 @@
   "description": "YuanQiTV2",
   "main": "main.js",
   "server": {
-    "host1": "localhost",
-    "wsPort": "8085"
+    "host": "localhost",
+    "wsPort": "6969"
   }
 }

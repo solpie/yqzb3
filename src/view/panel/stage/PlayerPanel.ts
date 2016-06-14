@@ -1,7 +1,7 @@
 /////////////////////////player panel
 import {StagePanelView} from "./StagePanelView";
 import {PlayerInfo} from "../../../model/PlayerInfo";
-import {StagePlayerCard} from "../PlayerRender";
+import {StagePlayerCard} from "../render/PlayerRender";
 export class PlayerPanel {
     playerCardArr:StagePlayerCard[];
     

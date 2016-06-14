@@ -170,24 +170,26 @@ export class GameInfo {
     }
 
     _setGameResult(isLeftWin):TeamInfo {
-        var teamLeft = new TeamInfo();
-        teamLeft.setPlayerArr(this.getLeftTeam());
+        if (this.gameState === 0) {
+            var teamLeft = new TeamInfo();
+            teamLeft.setPlayerArr(this.getLeftTeam());
 
-        var teamRight = new TeamInfo();
-        teamRight.setPlayerArr(this.getRightTeam());
+            var teamRight = new TeamInfo();
+            teamRight.setPlayerArr(this.getRightTeam());
 
-        if (isLeftWin) {
-            teamLeft.beat(teamRight);
-            this._winTeam = teamLeft;
-            this._loseTeam = teamRight;
+            if (isLeftWin) {
+                teamLeft.beat(teamRight);
+                this._winTeam = teamLeft;
+                this._loseTeam = teamRight;
+            }
+            else {
+                teamRight.beat(teamLeft);
+                this._winTeam = teamRight;
+                this._loseTeam = teamLeft;
+            }
+            // console.log("playerData", JSON.stringify(this.playerDataArr));
+            this.gameState = 1;
         }
-        else {
-            teamRight.beat(teamLeft);
-            this._winTeam = teamRight;
-            this._loseTeam = teamLeft;
-        }
-        // console.log("playerData", JSON.stringify(this.playerDataArr));
-        this.gameState = 1;
         return this._winTeam;
     }
 
@@ -199,10 +201,6 @@ export class GameInfo {
     setRightTeamWin():TeamInfo {
         return this._setGameResult(false);
     }
-
-    // getPlayerDataArr():Array<any> {
-    //     return this.playerDataArr;
-    // }
 
     getLeftTeam(start = 0) {
         var team = [];

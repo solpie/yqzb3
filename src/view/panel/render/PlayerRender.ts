@@ -1,5 +1,5 @@
-import {loadImg} from "../../utils/JsFunc";
-import {PlayerInfo} from "../../model/PlayerInfo";
+import {loadImg} from "../../../utils/JsFunc";
+import {PlayerInfo} from "../../../model/PlayerInfo";
 import Text = createjs.Text;
 import Container = createjs.Container;
 import Bitmap = createjs.Bitmap;

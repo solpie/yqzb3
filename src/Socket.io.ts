@@ -1,7 +1,8 @@
 import {StagePanelHandle} from "./router/StagePanelHandle";
+import {ServerConf} from "./Env";
 export class SocketIOSrv {
     constructor() {
-        var io = require('socket.io')(6969);
+        var io = require('socket.io')(ServerConf.wsPort);
         var stage = new StagePanelHandle(io);
 
         var news = io
