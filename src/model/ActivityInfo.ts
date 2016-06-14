@@ -1,5 +1,6 @@
 import {RoundInfo} from "./RoundInfo";
 import {BaseDoc} from "./BaseInfo";
+declare var db;
 export class ActivityDoc extends BaseDoc {
     id: number = -1
     playerIdArr: number[] = [];//16 
@@ -33,12 +34,19 @@ export class ActivityInfo {
 
 
     setPlayerIdArr(playerIdArr: number[]) {
-        this.activityDoc.playerIdArr = playerIdArr.concat();
+        if (playerIdArr.length != 16) {
+            throw new Error('人数不满足条件')
+        }
+        else {
+            this.activityDoc.playerIdArr = playerIdArr.concat();
+        }
     }
     /*
         完全高低分组队 （高分和高分组队）
     */
     createGameInHighLowMode() {
+        var playerDocArr = db.player.getPlayerRank(this.activityDoc.playerIdArr);
+        
 
     }
     /*
