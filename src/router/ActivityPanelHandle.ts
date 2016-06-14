@@ -1,6 +1,6 @@
 import Server = SocketIO.Server;
 import Socket = SocketIO.Socket;
-import {PanelId} from "../event/Const";
+import {PanelId, ServerConst} from "../event/Const";
 import {ScParam, stagePanelHandle} from "../SocketIOSrv";
 import {Response} from "express-serve-static-core";
 import {Request} from "express";
@@ -35,16 +35,25 @@ export class ActivityPanelHandle {
 
             cmdMap[`${CommandId.cs_startGame}`] = (param)=> {
                 if (db.game.isGameFinish(param.gameId)) {
-                    return res.send({isFinish: true})
+                    res.send({isFinish: true})
                 }
                 else {
                     stagePanelHandle.startGame(param.gameId);
-                    return res.send({isFinish: false});
+                    res.send({isFinish: false});
                 }
+                return ServerConst.SEND_ASYNC;
             };
 
             cmdMap[`${CommandId.cs_restartGame}`] = (param)=> {
                 db.game.restartGame(param.gameId);
+            };
+
+            cmdMap[`${CommandId.cs_fadeInRankPanel}`] = (param)=> {
+                var activityId = param.activityId;
+                var playerIdArr = param.playerIdArr;
+                res.send({playerDocArr: db.player.getPlayerRank(playerIdArr)});
+                return ServerConst.SEND_ASYNC;
+                // db.game.restartGame(param.gameId);
             };
 
             var isSend = cmdMap[cmdId](param);

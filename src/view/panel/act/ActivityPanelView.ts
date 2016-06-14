@@ -121,7 +121,6 @@ export class ActivityPanelView extends BasePanelView {
     }
 
     onResetGame() {
-
         var selActivityInfo:ActivityInfo = this.activityInfoMap[this.activitySelected];
         var selGameInfo = selActivityInfo.getGameInfoById(this.gameSelected, this.roundSelected);
         console.log('onResetGame', selGameInfo);
@@ -132,9 +131,23 @@ export class ActivityPanelView extends BasePanelView {
             })
     }
 
-    onRankIn() {
-        console.log('onRankIn')
+    get selGameDoc():any {
+        var selActivityInfo:ActivityInfo = this.activityInfoMap[this.activitySelected];
+        return selActivityInfo.getGameInfoById(this.gameSelected, this.roundSelected);
+    }
 
+    onRankIn() {
+        console.log('onRankIn',this.selGameDoc);
+        // var playerIdArr = [];
+        // for (var i = 0; i < this.selGameDoc.playerIdArr.length; i++) {
+        //     var playerInfo = this.selGameDoc.playerIdArr[i];
+        //     playerIdArr.push(playerInfo.playerData.id);
+        // }
+        this.opReq(`${CommandId.cs_fadeInRankPanel}`,
+            {playerIdArr: this.selGameDoc.playerIdArr},
+            (param)=> {
+                console.log(param);
+            })
     }
 
     onRankOut() {

@@ -1,6 +1,7 @@
 import {PlayerInfo} from "./PlayerInfo";
 import {_path} from "../Env";
 import {EloConf} from "../event/Const";
+import {ascendingProp} from "../utils/JsFunc";
 export var db:any;
 var Datastore = require('nedb');
 
@@ -165,7 +166,7 @@ class GameDB extends BaseDB {
         });
     }
 
-    restartGame(gameId, callback=null) {
+    restartGame(gameId, callback = null) {
         var gameDoc = this.dataMap[gameId];
         if (gameDoc) {
             gameDoc.isFinish = false;
@@ -272,6 +273,20 @@ class PlayerDB extends BaseDB {
         // this.dataStore.find({$not: {id: 0}, activityId: actId}).sort({eloScore: 1}).exec(function (err, docs) {
         //     callback(err, docs);
         // });
+    }
+
+    getPlayerRank(playerIdArr:number[]) {
+        var playerDocArr = [];
+        for (var i = 0; i < playerIdArr.length; i++) {
+            var playerId = playerIdArr[i];
+            var playerDoc = this.dataMap[playerId];
+            if (playerDoc) {
+                playerDocArr.push(playerDoc);
+            }
+        }
+        //ascending
+        playerDocArr.sort(ascendingProp('eloScore'));
+        return playerDocArr;
     }
 
     getPlayerDataMapByIdArr(idArr, callback) {
