@@ -1,16 +1,18 @@
 import {loadImgArr} from "../../../utils/JsFunc";
 import {ViewConst} from "../../../event/Const";
+import {ActivityPanelView} from "../act/ActivityPanelView";
 import Container = createjs.Container;
 export class RankRender {
     ctn:Container;
     stageWidth:number = ViewConst.STAGE_WIDTH;
     stageHeight:number = ViewConst.STAGE_HEIGHT;
 
-    constructor() {
-
+    constructor(parant:ActivityPanelView) {
+        this.ctn = new Container();
+        parant.stage.addChild(this.ctn);
     }
 
-    fadeInRank(playerDataArr, pageNum = 0) {
+    fadeInRank(playerDocArr, pageNum = 0) {
         this.ctn.removeAllChildren();
         this.ctn.alpha = 0;
 
@@ -26,14 +28,14 @@ export class RankRender {
 
         var imgArr = [];
         for (var i = 0; i < 10; i++) {
-            var playerData = playerDataArr[i];
+            var playerData = playerDocArr[i];
             if (!playerData)break;
             imgArr.push(playerData.avatar);
         }
 
         loadImgArr(imgArr, ()=> {
             for (var i = 0; i < 10; i++) {
-                var playerData = playerDataArr[i];
+                var playerData = playerDocArr[i];
                 if (!playerData)break;
                 imgArr.push(playerData.avatar);
 
@@ -85,10 +87,10 @@ export class RankRender {
         createjs.Tween.get(this.ctn)
             .to({alpha: 1}, 300);
 
-        if (10 < playerDataArr.length) {
+        if (10 < playerDocArr.length) {
             var nextPage = [];
-            for (var i = 10; i < playerDataArr.length; i++) {
-                var playerData = playerDataArr[i];
+            for (var i = 10; i < playerDocArr.length; i++) {
+                var playerData = playerDocArr[i];
                 nextPage.push(playerData);
             }
             createjs.Tween.get(this).wait(10000).call(()=> {

@@ -61,6 +61,10 @@ export class ActivityPanelView extends BasePanelView {
 
     ready() {
         var io = super.ready(PanelId.actPanel);
+        io.on(`${CommandId.fadeInRankPanel}`, (param)=> {
+            console.log(param);
+            this.rankRender.fadeInRank(param.playerDocArr);
+        });
 
         if (this.op) {
             this.post('/db/act/combine', function (param) {
@@ -70,6 +74,11 @@ export class ActivityPanelView extends BasePanelView {
                 this.activityInfoMap = {};
             })
         }
+        this.initActivity()
+    }
+
+    initActivity() {
+        this.rankRender = new RankRender(this);
     }
 
     onActivitySelected() {
@@ -137,7 +146,7 @@ export class ActivityPanelView extends BasePanelView {
     }
 
     onRankIn() {
-        console.log('onRankIn',this.selGameDoc);
+        console.log('onRankIn', this.selGameDoc);
         // var playerIdArr = [];
         // for (var i = 0; i < this.selGameDoc.playerIdArr.length; i++) {
         //     var playerInfo = this.selGameDoc.playerIdArr[i];

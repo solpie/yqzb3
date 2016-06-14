@@ -51,8 +51,9 @@ export class ActivityPanelHandle {
             cmdMap[`${CommandId.cs_fadeInRankPanel}`] = (param)=> {
                 var activityId = param.activityId;
                 var playerIdArr = param.playerIdArr;
-                res.send({playerDocArr: db.player.getPlayerRank(playerIdArr)});
-                return ServerConst.SEND_ASYNC;
+                this.io.emit(`${CommandId.fadeInRankPanel}`,
+                    ScParam({playerDocArr: db.player.getPlayerRank(playerIdArr)}));
+                // return ServerConst.SEND_ASYNC;
                 // db.game.restartGame(param.gameId);
             };
 
