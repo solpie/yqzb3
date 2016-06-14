@@ -116,11 +116,15 @@ export class StagePanelView extends BasePanelView {
         this.isInit = true;
         this.scorePanel = new ScorePanel(this);
         this.scorePanel.init(gameDoc);
-        // console.log(gameDoc);
         this.playerPanel = new PlayerPanel(this);
         this.playerPanel.init(gameDoc);
         this.gameId = gameDoc.id;
         this.eventPanel = new EventPanel(this);
+        console.log('initStage',gameDoc);
+        for (var i = 0; i < gameDoc.playerInfoArr.length; i++) {
+            var playerInfo = gameDoc.playerInfoArr[i];
+            this.getElem("#player" + i).value = playerInfo.playerData.id;
+        }
     }
 
     onToggleTimer() {
@@ -166,8 +170,8 @@ export class StagePanelView extends BasePanelView {
             var queryId = Number(this.getElem("#player" + i).value);
             playerIdArr.push(queryId);
         }
-        playerIdArr = [10002, 10003, 10004, 10005,
-            10008, 10010, 10011, 10012];
+        // playerIdArr = [10002, 10003, 10004, 10005,
+        //     10008, 10010, 10011, 10012];
         this.opReq(`${CommandId.cs_updatePlayerAll}`, {playerIdArr: playerIdArr});
     }
 

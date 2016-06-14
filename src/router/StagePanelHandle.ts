@@ -1,4 +1,3 @@
-import Server = SocketIO.Server;
 import {CommandId} from "../event/Command";
 import {PanelId, ViewEvent} from "../event/Const";
 import {ServerConf} from "../Env";
@@ -6,10 +5,12 @@ import {panelRouter} from "./PanelRouter";
 import {GameInfo} from "../model/GameInfo";
 import {Response} from "express-serve-static-core";
 import {Request} from "express";
-import {ScParam} from "../Socket.io";
+import {ScParam} from "../SocketIOSrv";
 import {db} from "../model/DbInfo";
 import {TeamInfo} from "../model/TeamInfo";
+import Server = SocketIO.Server;
 import Socket = SocketIO.Socket;
+import {PlayerInfo} from "../model/PlayerInfo";
 export class StagePanelHandle {
     io:any;
     gameInfo:GameInfo;
@@ -36,9 +37,9 @@ export class StagePanelHandle {
             var cmdId = req.params.cmdId;
             var param = req.body;
             console.log(`/stage/${cmdId}`);
-            // this.io.emit('broadcast', req.body);
-
             var cmdMap:any = {};
+
+
             cmdMap[`${CommandId.cs_addLeftScore}`] = ()=> {
                 var straight = this.gameInfo.addLeftScore();
                 if (straight == 3) {
@@ -106,5 +107,20 @@ export class StagePanelHandle {
             cmdMap[cmdId](param);
             res.sendStatus(200);
         });
+    }
+
+    startGame(gameId) {
+        var gameDoc = db.game.getDataById(gameId);
+
+        this.gameInfo = new GameInfo(gameDoc);
+        if (gameDoc.playerIdArr ) {
+            this.gameInfo.playerInfoArr = [];
+            for (var playerId of gameDoc.playerIdArr) {
+                console.log('playerId', playerId);
+                this.gameInfo.playerInfoArr.push(new PlayerInfo(db.player.dataMap[playerId]));
+            }
+        }
+        db.game.startGame(gameDoc);
+        console.log('startGame:', gameId, gameDoc);
     }
 }

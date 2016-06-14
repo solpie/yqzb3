@@ -1,7 +1,6 @@
 import {EventDispatcher} from "../event/EventDispatcher";
 import {CommandId} from "../event/Command";
 import {PlayerInfo} from "./PlayerInfo";
-import {TeamInfo} from "./TeamInfo";
 import {GameInfo} from "./GameInfo";
 import {RoundInfo} from "./RoundInfo";
 import {PanelId} from "../event/Const";
@@ -124,16 +123,17 @@ class ActivityPanelInfo extends BasePanelInfo {
         cmd.emit(CommandId.fadeOutActPanel, null, this.pid);
     }
 
-    startGame(param) {//{activityId: this.selected, gameData: selGame}
-        this.gameData = param.gameData;
-        param.gameData.activityId = param.activityId;
-        param.gameData.isFinish = false;
-        this.panelInfo.stage.gameInfo = new GameInfo();
-        this.panelInfo.stage.gameInfo.gameId = param.gameData.id;
-        this.panelInfo.stage.gameInfo.gameState = 0;
-        db.game.startGame(param.gameData);
-        console.log('startGame:', param.gameData.id);
-    }
+    // startGame(gameId) {//{activityId: this.selected, gameData: selGame}
+    //     // this.gameData = param.gameData;
+    //     var gameDoc = db.game.getDataById(gameId);
+    //     param.gameData.activityId = param.activityId;
+    //     param.gameData.isFinish = false;
+    //     this.panelInfo.stage.gameInfo = new GameInfo();
+    //     this.panelInfo.stage.gameInfo.gameId = param.gameData.id;
+    //     this.panelInfo.stage.gameInfo.gameState = 0;
+    //     db.game.startGame(param.gameData);
+    //     console.log('startGame:', param.gameData.id);
+    // }
 
     fadeInRankPanel(param:any) {
         db.player.getRankPlayerArr(param.activityId, param.limit, (err, docs)=> {
@@ -214,41 +214,41 @@ class StagePanelInfo extends BasePanelInfo {
     //     return this.gameInfo.getPlayerDataArr();
     // }
 
-    addLeftScore() {
-        if (this.unLimitScore === 1)
-            this.gameInfo.leftScore += 1;
-        else
-            this.gameInfo.leftScore = (this.gameInfo.leftScore + 1) % (this.gameInfo.winScore + 1);
-        cmd.emit(CommandId.addLeftScore, this.gameInfo.leftScore, this.pid);
-
-        this.gameInfo.straightScoreRight = 0;
-        this.gameInfo.straightScoreLeft++;
-        if (this.gameInfo.leftScore == 0)
-            this.gameInfo.straightScoreLeft = 0;
-        if (this.gameInfo.straightScoreLeft == 3) {
-            console.log("straight score 3");
-            cmd.emit(CommandId.straightScore3, {team: "left"}, this.pid);
-        }
-        if (this.gameInfo.straightScoreLeft == 5)
-            cmd.emit(CommandId.straightScore5, {team: "left"}, this.pid);
-    }
-
-    addRightScore() {
-        if (this.unLimitScore === 1)
-            this.gameInfo.rightScore += 1;
-        else
-            this.gameInfo.rightScore = (this.gameInfo.rightScore + 1) % (this.gameInfo.winScore + 1);
-        cmd.emit(CommandId.addRightScore, this.gameInfo.rightScore, this.pid);
-
-        this.gameInfo.straightScoreLeft = 0;
-        this.gameInfo.straightScoreRight++;
-        if (this.gameInfo.rightScore == 0)
-            this.gameInfo.straightScoreRight = 0;
-        if (this.gameInfo.straightScoreRight == 3)
-            cmd.emit(CommandId.straightScore3, {team: "right"}, this.pid);
-        if (this.gameInfo.straightScoreRight == 5)
-            cmd.emit(CommandId.straightScore5, {team: "right"}, this.pid);
-    }
+    // addLeftScore() {
+    //     if (this.unLimitScore === 1)
+    //         this.gameInfo.leftScore += 1;
+    //     else
+    //         this.gameInfo.leftScore = (this.gameInfo.leftScore + 1) % (this.gameInfo.winScore + 1);
+    //     cmd.emit(CommandId.addLeftScore, this.gameInfo.leftScore, this.pid);
+    //
+    //     this.gameInfo.straightScoreRight = 0;
+    //     this.gameInfo.straightScoreLeft++;
+    //     if (this.gameInfo.leftScore == 0)
+    //         this.gameInfo.straightScoreLeft = 0;
+    //     if (this.gameInfo.straightScoreLeft == 3) {
+    //         console.log("straight score 3");
+    //         cmd.emit(CommandId.straightScore3, {team: "left"}, this.pid);
+    //     }
+    //     if (this.gameInfo.straightScoreLeft == 5)
+    //         cmd.emit(CommandId.straightScore5, {team: "left"}, this.pid);
+    // }
+    //
+    // addRightScore() {
+    //     if (this.unLimitScore === 1)
+    //         this.gameInfo.rightScore += 1;
+    //     else
+    //         this.gameInfo.rightScore = (this.gameInfo.rightScore + 1) % (this.gameInfo.winScore + 1);
+    //     cmd.emit(CommandId.addRightScore, this.gameInfo.rightScore, this.pid);
+    //
+    //     this.gameInfo.straightScoreLeft = 0;
+    //     this.gameInfo.straightScoreRight++;
+    //     if (this.gameInfo.rightScore == 0)
+    //         this.gameInfo.straightScoreRight = 0;
+    //     if (this.gameInfo.straightScoreRight == 3)
+    //         cmd.emit(CommandId.straightScore3, {team: "right"}, this.pid);
+    //     if (this.gameInfo.straightScoreRight == 5)
+    //         cmd.emit(CommandId.straightScore5, {team: "right"}, this.pid);
+    // }
 
     toggleTimer() {
         this.gameInfo.toggleTimer();
@@ -277,15 +277,15 @@ class StagePanelInfo extends BasePanelInfo {
         cmd.emit(CommandId.moveStagePanel, param, this.pid);
     }
 
-    updatePlayer(param:any) {
-        var pos = param.pos;
-        param.playerInfo.pos = pos;
-        // this.playerInfoArr[pos] = param.playerInfo;
-        this.gameInfo.setPlayerInfoByIdx(pos, param.playerInfo);
-        db.game.updatePlayerByPos(this.gameInfo.gameId, pos, param.playerInfo.id);
-        console.log(this, "updatePlayer", JSON.stringify(param.playerInfo), param.playerInfo.pos);
-        cmd.emit(CommandId.updatePlayer, param, this.pid);
-    }
+    // updatePlayer(param:any) {
+    //     var pos = param.pos;
+    //     param.playerInfo.pos = pos;
+    //     // this.playerInfoArr[pos] = param.playerInfo;
+    //     this.gameInfo.setPlayerInfoByIdx(pos, param.playerInfo);
+    //     // db.game.updatePlayerByPos(this.gameInfo.gameId, pos, param.playerInfo.id);
+    //     console.log(this, "updatePlayer", JSON.stringify(param.playerInfo), param.playerInfo.pos);
+    //     cmd.emit(CommandId.updatePlayer, param, this.pid);
+    // }
 
     // showWinPanel(param:any) {
     //     var winTeam:TeamInfo;

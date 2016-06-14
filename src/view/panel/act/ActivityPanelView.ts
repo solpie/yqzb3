@@ -5,6 +5,7 @@ import {RankRender} from "../render/RankRender";
 import {OpLinks} from "../../admin/components/home/home";
 import {ActivityInfo} from "../../../model/ActivityInfo";
 import {RoundInfo} from "../../../model/RoundInfo";
+import {CommandId} from "../../../event/Command";
 @Component({
     template: require('./activity-panel.html'),
     components: {OpLinks},
@@ -98,12 +99,37 @@ export class ActivityPanelView extends BasePanelView {
         }
     }
 
+    onGameSelected() {
+        var selActivityInfo:ActivityInfo = this.activityInfoMap[this.activitySelected];
+        var selGameInfo = selActivityInfo.getGameInfoById(this.gameSelected, this.roundSelected);
+    }
+
     onStartGame() {
-        console.log('onStartGame')
+        var selActivityInfo:ActivityInfo = this.activityInfoMap[this.activitySelected];
+        var selGameInfo = selActivityInfo.getGameInfoById(this.gameSelected, this.roundSelected);
+        console.log('onStartGame', selGameInfo);
+        this.opReq(`${CommandId.cs_startGame}`,
+            {gameId: selGameInfo.id, activityId: this.activitySelected, gameData: selGameInfo},
+            (param)=> {
+                if (param.isFinish)
+                    alert("比赛已完结");
+                else {
+                    alert("比赛开始");
+                }
+                console.log(param);
+            })
     }
 
     onResetGame() {
-        console.log('onResetGame')
+
+        var selActivityInfo:ActivityInfo = this.activityInfoMap[this.activitySelected];
+        var selGameInfo = selActivityInfo.getGameInfoById(this.gameSelected, this.roundSelected);
+        console.log('onResetGame', selGameInfo);
+        this.opReq(`${CommandId.cs_restartGame}`,
+            {gameId: selGameInfo.id},
+            (param)=> {
+                console.log(param);
+            })
     }
 
     onRankIn() {

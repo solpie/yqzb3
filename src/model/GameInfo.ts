@@ -3,7 +3,7 @@ import {PlayerInfo} from "./PlayerInfo";
 import {setPropTo} from "./BaseInfo";
 declare var db;
 export class GameInfo {
-    gameId:number = 0;
+    id:number = 0;
     winScore:number = 7;
     leftScore:number = 0;
     rightScore:number = 0;
@@ -23,7 +23,7 @@ export class GameInfo {
     _winTeam:TeamInfo;
     _loseTeam:TeamInfo;
 
-    constructor(gameDoc?:Object) {
+    constructor(gameDoc?:any) {
         if (gameDoc) {
             setPropTo(gameDoc, this);
             var playerDocArr = this.playerInfoArr;
@@ -98,7 +98,7 @@ export class GameInfo {
     }
 
     getGameId() {
-        return this.gameId;
+        return this.id;
     }
 
     toggleTimer() {

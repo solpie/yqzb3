@@ -165,8 +165,14 @@ class GameDB extends BaseDB {
         });
     }
 
-    restartGame(gameId) {
-        this.syncDataMap();
+    restartGame(gameId, callback=null) {
+        var gameDoc = this.dataMap[gameId];
+        if (gameDoc) {
+            gameDoc.isFinish = false;
+            this.ds().update({id: gameDoc.id}, gameDoc, {upsert: true}, (err, newDoc) => {
+                this.syncDataMap(callback);
+            });
+        }
     }
 
     isGameFinish(gameId) {

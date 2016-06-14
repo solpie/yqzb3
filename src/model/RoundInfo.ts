@@ -7,7 +7,16 @@ export class RoundInfo {
     id:number;
     section:number;
     curGameId:number;
+
     constructor() {
         this.gameInfoArr = [];
+    }
+
+    getGameInfoById(id) {
+        for (var gameData of this.gameInfoArr) {
+            if (gameData.id === id)
+                return gameData;
+        }
+        return null;
     }
 }

@@ -28,7 +28,6 @@ export class VueEx extends Vue {
 
     getElem(val:string):any {
         var _0 = val[0];
-        console.log(_0, val.substr(1));
         if (_0 == "#") {
             return document.getElementById(val.substr(1));
         }

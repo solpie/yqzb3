@@ -2,7 +2,7 @@ import {adminRouter} from "./router/AdminRouter";
 import {initDB} from "./model/DbInfo";
 import {ServerConf, _path} from "./Env";
 import {dbRouter} from "./router/DbRouter";
-import {SocketIOSrv} from "./Socket.io";
+import {SocketIOSrv} from "./SocketIOSrv";
 import {panelRouter} from "./router/PanelRouter";
 import {getIPAddress} from "./utils/NodeJsFunc";
 var colors = require('colors');

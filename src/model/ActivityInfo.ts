@@ -15,6 +15,13 @@ export class ActivityInfo {
         return null;
     }
 
+    getGameInfoById(gameId, roundId) {
+        var roundInfo = this.getRoundInfoById(roundId);
+        if (roundInfo)
+            return roundInfo.getGameInfoById(gameId);
+        return null;
+    }
+
     static build(activityId, activityMap, gameMap) {
         var activityMap = activityMap;
         var gameMap = gameMap;

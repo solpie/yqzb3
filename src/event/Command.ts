@@ -63,6 +63,7 @@ export enum CommandId{
     cs_fadeOutActPanel,
     fadeOutActPanel,
     cs_startGame,
+    cs_restartGame,
     cs_fadeInRankPanel,
     fadeInRankPanel,
 
