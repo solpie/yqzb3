@@ -1,7 +1,7 @@
-export var isdef = function (val:any) {
+export var isdef = function (val: any) {
     return val != undefined
 };
-export var prop = function (obj:any, paramName:any, v:any, callback?:any) {
+export var prop = function (obj: any, paramName: any, v: any, callback?: any) {
     if (isdef(v)) {
         obj[paramName] = v;
         if (callback)
@@ -11,7 +11,7 @@ export var prop = function (obj:any, paramName:any, v:any, callback?:any) {
         return obj[paramName]
 };
 
-export var obj2Class = function (obj:any, cls:any) {
+export var obj2Class = function (obj: any, cls: any) {
     var c = new cls;
     for (var paramName in obj) {
         c[paramName] = obj[paramName];
@@ -24,7 +24,9 @@ export function setPropTo(data, obj) {
             obj[key] = data[key];
     }
 }
+export class BaseDoc {
 
+}
 export class BaseInfo {
 
 }
