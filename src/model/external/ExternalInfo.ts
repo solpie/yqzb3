@@ -53,15 +53,24 @@ class Team {
     beat(loseTeam:Team) {
         if (!this.isFake) {
             var winScore = EloInfo.classicMethod(this.teamEloScore(), loseTeam.teamEloScore());
-            this.saveScore(winScore);
-            loseTeam.saveScore(-winScore);
+            this.saveScore(winScore, true);
+            loseTeam.saveScore(-winScore, false);
         }
     }
 
-    saveScore(dtScore:number) {
+    saveScore(dtScore:number, isWin:boolean) {
         for (var i = 0; i < this.playerInfoArr.length; i++) {
             var playerInfo:PlayerInfo = this.playerInfoArr[i];
             playerInfo.eloScore(playerInfo.eloScore() + dtScore);
+            if (isWin) {
+                playerInfo.winGameCount(playerInfo.winGameCount() + 1);
+            }
+            else {
+                playerInfo.loseGameCount(playerInfo.loseGameCount() + 1);
+            }
+            // if (playerInfo.gameCount() > 0) {
+            //     console.log('saveScore', playerInfo.name());
+            // }
         }
     }
 
@@ -106,7 +115,7 @@ class Game_PlayersXLSX extends BaseXLSX {
                 team.playerIdArr.push(xlsxObj.playerId);
                 if (!playerMap[xlsxObj.playerId]) {
                     team.isFake = true;
-                    console.warn(`no player map data ${xlsxObj.playerId}`);
+                    // console.warn(`no player map data ${xlsxObj.playerId}`);
                 }
                 else {
                     team.playerInfoArr.push(playerMap[xlsxObj.playerId].playerInfo);
@@ -164,7 +173,50 @@ class GameXLSX extends BaseXLSX {
     }
 }
 export class ExternalInfo {
+    playerInfoMap:any;
+    isInit:boolean = false;
+
     constructor() {
+    }
+
+    setupHuitiDB() {
+        if (this.isInit)
+            return this.playerInfoMap;
+        this.isInit = true;
+        //playerXLSX
+        var playerMap:any = PlayerXLSX.getData(_path('app/db/xlsx/player.xlsx'));
+        var teamMap:any = Game_PlayersXLSX.getData(_path('app/db/xlsx/game_players.xlsx'), playerMap);
+
+        db.gameHuiTi.ds().find({$not: {id: 0}})
+            .sort({date: -1})
+            .exec((err, docs) => {
+                for (var key in db.gameHuiTi.dataMap) {
+                    var gameXLSX:GameXLSX = db.gameHuiTi.dataMap[key];
+                    var homeTeam:Team = teamMap[gameXLSX.homeTeamId];
+                    var guestTeam:Team = teamMap[gameXLSX.guestTeamId];
+                    if (Number(gameXLSX.homeTeamScore) > Number(gameXLSX.guestTeamScore)) {
+                        homeTeam.beat(guestTeam);
+                    }
+                    else
+                        guestTeam.beat(homeTeam);
+                }
+
+                var playerInfoMap:any = {};
+                var playerInfoCount = 0;
+                var playerDocArr = [];
+                for (var key in playerMap) {
+                    var playerXLSX:PlayerXLSX = playerMap[key];
+                    if (playerXLSX.playerInfo.gameCount() > 0) {
+                        playerInfoCount++;
+                        playerInfoMap[playerXLSX.id] = playerXLSX.playerInfo;
+                        // playerDocArr.push(playerXLSX.playerInfo.playerData);
+                    }
+                }
+                this.playerInfoMap = playerInfoMap;
+                // db.playerHuiTi.ds().insert(playerDocArr);
+                console.log('playerInfo map count:', playerInfoCount);
+                return this.playerInfoMap;
+            });
     }
 
     static importHuiTi() {
@@ -183,13 +235,13 @@ export class ExternalInfo {
                     gameXLSX.isFake = true;
                     continue;
                 }
-                console.log("homeTeam", homeTeam, homeTeam.teamEloScore(), 'guestTeam', guestTeam, guestTeam.teamEloScore());
+                // console.log("homeTeam", homeTeam, homeTeam.teamEloScore(), 'guestTeam', guestTeam, guestTeam.teamEloScore());
                 if (gameXLSX.homeTeamScore > gameXLSX.guestTeamScore) {
                     homeTeam.beat(guestTeam);
                 }
                 else
                     guestTeam.beat(homeTeam);
-                console.log("homeTeam", homeTeam.teamEloScore(), 'guestTeam', guestTeam.teamEloScore());
+                // console.log("homeTeam", homeTeam.teamEloScore(), 'guestTeam', guestTeam.teamEloScore());
                 var gameDoc = {
                     id: gameXLSX.id,
                     date: gameXLSX.date,
@@ -207,7 +259,7 @@ export class ExternalInfo {
             }
         }
 
-        db.gameHuiTi.ds().insert(gameXLSXavailble,function (err, doc) {
+        db.gameHuiTi.ds().insert(gameXLSXavailble, function (err, doc) {
             console.log('hui ti data import complete!!');
         });
         // function upsert(idx) {

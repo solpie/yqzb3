@@ -2,6 +2,7 @@ import {PlayerInfo} from "./PlayerInfo";
 import {_path} from "../Env";
 import {ascendingProp} from "../utils/JsFunc";
 import {EloConf} from "./EloInfo";
+import {ExternalInfo} from "./external/ExternalInfo";
 export var db:any;
 var Datastore = require('nedb');
 
@@ -10,9 +11,13 @@ class BaseDB {
     config:any;
     dbPath:string;
     dataMap:any;
+    indexName:string = 'id';
 
     constructor(option) {
         this.dbPath = option.filename;
+        if (option.indexName) {
+            this.indexName = option.indexName;
+        }
         this.dataStore = new Datastore(option);
         this.dataStore.find({id: 0}, (err, docs) => {
             console.log('load config', this.dbPath);
@@ -32,7 +37,7 @@ class BaseDB {
             this.dataMap = {};
             for (var i = 0; i < docs.length; i++) {
                 var doc = docs[i];
-                this.dataMap[doc.id] = doc;
+                this.dataMap[doc[this.indexName]] = doc;
             }
             if (callback)
                 callback();
@@ -337,13 +342,19 @@ export function initDB() {
     var playerDb:string = _path('app/db/player.db');
     var activityDb:string = _path('app/db/activity.db');
     var gameDbPath:string = _path('app/db/game.db');
+
     var huitiDbPath:string = _path('app/db/gameHuiTi.db');
+    var huitiPlayerDbPath:string = _path('app/db/playerHuiTi.db');
 
     db = {};
     db.player = new PlayerDB({filename: playerDb, autoload: true});
     db.activity = new ActivityDB({filename: activityDb, autoload: true});
     db.game = new GameDB({filename: gameDbPath, autoload: true});
-    db.gameHuiTi = new BaseDB({filename: huitiDbPath, autoload: true});
+    //hui ti
+    db.gameHuiTi = new BaseDB({filename: huitiDbPath, autoload: true, indexName: '_id'});
+    db.playerHuiTi = new BaseDB({filename: huitiPlayerDbPath, autoload: true, indexName: '_id'});
+
+    db.externalInfo = new ExternalInfo();
     // var ProtoBuf = require('protobufjs');
     // var builder = ProtoBuf.loadProtoFile(_path('app/proto/player.proto'));
     // var Player:any = builder.build('Player');

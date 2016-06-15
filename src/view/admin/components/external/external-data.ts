@@ -15,6 +15,10 @@ export class ExternalData extends VueEx {
         _this_ = this;
 
         // this.importDataFromHT();
+        this.post('/db/external/player', function (param) {
+            var playerInfoMap = param.playerInfoMap;
+            console.log('playerInfo map', playerInfoMap);
+        })
     }
 
     importDataFromHT() {

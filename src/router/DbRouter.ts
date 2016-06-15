@@ -1,5 +1,4 @@
 import {db} from "../model/DbInfo";
-import {_path} from "../Env";
 import {ExternalInfo} from "../model/external/ExternalInfo";
 export var dbRouter = require('express').Router();
 
@@ -36,7 +35,11 @@ dbRouter.post('/game/', function (req:any, res:any) {
     res.send({gameMap: db.game.dataMap});
 });
 
-dbRouter.post('/external/', function (req:any, res:any) {
+dbRouter.post('/external/player', function (req:any, res:any) {
+    res.send({playerInfoMap: db.playerHuiTi.dataMap})
+});
+
+dbRouter.post('/external/import', function (req:any, res:any) {
     //https://github.com/SheetJS/js-xlsx
     console.log('/db/external');
     ExternalInfo.importHuiTi();
