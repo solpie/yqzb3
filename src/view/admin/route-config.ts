@@ -27,6 +27,10 @@ export function configureRouter(router:vuejs.Router<App>) {
             component: ExternalData,
             name: 'external'
         },
+        '/external/:page': {
+            component: ExternalData,
+            name: 'external'
+        },
         '/settings': {
             component: Settings,
             name: 'settings'
@@ -34,6 +38,7 @@ export function configureRouter(router:vuejs.Router<App>) {
     });
 
     router.afterEach((transition) => {
-        router.app.active = transition.to.path.split("/")[1];
+        var toPath = transition.to.path;
+        router.app.active = toPath.split("/")[1];
     });
 }

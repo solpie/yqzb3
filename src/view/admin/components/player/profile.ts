@@ -5,7 +5,7 @@ import {PlayerInfo} from "../../../../model/PlayerInfo";
 import {ViewEvent} from "../../../../event/Const";
 import WatchOption = vuejs.WatchOption;
 declare var Cropper;
-var _this_: Profile;
+var _this_:Profile;
 @Component({
     template: require('./profile.html'),
     props: {
@@ -59,27 +59,27 @@ var _this_: Profile;
     }
 })
 export class Profile extends VueEx {
-    imagePath: string;
-    playerInfo: PlayerInfo;
-    stage: any;
-    bluePlayerCard: StagePlayerCard;
-    redPlayerCard: StagePlayerCard;
-    cropper: any;
+    imagePath:string;
+    playerInfo:PlayerInfo;
+    stage:any;
+    bluePlayerCard:StagePlayerCard;
+    redPlayerCard:StagePlayerCard;
+    cropper:any;
     //props
-    eloScore: number;
-    name: string;
-    realName: string;
-    style: number;
-    phone: number;
-    weight: number;
-    height: number;
-    qq: number;
-    avatar: string;
+    eloScore:number;
+    name:string;
+    realName:string;
+    style:number;
+    phone:number;
+    weight:number;
+    height:number;
+    qq:number;
+    avatar:string;
     //
 
-    isEdit: boolean;
-    editPlayerId: number;
-    isChangeAvatar: boolean;
+    isEdit:boolean;
+    editPlayerId:number;
+    isChangeAvatar:boolean;
 
     ready() {
         _this_ = this;
@@ -112,19 +112,30 @@ export class Profile extends VueEx {
         toObj.height = data.height;
         toObj.eloScore = data.eloScore;
     }
+
     onDeletePlayer() {
         console.log('onDeletePlayer');
+        this.post('/admin/player/delete', {id: this.editPlayerId}, function (res) {
+            if (res == "OK") {
+                console.log('delete sus');
+                window.location.reload();
+            }
+            else
+                console.error('delete failed');
+        })
+
     }
+
     onSubmitInfo(event) {
         event.stopPropagation();
         console.log('onSubmitInfo');
         $(".cropper-container").hide();
-        var playerDoc: any = {};
+        var playerDoc:any = {};
         this.setProp(this, playerDoc);
         if (this.isEdit) {
 
             var postUpdate = () => {
-                this.post('/admin/player/update', { playerDoc: playerDoc }, (res) => {
+                this.post('/admin/player/update', {playerDoc: playerDoc}, (res) => {
                     console.log(res);
                     this.isEdit = false;
                     if (res) {
@@ -147,7 +158,7 @@ export class Profile extends VueEx {
         }
         else {
             playerDoc.avatar = this.cropper.getCroppedCanvas().toDataURL();
-            this.$http.post('/admin/player/add', { playerData: playerDoc }, (res) => {
+            this.$http.post('/admin/player/add', {playerData: playerDoc}, (res) => {
                 console.log(res);
                 if (res) {
                     window.location.reload();
@@ -187,7 +198,7 @@ export class Profile extends VueEx {
         };
     }
 
-    onUpdateCropPreview(cropData: any) {
+    onUpdateCropPreview(cropData:any) {
         var scale = cropData.width / 180;
         if (this.bluePlayerCard && this.bluePlayerCard.avatarBmp) {
             this.bluePlayerCard.avatarBmp.x = -cropData.x / scale;

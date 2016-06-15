@@ -11,7 +11,14 @@ export function descendingProp(prop) {
         return b[prop] - a[prop];
     }
 }
-
+export function mapToSortArray(map, prop, sortFunc) {
+    var arr = [];
+    for (var k in map) {
+        arr.push(map[k]);
+    }
+    arr.sort(sortFunc(prop));
+    return arr;
+}
 export function loadImg(path1, callback) {
     var img = new Image();
     img.onload = callback;

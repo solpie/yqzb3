@@ -1,7 +1,7 @@
 import {_path} from "../../Env";
 import {BaseXLSX} from "./BaseXLSX";
 import {PlayerInfo} from "../PlayerInfo";
-import {EloInfo, EloConf} from "../EloInfo";
+import {EloUtil, EloConf} from "../../utils/EloUtil";
 import {db} from "../DbInfo";
 var XLSX = require('xlsx');
 class PlayerXLSX extends BaseXLSX {
@@ -52,7 +52,7 @@ class Team {
 
     beat(loseTeam:Team) {
         if (!this.isFake) {
-            var winScore = EloInfo.classicMethod(this.teamEloScore(), loseTeam.teamEloScore());
+            var winScore = EloUtil.classicMethod(this.teamEloScore(), loseTeam.teamEloScore());
             this.saveScore(winScore, true);
             loseTeam.saveScore(-winScore, false);
         }

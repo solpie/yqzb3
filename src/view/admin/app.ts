@@ -10,10 +10,11 @@ export interface App extends vuejs.Vue {
 })
 export class App {
     active:string;
-
+    param1:string;
     data() {
         return {
-            active: ""
+            active: "",
+            param1: ""
         };
     }
 }

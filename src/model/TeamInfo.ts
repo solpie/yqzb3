@@ -1,5 +1,5 @@
 import {PlayerInfo} from "./PlayerInfo";
-import {EloInfo} from "./EloInfo";
+import {EloUtil} from "../utils/EloUtil";
 export class TeamInfo {
     name:string;
     score:number;
@@ -61,7 +61,7 @@ export class TeamInfo {
         //
         // var win = Math.round(K * ( 1 - percentage ));
 
-        var win = EloInfo.classicMethod(this.score, loserTeam.score);
+        var win = EloUtil.classicMethod(this.score, loserTeam.score);
         //this.score += win;
         this.saveScore(win, true);
         loserTeam.saveScore(-win, false);

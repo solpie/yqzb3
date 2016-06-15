@@ -90,7 +90,6 @@ function openWin(serverConf?:any) {
     win.on('closed', function () {
         win = null;
     });
-
     //todo print
     // http://electron.atom.io/docs/api/web-contents/
 }

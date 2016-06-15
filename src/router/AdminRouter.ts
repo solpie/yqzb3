@@ -39,6 +39,21 @@ adminRouter.post('/player/add', function (req:any, res:any) {
     });
 });
 
+adminRouter.post('/player/delete', function (req:any, res:any) {
+    if (!req.body) return res.sendStatus(400);
+    var playerId = req.body.id;
+    db.player.ds().remove({id: playerId}, {}, function (err, numRemoved) {
+        db.player.syncDataMap();
+        // numRemoved = 1
+        if (!err) {
+            res.sendStatus(200);
+        }
+        else {
+            res.sendStatus(400);
+        }
+    });
+});
+
 adminRouter.post('/player/update', function (req:any, res:any) {
     if (!req.body) return res.sendStatus(400);
     var playerDocUpdate:any = req.body.playerDoc;

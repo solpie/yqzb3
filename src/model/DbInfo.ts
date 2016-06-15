@@ -1,7 +1,7 @@
 import {PlayerInfo} from "./PlayerInfo";
 import {_path} from "../Env";
 import {ascendingProp} from "../utils/JsFunc";
-import {EloConf} from "./EloInfo";
+import {EloConf} from "../utils/EloUtil";
 import {ExternalInfo} from "./external/ExternalInfo";
 export var db:any;
 var Datastore = require('nedb');
