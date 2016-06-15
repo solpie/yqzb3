@@ -1,5 +1,5 @@
 <div>
-    <input id="playerId" type="text" @keyup.enter="onQueryPlayer" style="width: 75px">
+    <input id="playerId" type="text" v-model="playerId" @change="onQueryPlayer($event)" @keyup.enter="onQueryPlayer($event)" style="width: 75px">
     <a class="waves-effect waves-light btn" @click="onAddPlayer">Add</a>
-    
+    <a class="waves-effect waves-light btn" @click="onHighLowMode">HighLowMode</a>
 </div>

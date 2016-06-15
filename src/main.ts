@@ -24,7 +24,10 @@ function devWatch() {
         sender.send('logView', data);
     }
 
-    watchView = spawn('npm.cmd', ['run', 'view']);
+    watchView = spawn('npm.cmd', ['run', 'view'], {
+        detached: false,
+        stdio: ['ignore']
+    });
 
     watchView.stdout.on('data', sendView);
 
@@ -32,7 +35,9 @@ function devWatch() {
 
     watchView.on('close', sendView);
 
-    watchServer = spawn('npm.cmd', ['run', 'server']);
+    watchServer = spawn('npm.cmd', ['run', 'server'], {
+        detached: false
+    });
 
 
     watchServer.stdout.on('data', sendServer);
@@ -42,12 +47,16 @@ function devWatch() {
     watchServer.on('close', sendServer);
 }
 function killWatch() {
-    if (isWatch) {
-        if (watchView)
-            watchView.kill();
-        if (watchServer)
-            watchServer.kill();
+    // if (isWatch) {
+    if (watchView) {
+        // watchView.stdin.pause();
+        watchView.kill('SIGKILL');
     }
+    if (watchServer) {
+        // watchServer.stdin.pause();
+        watchServer.kill('SIGKILL');
+    }
+    // }
 }
 // var process:any= require("process");
 var isDev = /[\\/]electron-prebuilt[\\/]/.test(process.execPath);
@@ -81,13 +90,15 @@ function openWin(serverConf?:any) {
     win.on('closed', function () {
         win = null;
     });
-    
+
     //todo print
     // http://electron.atom.io/docs/api/web-contents/
 }
 
+
 app.on('ready', onReady);
-app.on('window-all-closed', function () {
+app.on('window-all-closed', ()=> {
+    console.log('window-all-closed');
     killWatch();
     if (process.platform !== 'darwin') {
         app.quit();

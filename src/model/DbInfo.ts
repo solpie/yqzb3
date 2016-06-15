@@ -1,7 +1,7 @@
 import {PlayerInfo} from "./PlayerInfo";
 import {_path} from "../Env";
-import {EloConf} from "../event/Const";
 import {ascendingProp} from "../utils/JsFunc";
+import {EloConf} from "./EloInfo";
 export var db:any;
 var Datastore = require('nedb');
 
@@ -78,6 +78,12 @@ class BaseDB {
             }
             else
                 throw err;
+        });
+    }
+
+    upsert(doc, callback?) {
+        this.ds().update({id: doc.id}, doc, {upsert: true}, (err, newDoc) => {
+            // this.syncDataMap(callback);
         });
     }
 }
@@ -331,12 +337,13 @@ export function initDB() {
     var playerDb:string = _path('app/db/player.db');
     var activityDb:string = _path('app/db/activity.db');
     var gameDbPath:string = _path('app/db/game.db');
+    var huitiDbPath:string = _path('app/db/gameHuiTi.db');
 
     db = {};
     db.player = new PlayerDB({filename: playerDb, autoload: true});
     db.activity = new ActivityDB({filename: activityDb, autoload: true});
     db.game = new GameDB({filename: gameDbPath, autoload: true});
-
+    db.gameHuiTi = new BaseDB({filename: huitiDbPath, autoload: true});
     // var ProtoBuf = require('protobufjs');
     // var builder = ProtoBuf.loadProtoFile(_path('app/proto/player.proto'));
     // var Player:any = builder.build('Player');

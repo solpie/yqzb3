@@ -144,12 +144,9 @@
             shell.openExternal('http://127.0.0.1');
         }
     }, false);
-
     // You can also require other files to run in this process
-    //    var config = require('./config.json');
-    //    require('./Server.js');
     var webServer = require('./Server.js');
-    //    var serverConf = require('./Server.js');
+
     function startDevWatch() {
         var consoleView = document.getElementById('consoleView');
         var consoleServer = document.getElementById('consoleServer');
@@ -175,5 +172,11 @@
     }
     if (isDev)
         startDevWatch();
+
+
+    function test() {
+
+    }
+    test();
 </script>
 </html>

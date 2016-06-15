@@ -14,8 +14,12 @@
                 <li :class="{active: active === 'rank'}">
                     <a v-link="{name: 'rank'}">天梯排名</a>
                 </li>
+
             </ul>
             <ul class="right hide-on-med-and-down">
+                <li :class="{active: active === 'external'}">
+                    <a v-link="{name: 'external'}">数据导入</a>
+                </li>
                 <li :class="{active: active === 'settings'}">
                     <a v-link="{name: 'settings'}">settings</a>
                 </li>

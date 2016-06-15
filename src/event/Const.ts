@@ -18,7 +18,3 @@ export const ViewEvent = {
     STRAIGHT3_RIGHT: 'STRAIGHT3_RIGHT'
 };
 
-export const EloConf = {
-    score: 2000,
-    K: 32
-};
