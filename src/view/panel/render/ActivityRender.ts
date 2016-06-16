@@ -46,7 +46,7 @@ export class ActivityRender {
                 var playerInfo = new PlayerInfo(gameDoc.playerDocArr[j]);
                 playerInfo.isBlue = (j < 4);
                 var playerCtn = new StagePlayerCard(playerInfo, 1, playerInfo.isBlue);
-                playerCtn.y = 48;
+                playerCtn.y = 50;
                 var scoreText = StagePlayerCard.newScoreText();
                 scoreText.y = 70;
                 if (gameDoc.isFinish)
@@ -62,7 +62,7 @@ export class ActivityRender {
                     scoreText.text = gameDoc.leftScore + "";
                     scoreText.x = 685;
                     leftScore += playerInfo.eloScore();
-                    playerCtn.x = 256 + j * 148;
+                    playerCtn.x = 305 + j * 148;
                 }
                 gameCtn.addChild(scoreText);
                 gameCtn.addChild(playerCtn);

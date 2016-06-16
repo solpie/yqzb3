@@ -1,6 +1,7 @@
 import {PlayerInfo} from "../model/PlayerInfo";
 import {db} from "../model/DbInfo";
 import {base64ToPng} from "../utils/NodeJsFunc";
+import {ServerConst} from "../event/Const";
 export var adminRouter = require('express').Router();
 
 adminRouter.get('/', function (req:any, res:any) {
@@ -21,13 +22,7 @@ adminRouter.post('/player/add', function (req:any, res:any) {
     var playerData = req.body.playerData;
     var playerInfo = new PlayerInfo(playerData);
     playerInfo.id(db.player.getIdNew());
-
-    var avatarPath = 'img/player/' + playerInfo.id() + '.png';
-    var dbImgPath = "app/db/" + avatarPath;
-    console.log('/admin/player/add');
-    base64ToPng(dbImgPath, playerData.avatar, function (imgPath) {
-        playerInfo.avatar("/" + avatarPath);
-        console.log('/admin/player/add', JSON.stringify(playerInfo.playerData));
+    function createPlayer() {
         db.player.create(playerInfo.playerData, function (err, newDoc) {
             if (!err) {
                 db.player.saveIdUsed();
@@ -36,7 +31,23 @@ adminRouter.post('/player/add', function (req:any, res:any) {
             else
                 res.sendStatus(400);
         });
-    });
+    }
+
+    var avatarPath = 'img/player/' + playerInfo.id() + '.png';
+    if (playerData.avatar) {
+        var dbImgPath = "app/db/" + avatarPath;
+        console.log('/admin/player/add');
+        base64ToPng(dbImgPath, playerData.avatar, function (imgPath) {
+            playerInfo.avatar("/" + avatarPath);
+            console.log('/admin/player/add', JSON.stringify(playerInfo.playerData));
+            createPlayer();
+        });
+    }
+    else {
+        playerInfo.avatar(ServerConst.DEF_AVATAR);
+        createPlayer();
+    }
+
 });
 
 adminRouter.post('/player/delete', function (req:any, res:any) {
@@ -62,6 +73,8 @@ adminRouter.post('/player/update', function (req:any, res:any) {
     var playerDoc = db.player.dataMap[playerDocUpdate.id];
     if (playerDoc) {
         var avatarPathOld = playerDoc.avatar;
+        if (avatarPathOld == ServerConst.DEF_AVATAR)
+            avatarPathOld = '/' + 'img/player/' + playerDocUpdate.id + '.png';
 
         function updatePlayer() {
             playerDocUpdate.avatar = avatarPathOld;

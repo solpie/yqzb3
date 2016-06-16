@@ -14,6 +14,7 @@ class PlayerDoc {
     gameRec:Array<number> = [];//比赛记录
     loseGameCount:number = 0;
     winGameCount:number = 0;
+    size:string;//衣服尺寸
 }
 export class PlayerInfo extends BaseInfo {
     playerData:PlayerDoc = new PlayerDoc();

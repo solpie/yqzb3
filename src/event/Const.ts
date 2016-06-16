@@ -5,7 +5,8 @@ export const PanelId = {
     playerPanel: 'player'
 };
 export const ServerConst = {
-    SEND_ASYNC: true
+    SEND_ASYNC: true,
+    DEF_AVATAR: '/img/panel/stage/blue.png'
 };
 export const ViewConst = {
     STAGE_WIDTH: 1920,

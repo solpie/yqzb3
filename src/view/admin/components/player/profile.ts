@@ -18,6 +18,10 @@ var _this_:Profile;
             type: String,
             default: ""
         },
+        size: {
+            type: String,
+            default: ""
+        },
         phone: {
             type: Number,
         },
@@ -45,16 +49,24 @@ var _this_:Profile;
     },
     watch: {
         name: (val) => {
-            _this_.bluePlayerCard.setName(val);
-            _this_.redPlayerCard.setName(val);
+            if (_this_.bluePlayerCard) {
+                _this_.bluePlayerCard.setName(val);
+                _this_.redPlayerCard.setName(val);
+            }
+
         },
         eloScore: (val) => {
-            _this_.bluePlayerCard.setEloScore(val);
-            _this_.redPlayerCard.setEloScore(val);
+            if (_this_.bluePlayerCard) {
+                _this_.bluePlayerCard.setEloScore(val);
+                _this_.redPlayerCard.setEloScore(val);
+            }
+
         },
         style: (val) => {
-            _this_.bluePlayerCard.setStyle(val);
-            _this_.redPlayerCard.setStyle(val);
+            if (_this_.bluePlayerCard) {
+                _this_.bluePlayerCard.setStyle(val);
+                _this_.redPlayerCard.setStyle(val);
+            }
         },
     }
 })
@@ -75,6 +87,7 @@ export class Profile extends VueEx {
     height:number;
     qq:number;
     avatar:string;
+    size:string;
     //
 
     isEdit:boolean;
@@ -103,15 +116,15 @@ export class Profile extends VueEx {
     }
 
     setProp(data, toObj) {
-        toObj.style = data.style;
         toObj.name = data.name;
         toObj.realName = data.realName;
         toObj.phone = data.phone;
         toObj.qq = data.qq;
+        toObj.eloScore = data.eloScore;
+        toObj.style = data.style;
         toObj.weight = data.weight;
         toObj.height = data.height;
-        toObj.eloScore = data.eloScore;
-        toObj.size = data.size;
+        toObj['size'] = data.size;
     }
 
     onDeletePlayer() {
@@ -134,7 +147,6 @@ export class Profile extends VueEx {
         var playerDoc:any = {};
         this.setProp(this, playerDoc);
         if (this.isEdit) {
-
             var postUpdate = () => {
                 this.post('/admin/player/update', {playerDoc: playerDoc}, (res) => {
                     console.log(res);
@@ -158,7 +170,9 @@ export class Profile extends VueEx {
 
         }
         else {
-            playerDoc.avatar = this.cropper.getCroppedCanvas().toDataURL();
+            if (this.isChangeAvatar) {
+                playerDoc.avatar = this.cropper.getCroppedCanvas().toDataURL();
+            }
             this.$http.post('/admin/player/add', {playerData: playerDoc}, (res) => {
                 console.log(res);
                 if (res) {
