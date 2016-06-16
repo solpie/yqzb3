@@ -78,7 +78,7 @@ export class StagePlayerCard extends Container {
                 .lineTo(0, 0);
         }
 
-        loadImg(playerInfo.avatar(),  ()=> {
+        loadImg(playerInfo.avatar(), ()=> {
             var avatarBmp = new createjs.Bitmap(playerInfo.avatar());
             avatarBmp.mask = avatarMask;
             avatarCtn.addChild(avatarMask);
@@ -146,5 +146,35 @@ export class StagePlayerCard extends Container {
 //        this.nameLabelArr.push(leftNameLabel);
         ctn.addChild(nameText);
         return ctn;
+    }
+
+
+    static newScoreText() {
+        var sheet = new createjs.SpriteSheet({
+            animations: {
+                "0": 1,
+                "1": 2,
+                "2": 3,
+                "3": 4,
+                "4": 5,
+                "5": 6,
+                "6": 7,
+                "7": 8,
+                "8": 9,
+                "9": 0
+            },
+            images: ["/img/panel/scoreNum.png"],
+            frames: [[0, 0, 40, 54],
+                [41, 0, 40, 54],
+                [0, 55, 40, 54],
+                [41, 55, 40, 54],
+                [82, 0, 40, 54],
+                [82, 55, 40, 54],
+                [123, 0, 40, 54],
+                [123, 55, 40, 54],
+                [0, 110, 40, 54],
+                [41, 110, 40, 54]]
+        });
+        return new createjs.BitmapText("0", sheet);
     }
 }

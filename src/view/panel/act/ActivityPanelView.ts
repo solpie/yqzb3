@@ -7,6 +7,7 @@ import {ActivityInfo} from "../../../model/ActivityInfo";
 import {RoundInfo} from "../../../model/RoundInfo";
 import {CommandId} from "../../../event/Command";
 import {CountDownPanel} from "./CountDownPanel";
+import {ActivityRender} from "../render/ActivityRender";
 @Component({
     template: require('./activity-panel.html'),
     components: {OpLinks},
@@ -48,6 +49,7 @@ import {CountDownPanel} from "./CountDownPanel";
 export class ActivityPanelView extends BasePanelView {
     rankRender:RankRender;
     countDownRender:CountDownPanel;
+    activityRender:ActivityRender;
 
     activitySelected:number;
 
@@ -86,11 +88,13 @@ export class ActivityPanelView extends BasePanelView {
                 this.countDownRender.fadeOut();
             })
 
-            .on(`${CommandId.fadeInActPanel}`, (param)=> {
-
+            .on(`${CommandId.fadeInActivityPanel}`, (param)=> {
+                var gameDocArr = param.gameDocArr;
+                this.activityRender.fadeIn(gameDocArr);
+                console.log('fade in activity panel', gameDocArr);
             })
-            .on(`${CommandId.fadeOutActPanel}`, (param)=> {
-
+            .on(`${CommandId.fadeOutActivityPanel}`, (param)=> {
+                this.activityRender.fadeOut();
             })
 
         if (this.op) {
@@ -107,6 +111,7 @@ export class ActivityPanelView extends BasePanelView {
     initActivity() {
         this.rankRender = new RankRender(this);
         this.countDownRender = new CountDownPanel(this);
+        this.activityRender = new ActivityRender(this);
     }
 
     onActivitySelected() {
@@ -185,13 +190,12 @@ export class ActivityPanelView extends BasePanelView {
         return selActivityInfo.getGameInfoById(this.gameSelected, this.roundSelected);
     }
 
+    get selActivityInfo():ActivityInfo {
+        return this.activityInfoMap[this.activitySelected];
+    }
+
     onRankIn() {
         console.log('onRankIn', this.selGameDoc);
-        // var playerIdArr = [];
-        // for (var i = 0; i < this.selGameDoc.playerIdArr.length; i++) {
-        //     var playerInfo = this.selGameDoc.playerIdArr[i];
-        //     playerIdArr.push(playerInfo.playerData.id);
-        // }
         var playerIdArr = this.curActivityPlayerIdArr;
         if (playerIdArr.length) {
             this.opReq(`${CommandId.cs_fadeInRankPanel}`,
@@ -223,16 +227,23 @@ export class ActivityPanelView extends BasePanelView {
     onCountDownOut() {
         console.log('onCountDownOut');
         this.opReq(`${CommandId.cs_fadeOutCountDown}`);
-        // this.countDownRender.fadeOut();
     }
 
     onActivityIn() {
-        console.log('onActivityIn');
-        this.opReq(`${CommandId.cs_fadeInActPanel}`);
+        var selActivityInfo = this.selActivityInfo;
+        if (selActivityInfo) {
+            var gameIdArr = this.selActivityInfo.getGameIdArr();
+            console.log('onActivityIn', gameIdArr);
+            this.opReq(`${CommandId.cs_fadeInActivityPanel}`,
+                {gameIdArr: gameIdArr});
+        }
+        else {
+            alert(`无效赛程 id${this.activitySelected}`);
+        }
     }
 
     onActivityOut() {
         console.log('onActivityOut');
-        this.opReq(`${CommandId.cs_fadeOutActPanel}`);
+        this.opReq(`${CommandId.cs_fadeOutActivityPanel}`);
     }
 }

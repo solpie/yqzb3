@@ -111,6 +111,7 @@ export class Profile extends VueEx {
         toObj.weight = data.weight;
         toObj.height = data.height;
         toObj.eloScore = data.eloScore;
+        toObj.size = data.size;
     }
 
     onDeletePlayer() {

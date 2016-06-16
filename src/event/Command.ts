@@ -58,10 +58,10 @@ export enum CommandId{
 
     initPanel,
     /////activity panel
-    cs_fadeInActPanel,
-    fadeInActPanel,
-    cs_fadeOutActPanel,
-    fadeOutActPanel,
+    cs_fadeInActivityPanel,
+    fadeInActivityPanel,
+    cs_fadeOutActivityPanel,
+    fadeOutActivityPanel,
     cs_startGame,
     cs_restartGame,
     cs_fadeInRankPanel,

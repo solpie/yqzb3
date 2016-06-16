@@ -91,6 +91,14 @@ class BaseDB {
             // this.syncDataMap(callback);
         });
     }
+
+    getDocArr(idArr) {
+        var a = [];
+        for (var id of idArr) {
+            a.push(this.dataMap[id]);
+        }
+        return a;
+    }
 }
 
 class ActivityDB extends BaseDB {

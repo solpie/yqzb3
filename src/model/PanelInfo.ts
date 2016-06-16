@@ -116,11 +116,11 @@ class ActivityPanelInfo extends BasePanelInfo {
             }
             this.roundInfo.gameInfoArr.push(gameInfo);
         }
-        cmd.emit(CommandId.fadeInActPanel, this.roundInfo, this.pid);
+        // cmd.emit(CommandId.fadeInActivityPanel, this.roundInfo, this.pid);
     }
 
     fadeOutActPanel() {
-        cmd.emit(CommandId.fadeOutActPanel, null, this.pid);
+        // cmd.emit(CommandId.fadeOutActivityPanel, null, this.pid);
     }
 
     // startGame(gameId) {//{activityId: this.selected, gameData: selGame}
