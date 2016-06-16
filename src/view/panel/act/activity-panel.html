@@ -1,4 +1,14 @@
-<div class="card-panel grey lighten-3" v-if="op" style="position:absolute;width:950px;left: 100px;top: 50px">
+<style>
+    #act-panel {
+        position: absolute;
+        width: 950px;
+        left: 100px;
+        opacity: .8;
+        top: 50px;
+
+    }
+</style>
+<div id="act-panel" class="card-panel grey lighten-3" v-if="op">
     <div class="row" style="width: 100%;display: inline-flex;">
         赛事：
         <select class="browser-default" v-model="activitySelected" @change="onActivitySelected"
@@ -29,10 +39,17 @@
         <a class="waves-effect waves-light btn" @click="onStartGame">start game</a>
         <a class="waves-effect waves-light btn" @click="onResetGame">reset game</a>
     </div>
+
     <div class="row">
         <a class="waves-effect waves-light btn" @click="onRankIn">rank in</a>
         <a class="waves-effect waves-light btn" @click="onRankOut">rank out</a>
     </div>
+
+    <div class="row">
+        <a class="waves-effect waves-light btn" @click="onCountDownIn">count down in</a>
+        <a class="waves-effect waves-light btn" @click="onCountDownOut">count down out</a>
+    </div>
+
     <div class="row">
         <a class="waves-effect waves-light btn" @click="onActivityIn">Activity in</a>
         <a class="waves-effect waves-light btn" @click="onActivityOut">activity out</a>

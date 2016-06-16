@@ -19,6 +19,15 @@ export function mapToSortArray(map, prop, sortFunc) {
     arr.sort(sortFunc(prop));
     return arr;
 }
+//转换唯一数组
+export function mapToArr(map) {
+    var a = [];
+    for (var k in map) {
+        a.push(map[k])
+    }
+    return a;
+}
+
 export function loadImg(path1, callback) {
     var img = new Image();
     img.onload = callback;

@@ -99,7 +99,17 @@ export class RankRender {
         }
     }
 
+    fadeOut() {
+        createjs.Tween.get(this.ctn)
+            .to({alpha: 0}, 300).call(
+            ()=> {
+                this.ctn.removeAllChildren();
+            }
+        );
+    }
+
     fadeOutRank() {
+
 
     }
 

@@ -9,11 +9,32 @@
             <a href="#!"><i class="material-icons">chevron_left</i></a></li>
         <vue v-for="idx in pageNumArr">
             <li class="waves-effect" @click="onClkPageNum(idx)">
-                <a href="#!/external/{{idx}}" @click="onClkPageNum(idx)">{{idx}}</a>
+                <a href="#!/external/{{idx}}">{{idx}}</a>
             </li>
         </vue>
         <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
     </ul>
+
+    <!--<table class="table striped centered">-->
+    <!--<thead>-->
+    <!--<tr>-->
+    <!--<th>姓名</th>-->
+    <!--<th>天梯分</th>-->
+    <!--<th>地区</th>-->
+    <!--<th>电话</th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+
+    <!--<tbody>-->
+    <!--<tr v-for="playerDoc in pageArr">-->
+    <!--<td v-text="playerDoc.name"></td>-->
+    <!--<td v-text="playerDoc.eloScore"></td>-->
+    <!--<td></td>-->
+    <!--<td v-text="playerDoc.phone"></td>-->
+    <!--</tr>-->
+    <!--</tbody>-->
+    <!--</table>-->
+
     <div class="row" style="display: inline-block">
         <div class="col" v-for="playerDoc in pageArr" style="width: 270px">
             <ul class="collection">

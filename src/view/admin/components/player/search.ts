@@ -1,15 +1,20 @@
-import Vue = require('vue');
-import Component from "vue-class-component";
+import {VueEx, Component} from "../../../VueEx";
 
 @Component({
-    template: require('./search.html')
+    template: require('./search.html'),
+
+    watch: {
+        searchVal: ()=> {
+            
+        }
+    }
 })
-export class Search extends Vue {
-    links:{ title:string; url:string }[];
+export class Search extends VueEx {
+    searchVal:string;
 
     data():any {
         return {
-            playerDataArr: []
+            searchVal: ''
         };
     }
 }

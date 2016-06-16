@@ -6,6 +6,7 @@ import {OpLinks} from "../../admin/components/home/home";
 import {ActivityInfo} from "../../../model/ActivityInfo";
 import {RoundInfo} from "../../../model/RoundInfo";
 import {CommandId} from "../../../event/Command";
+import {CountDownPanel} from "./CountDownPanel";
 @Component({
     template: require('./activity-panel.html'),
     components: {OpLinks},
@@ -46,6 +47,8 @@ import {CommandId} from "../../../event/Command";
 })
 export class ActivityPanelView extends BasePanelView {
     rankRender:RankRender;
+    countDownRender:CountDownPanel;
+
     activitySelected:number;
 
     roundOptionArr:any;
@@ -59,12 +62,36 @@ export class ActivityPanelView extends BasePanelView {
 
     activityInfoMap:any;
 
+
     ready() {
         var io = super.ready(PanelId.actPanel);
-        io.on(`${CommandId.fadeInRankPanel}`, (param)=> {
-            console.log(param);
-            this.rankRender.fadeInRank(param.playerDocArr);
-        });
+        io
+            .on(`${CommandId.fadeInRankPanel}`, (param)=> {
+                console.log(param);
+                this.rankRender.fadeInRank(param.playerDocArr);
+            })
+
+            .on(`${CommandId.fadeOutRankPanel}`, (param)=> {
+                console.log(param);
+                this.rankRender.fadeOut();
+            })
+
+            .on(`${CommandId.fadeInCountDown}`, (param)=> {
+                var cdSec = param.cdSec;
+                var cdText = param.cdText;
+                this.countDownRender.fadeInCountDown(cdSec, cdText);
+            })
+
+            .on(`${CommandId.fadeOutCountDown}`, (param)=> {
+                this.countDownRender.fadeOut();
+            })
+
+            .on(`${CommandId.fadeInActPanel}`, (param)=> {
+
+            })
+            .on(`${CommandId.fadeOutActPanel}`, (param)=> {
+
+            })
 
         if (this.op) {
             this.post('/db/act/combine', function (param) {
@@ -79,6 +106,7 @@ export class ActivityPanelView extends BasePanelView {
 
     initActivity() {
         this.rankRender = new RankRender(this);
+        this.countDownRender = new CountDownPanel(this);
     }
 
     onActivitySelected() {
@@ -140,6 +168,18 @@ export class ActivityPanelView extends BasePanelView {
             })
     }
 
+    get curActivityPlayerIdArr() {
+        var selActivityInfo:ActivityInfo = this.activityInfoMap[this.activitySelected];
+        return selActivityInfo.getActivityPlayerIdArr();
+        // console.log(playerInfoArr);
+        // var playerIdArr:number[] = [];
+        // for (var i = 0; i < playerInfoArr.length; i++) {
+        //     var playerInfo = playerInfoArr[i];
+        //     playerIdArr.push(playerInfo.id);
+        // }
+        // return playerIdArr;
+    }
+
     get selGameDoc():any {
         var selActivityInfo:ActivityInfo = this.activityInfoMap[this.activitySelected];
         return selActivityInfo.getGameInfoById(this.gameSelected, this.roundSelected);
@@ -152,23 +192,47 @@ export class ActivityPanelView extends BasePanelView {
         //     var playerInfo = this.selGameDoc.playerIdArr[i];
         //     playerIdArr.push(playerInfo.playerData.id);
         // }
-        this.opReq(`${CommandId.cs_fadeInRankPanel}`,
-            {playerIdArr: this.selGameDoc.playerIdArr},
-            (param)=> {
-                console.log(param);
-            })
+        var playerIdArr = this.curActivityPlayerIdArr;
+        if (playerIdArr.length) {
+            this.opReq(`${CommandId.cs_fadeInRankPanel}`,
+                {playerIdArr: playerIdArr},
+                (param)=> {
+                    console.log(param);
+                });
+        }
+        else {
+            alert('没有选择比赛');
+        }
     }
 
     onRankOut() {
-        console.log('onRankOut')
+        console.log('onRankOut');
+        this.opReq(`${CommandId.cs_fadeOutRankPanel}`);
+    }
+
+    onCountDownIn() {
+        console.log('onCountDownIn');
+        this.opReq(`${CommandId.cs_fadeInCountDown}`,
+            {cdSec: 50, cdText: 'coming up'},
+            (param)=> {
+                console.log(param);
+            });
+
+    }
+
+    onCountDownOut() {
+        console.log('onCountDownOut');
+        this.opReq(`${CommandId.cs_fadeOutCountDown}`);
+        // this.countDownRender.fadeOut();
     }
 
     onActivityIn() {
-        console.log('onActivityIn')
-
+        console.log('onActivityIn');
+        this.opReq(`${CommandId.cs_fadeInActPanel}`);
     }
 
     onActivityOut() {
-        console.log('onActivityOut')
+        console.log('onActivityOut');
+        this.opReq(`${CommandId.cs_fadeOutActPanel}`);
     }
 }

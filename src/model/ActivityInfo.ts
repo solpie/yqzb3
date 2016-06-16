@@ -1,16 +1,17 @@
 import {RoundInfo} from "./RoundInfo";
 import {BaseDoc} from "./BaseInfo";
+import {mapToArr} from "../utils/JsFunc";
 declare var db;
 export class ActivityDoc extends BaseDoc {
-    id: number = -1
-    playerIdArr: number[] = [];//16 
-    gameIdArr: number[] = [];
-    date: number = -1;
+    id:number = -1
+    playerIdArr:number[] = [];//16 
+    gameIdArr:number[] = [];
+    date:number = -1;
 }
 export class ActivityInfo {
-    activityDoc: ActivityDoc;
-    id: number;
-    roundInfoArr: RoundInfo[];
+    activityDoc:ActivityDoc;
+    id:number;
+    roundInfoArr:RoundInfo[];
 
     constructor() {
         this.roundInfoArr = [];
@@ -25,6 +26,20 @@ export class ActivityInfo {
         return null;
     }
 
+    getActivityPlayerIdArr() {
+        var playerInfoArr = [];
+        var playerIdMap:any = {};
+        for (var roundInfo of this.roundInfoArr) {
+            for (var i = 0; i < roundInfo.gameInfoArr.length; i++) {
+                var gameDoc:any = roundInfo.gameInfoArr[i];
+                for (var playerId of gameDoc.playerIdArr) {
+                    playerIdMap[playerId] = playerId;
+                }
+            }
+        }
+        return mapToArr(playerIdMap);
+    }
+
     getGameInfoById(gameId, roundId) {
         var roundInfo = this.getRoundInfoById(roundId);
         if (roundInfo)
@@ -33,7 +48,7 @@ export class ActivityInfo {
     }
 
 
-    setPlayerIdArr(playerIdArr: number[]) {
+    setPlayerIdArr(playerIdArr:number[]) {
         if (playerIdArr.length != 16) {
             throw new Error('人数不满足条件')
         }
@@ -41,17 +56,19 @@ export class ActivityInfo {
             this.activityDoc.playerIdArr = playerIdArr.concat();
         }
     }
+
     /*
-        完全高低分组队 （高分和高分组队）
-    */
+     完全高低分组队 （高分和高分组队）
+     */
     createGameInHighLowMode() {
         var playerDocArr = db.player.getPlayerRank(this.activityDoc.playerIdArr);
-        
+
 
     }
+
     /*
      混合分组
-    */
+     */
     createGameInMixMode() {
 
     }
@@ -75,7 +92,7 @@ export class ActivityInfo {
                 }
                 roundData.gameDataArr = reBuildGameDataArr;
 
-                var roundInfo: RoundInfo = new RoundInfo();
+                var roundInfo:RoundInfo = new RoundInfo();
                 roundInfo.gameInfoArr = reBuildGameDataArr;
                 roundInfo.id = roundData.round;
                 roundInfo.section = roundData.section;

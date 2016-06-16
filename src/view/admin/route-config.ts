@@ -29,7 +29,6 @@ export function configureRouter(router:vuejs.Router<App>) {
         },
         '/external/:page': {
             component: ExternalData,
-            name: 'external'
         },
         '/settings': {
             component: Settings,

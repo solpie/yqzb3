@@ -1,4 +1,12 @@
-<div class="search-wrapper card">
-    <input id="search"><i class="material-icons">search</i>
-    <div class="search-results"></div>
+<style>
+    #search{
+        width: 70%;
+        height: 30px;
+    }
+</style>
+<div class="search">
+    <div class="search-wrapper card focused">
+        <input id="search" v-model="searchVal"><i class="material-icons">search</i>
+        <div class="search-results"></div>
+    </div>
 </div>

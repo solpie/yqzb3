@@ -25,7 +25,13 @@ export class ExternalData extends VueEx {
     ready() {
         this.pagePlayerCount = 70;
         _this_ = this;
-        var curPage = (Number(this.$route.params.page) || 0) - 1;
+        var curPage;
+        if (this.$route.params.page) {
+            curPage = (Number(this.$route.params.page)) - 1;
+        }
+        else {
+            curPage = 0;
+        }
         // this.importDataFromHT();
         console.log('page', this.$route.params.page, curPage);
         this.post('/db/external/player', (param)=> {
@@ -45,7 +51,7 @@ export class ExternalData extends VueEx {
 
     onClkPageNum(pageNum) {
         console.log('pageNum', pageNum);
-        var curPage = (Number(this.$route.params.page) || 0) - 1;
+        var curPage = Number(pageNum) - 1;
         this.pageArr = this.playerDocArr.slice(curPage * this.pagePlayerCount,
             curPage * this.pagePlayerCount + this.pagePlayerCount - 1);
 

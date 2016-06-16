@@ -57,6 +57,18 @@ export class ActivityPanelHandle {
                 // db.game.restartGame(param.gameId);
             };
 
+            cmdMap[`${CommandId.cs_fadeOutRankPanel}`] = (param)=> {
+                this.io.emit(`${CommandId.fadeOutRankPanel}`);
+            };
+
+            cmdMap[`${CommandId.cs_fadeInCountDown}`] = (param)=> {
+                this.io.emit(`${CommandId.fadeInCountDown}`, param);
+            };
+
+            cmdMap[`${CommandId.cs_fadeOutCountDown}`] = (param)=> {
+                this.io.emit(`${CommandId.fadeOutCountDown}`);
+            };
+
             var isSend = cmdMap[cmdId](param);
             if (!isSend)
                 res.sendStatus(200);
