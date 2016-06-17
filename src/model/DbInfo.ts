@@ -236,7 +236,7 @@ class GameDB extends BaseDB {
         }
     }
 
-    submitGame(gameId, isRedWin, mvp, blueScore, redScore, playerRecArr, callback) {
+    submitGame(gameId, isBlueWin, mvp, blueScore, redScore, playerRecArr, callback) {
         this.ds().findOne({id: gameId}, (err, docs)=> {
             var doc = docs;
             if (doc.isFinish) {
@@ -247,9 +247,10 @@ class GameDB extends BaseDB {
                 doc.blueScore = blueScore;
                 doc.redScore = redScore;
                 doc.isFinish = true;
-                doc.mvp = doc.playerIdArr[mvp];
+                doc.mvp = mvp;
                 doc.playerRecArr = playerRecArr;
-                doc.isRedWin = isRedWin;
+                doc.isBlueWin = isBlueWin;
+                doc.isRedWin = !isBlueWin;
                 console.log('update game data:', JSON.stringify(doc));
                 this.ds().update({id: gameId},
                     {$set: doc}, {upsert: true}, (err, numUpdate)=> {
@@ -270,6 +271,24 @@ class GameDB extends BaseDB {
         //     else
         //         this.setLeftTeamWin();
         // }
+        function saveGameDb() {
+            var playerRecArr = [];
+            for (var i = 0; i < gameInfo.playerInfoArr.length; i++) {
+                var newPlayerInfo = gameInfo.playerInfoArr[i];
+                // var newPlayerInfo:PlayerInfo = new PlayerInfo(db.player.getDataById(playerData.id));
+                playerRecArr.push(newPlayerInfo.getRec());
+                console.log("push rec", JSON.stringify(newPlayerInfo.getRec()));
+            }
+            db.game.submitGame(gameInfo.id, gameInfo.isBlueWin, gameInfo.mvpPlayerId, gameInfo.leftScore, gameInfo.rightScore, playerRecArr, (isSus)=> {
+                if (isSus) {
+                    console.log("submit Game sus");
+                }
+                else {
+                    console.log("submit Game failed!!");
+                }
+            })
+        }
+
         if (gameInfo.gameState < GameInfo.GAME_STATE_SAVE) {
             var saveTeamPlayerData = (teamInfo:TeamInfo)=> {
                 for (var playerInfo of teamInfo.playerInfoArr) {
@@ -283,16 +302,21 @@ class GameDB extends BaseDB {
                         console.log("saveGameRecToPlayer:", savePlayerCount);
                         if (savePlayerCount === 0) {
                             console.log("change game state 2 and callback");
+                            saveGameDb();
                             gameInfo.gameState = GameInfo.GAME_STATE_SAVE;
                             db.player.syncDataMap(callback);
                         }
                     });
+
+
                 }
             };
 
             var savePlayerCount = 8;
             saveTeamPlayerData(gameInfo._winTeam);
             saveTeamPlayerData(gameInfo._loseTeam);
+
+
         }
     }
 }

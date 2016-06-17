@@ -185,6 +185,10 @@ export class GameInfo {
         return team;
     }
 
+    get isBlueWin() {
+        return this.leftScore > this.rightScore;
+    }
+
     getRightTeam() {
         return this.getLeftTeam(4);
     }

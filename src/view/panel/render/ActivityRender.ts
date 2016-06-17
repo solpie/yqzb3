@@ -52,14 +52,14 @@ export class ActivityRender {
                 if (gameDoc.isFinish)
                     playerInfo.eloScore(gameDoc.playerRecArr[j].eloScore);
                 if (playerInfo.isBlue) {
-                    scoreText.text = gameDoc.rightScore + "";
+                    scoreText.text = gameDoc.redScore + "";
                     scoreText.x = 830;
                     rightScore += playerInfo.eloScore();
                     // playerCtn = new StagePlayerCard(playerInfo, 1, playerInfo.isBlue);
                     playerCtn.x = 26 + j * 148;
                 }
                 else {
-                    scoreText.text = gameDoc.leftScore + "";
+                    scoreText.text = gameDoc.blueScore + "";
                     scoreText.x = 685;
                     leftScore += playerInfo.eloScore();
                     playerCtn.x = 305 + j * 148;

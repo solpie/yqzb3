@@ -70,16 +70,18 @@ export class ActivityPanelHandle {
             };
 
             cmdMap[`${CommandId.cs_fadeInActivityPanel}`] = (param)=> {
-                var gameIdArr = param.gameIdArr;
-                var gameDocArr = db.game.getDocArr(gameIdArr);
-                for (var gameDoc of gameDocArr) {
-                    gameDoc.playerDocArr = [];
-                    for (var playerId of gameDoc.playerIdArr) {
-                        gameDoc.playerDocArr.push(db.player.dataMap[playerId]);
+                db.game.syncDataMap(()=> {
+                    var gameIdArr = param.gameIdArr;
+                    var gameDocArr = db.game.getDocArr(gameIdArr);
+                    for (var gameDoc of gameDocArr) {
+                        gameDoc.playerDocArr = [];
+                        for (var playerId of gameDoc.playerIdArr) {
+                            gameDoc.playerDocArr.push(db.player.dataMap[playerId]);
+                        }
                     }
-                }
-                this.io.emit(`${CommandId.fadeInActivityPanel}`,
-                    ScParam({gameDocArr: gameDocArr}));
+                    this.io.emit(`${CommandId.fadeInActivityPanel}`,
+                        ScParam({gameDocArr: gameDocArr}));
+                })
             };
 
             cmdMap[`${CommandId.cs_fadeOutActivityPanel}`] = (param)=> {
