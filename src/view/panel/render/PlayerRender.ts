@@ -48,8 +48,6 @@ export class StagePlayerCard extends Container {
         }
 
         var avatarFrame = new createjs.Bitmap(_isBluePath('/img/panel/stage/avatarFrame'));//694x132
-        // leftAvatarBg.x = 15;
-        // leftAvatarBg.y = 6;
 
         var avatarCtn = new createjs.Container();
         if (isBlue) {
@@ -104,9 +102,12 @@ export class StagePlayerCard extends Container {
         }
         ctn.addChild(backNumText);
 
-        var eloText = '---';
+        var eloText = '';
         if (playerInfo.gameRec().length >= 3)
             eloText = playerInfo.eloScore();
+        else {
+            var newPlayerIcon;//todo
+        }
         console.log(`player${playerInfo.name()}game Count`, playerInfo.gameCount());
         var eloScoreText = new createjs.Text(eloText, "18px Arial", "#fff");
         eloScoreText.y = 59;

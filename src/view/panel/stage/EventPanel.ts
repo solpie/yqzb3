@@ -53,19 +53,22 @@ export class EventPanel {
         });
     }
 
-    fadeInWinPanel(teamInfo:TeamInfo, mvp) {
+    fadeInWinPanel(teamInfo:TeamInfo, mvpIdx, mpvId) {
+        //todo 优化mvpId mvpIdx
+        var mvp = Number(mvpIdx);
         console.log(this, "show fadeInWinPanel mvp:", mvp);
         var ctn = this.ctn;
-        var bg = new createjs.Shape();
-        bg.graphics.beginFill('#000').drawRect(0, 0, ViewConst.STAGE_WIDTH, ViewConst.STAGE_HEIGHT);
-        bg.alpha = .3;
-        ctn.addChild(bg);
+        var modal = new createjs.Shape();
+        modal.graphics.beginFill('#000').drawRect(0, 0, ViewConst.STAGE_WIDTH, ViewConst.STAGE_HEIGHT);
+        modal.alpha = .3;
+        ctn.addChild(modal);
 
         var playerCtn = new createjs.Container();
         ctn.addChild(playerCtn);
 
         // if (this.verifyWin(paramDataArr, mvp)) {
         var isRedWin = (mvp > 3);
+        var isBlue = (mvp < 4);
 
         var titlePath = "/img/panel/stage/win/winPanelTitle";
         if (isRedWin)
@@ -89,11 +92,18 @@ export class EventPanel {
         var prePlayerIsMvp = false;
         playerCtn.x = (ViewConst.STAGE_WIDTH - 4 * 390) * .5;
         playerCtn.y = 300;
-        for (var i = 0; i < 4; i++) {
+
+
+        var start = 0;
+        if (!isBlue) {
+            // start = 4;
+        }
+        for (var i = start; i < start + 4; i++) {
             var pInfo;
             pInfo = new PlayerInfo(teamInfo.playerInfoArr[i].playerData);
             pInfo.isRed = teamInfo.playerInfoArr[i].isRed;
-            pInfo.isMvp = teamInfo.playerInfoArr[i].pos == mvp;
+            pInfo.isBlue = isBlue;
+            pInfo.isMvp = pInfo.id() == mpvId;
             var playerCard = this.getWinPlayerCard(pInfo);
             playerCard.x = i * 390;
             if (pInfo.isMvp)
@@ -139,10 +149,10 @@ export class EventPanel {
         ctn.addChild(avatar);
 
         var bgPath = '/img/panel/stage/win/playerBgWin';
-        if (p.isRed)
-            bgPath += "Red";
-        else
+        if (p.isBlue)
             bgPath += "Blue";
+        else
+            bgPath += "Red";
         if (p.isMvp)
             bgPath += "Mvp";
         bgPath += '.png';
@@ -182,7 +192,11 @@ export class EventPanel {
         ctn.addChild(name);
 
         var eloScore;
-        eloScore = new createjs.Text(p.eloScore(), "bold 32px Arial", nameCol);
+        var eloScoreText = '新秀';
+        if (p.gameCount() >= 3) {
+            eloScoreText = p.eloScore();
+        }
+        eloScore = new createjs.Text(eloScoreText, "bold 32px Arial", nameCol);
         eloScore.textAlign = 'center';
         eloScore.x = name.x;
         eloScore.y = 245 + 30;

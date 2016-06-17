@@ -100,8 +100,14 @@ export class StagePanelHandle {
             };
 
             cmdMap[`${CommandId.cs_fadeInWinPanel}`] = (param)=> {
+                console.log('cs_fadeInWinPanel', param.mvpIdx, this.gameInfo);
                 var winTeam:TeamInfo = this.gameInfo.setWinByMvpIdx(param.mvpIdx);
-                this.io.emit(`${CommandId.fadeInWinPanel}`, ScParam({teamInfo: winTeam, mvpIdx: param.mvpIdx}));
+
+                this.io.emit(`${CommandId.fadeInWinPanel}`, ScParam({
+                    teamInfo: winTeam,
+                    mvpIdx: param.mvpIdx,
+                    mvpId: this.gameInfo.mvpPlayerId
+                }));
             };
 
             cmdMap[`${CommandId.cs_fadeOutWinPanel}`] = (param)=> {

@@ -98,16 +98,12 @@ export class StagePanelView extends BasePanelView {
                     this.playerPanel.setPlayer(i, playerInfo);
                 }
                 this.scorePanel.setAvgEloScore(param.avgEloScore);
-                // for (var j = 0; j < param.backNumArr.length; j++) {
-                //     var backNum = param.backNumArr[j];
-                //     this.playerPanel.playerCardArr[j].setBackNumber(backNum);
-                // }
-                // this.getElem('#playerImg' + data.idx).src = data.playerDoc.avatar;
             })
             .on(`${CommandId.fadeInWinPanel}`, (param)=> {
                 var teamInfo = param.teamInfo;
                 var mvpIdx = param.mvpIdx;
-                this.eventPanel.fadeInWinPanel(teamInfo, mvpIdx);
+                var mvpId = param.mvpId;
+                this.eventPanel.fadeInWinPanel(teamInfo, mvpIdx,mvpId);
             })
             .on(`${CommandId.fadeOutWinPanel}`, (param)=> {
                 this.eventPanel.fadeOutWinPanel();
