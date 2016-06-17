@@ -32,6 +32,8 @@ export enum CommandId{
     cs_updatePlayer,
     updatePlayerAll,
     cs_updatePlayerAll,
+    cs_updatePlayerBackNum,
+    updatePlayerBackNum,
     notice,//小喇叭
     cs_notice,
     cs_resetGame,//重置比分 时间 player

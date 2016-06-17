@@ -88,6 +88,9 @@ export class StagePanelHandle {
                     var playerInfo = db.player.getPlayerInfoById(playerId);
                     this.gameInfo.setPlayerInfoByIdx(i, playerInfo);
                     playerInfoArr.push(playerInfo);
+                    if (param.backNumArr[i]) {
+                        playerInfo.backNumber = param.backNumArr[i];
+                    }
                 }
                 this.io.emit(`${CommandId.updatePlayerAll}`, ScParam({
                     avgEloScore: this.gameInfo.getAvgEloScore(),
@@ -102,6 +105,10 @@ export class StagePanelHandle {
 
             cmdMap[`${CommandId.cs_fadeOutWinPanel}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeOutWinPanel}`);
+            };
+
+            cmdMap[`${CommandId.cs_updatePlayerBackNum}`] = (param)=> {
+                this.io.emit(`${CommandId.updatePlayerBackNum}`, param);
             };
 
             cmdMap[cmdId](param);

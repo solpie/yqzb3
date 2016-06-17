@@ -98,6 +98,10 @@ export class StagePanelView extends BasePanelView {
                     this.playerPanel.setPlayer(i, playerInfo);
                 }
                 this.scorePanel.setAvgEloScore(param.avgEloScore);
+                // for (var j = 0; j < param.backNumArr.length; j++) {
+                //     var backNum = param.backNumArr[j];
+                //     this.playerPanel.playerCardArr[j].setBackNumber(backNum);
+                // }
                 // this.getElem('#playerImg' + data.idx).src = data.playerDoc.avatar;
             })
             .on(`${CommandId.fadeInWinPanel}`, (param)=> {
@@ -107,6 +111,9 @@ export class StagePanelView extends BasePanelView {
             })
             .on(`${CommandId.fadeOutWinPanel}`, (param)=> {
                 this.eventPanel.fadeOutWinPanel();
+            })
+            .on(`${CommandId.updatePlayerBackNum}`, (param)=> {
+                this.playerPanel.playerCardArr[param.idx].setBackNumber(param.backNum);
             })
 
     }
@@ -120,11 +127,14 @@ export class StagePanelView extends BasePanelView {
         this.playerPanel.init(gameDoc);
         this.gameId = gameDoc.id;
         this.eventPanel = new EventPanel(this);
-        console.log('initStage',gameDoc);
-        for (var i = 0; i < gameDoc.playerInfoArr.length; i++) {
-            var playerInfo = gameDoc.playerInfoArr[i];
-            this.getElem("#player" + i).value = playerInfo.playerData.id;
+        console.log('initStage', gameDoc);
+        if (this.op) {
+            for (var i = 0; i < gameDoc.playerInfoArr.length; i++) {
+                var playerInfo = gameDoc.playerInfoArr[i];
+                this.getElem("#player" + i).value = playerInfo.playerData.id;
+            }
         }
+
     }
 
     onToggleTimer() {
@@ -159,20 +169,26 @@ export class StagePanelView extends BasePanelView {
     }
 
     onUpdatePlayerNum(idx) {
-        var playerNum = this.getElem("#playerNum" + idx).value;
-        console.log('onQueryPlayer', idx, playerNum);
+        var backNum = this.getElem("#playerNum" + idx).value;
+        console.log('onUpdatePlayerNum', idx, backNum);
+        this.opReq(`${CommandId.cs_updatePlayerBackNum}`, {idx: idx, backNum: backNum});
+        // this.playerPanel.playerCardArr[idx].setBackNumber(playerNum);
     }
 
     onStarting() {
         console.log('onStarting');
         var playerIdArr = [];
+        var backNumArr = [];
         for (var i = 0; i < 8; i++) {
             var queryId = Number(this.getElem("#player" + i).value);
             playerIdArr.push(queryId);
+            backNumArr.push(Number(this.getElem("#playerNum" + i).value));
         }
         // playerIdArr = [10002, 10003, 10004, 10005,
         //     10008, 10010, 10011, 10012];
-        this.opReq(`${CommandId.cs_updatePlayerAll}`, {playerIdArr: playerIdArr});
+        this.opReq(`${CommandId.cs_updatePlayerAll}`,
+            {playerIdArr: playerIdArr, backNumArr: backNumArr}
+        );
     }
 
     onUpdatePlayer(idx) {
