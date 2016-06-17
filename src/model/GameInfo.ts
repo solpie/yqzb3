@@ -1,7 +1,6 @@
 import {TeamInfo} from "./TeamInfo";
 import {PlayerInfo} from "./PlayerInfo";
 import {setPropTo} from "./BaseInfo";
-declare var db;
 export class GameInfo {
     id:number = 0;
     winScore:number = 7;
@@ -14,10 +13,9 @@ export class GameInfo {
     straightScoreRight:number = 0;//连杀判定
     playerInfoArr:PlayerInfo[] = new Array(8);
     playerRecArr:any = [];
-    isFinish:any = null;
     _timer:number = 0;
     static GAME_STATE_ING = 0;
-    static GAME_STATE_WIN = 1;
+    static GAME_STATE_FIN = 1;
     static GAME_STATE_SAVE = 2;
     gameState:number = 0;//0 未确认胜负 1 确认胜负未录入数据 2确认胜负并录入数据
     unLimitScore:number = 0;///
@@ -117,36 +115,8 @@ export class GameInfo {
         }
     }
 
-    saveGameRecToPlayer(gameId, isRedWin, callback) {
-        // if (this.isUnsaved) {
-        if (this.gameState === 0) {
-            if (isRedWin)
-                this.setRightTeamWin();
-            else
-                this.setLeftTeamWin();
-        }
-        var saveTeamPlayerData = (teamInfo:TeamInfo)=> {
-            for (var playerInfo of teamInfo.playerInfoArr) {
-                console.log("playerData", JSON.stringify(playerInfo));
-                if (!playerInfo.gameRec())
-                    playerInfo.gameRec([]);
-                playerInfo.gameRec().push(gameId);
-                console.log(playerInfo.name(), " cur player score:", playerInfo.eloScore(), playerInfo.dtScore());
-                db.player.ds().update({id: playerInfo.id()}, {$set: playerInfo.playerData}, {}, (err, doc)=> {
-                    savePlayerCount--;
-                    console.log("saveGameRecToPlayer:", savePlayerCount);
-                    if (savePlayerCount === 0) {
-                        console.log("change game state 2 and callback");
-                        this.gameState = 2;
-                        db.player.syncDataMap(callback);
-                    }
-                });
-            }
-        };
-
-        var savePlayerCount = 8;
-        saveTeamPlayerData(this._winTeam);
-        saveTeamPlayerData(this._loseTeam);
+    get isFinish() {
+        return this.gameState === GameInfo.GAME_STATE_SAVE;
     }
 
     resetTimer() {

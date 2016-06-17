@@ -126,7 +126,8 @@ export class StagePanelView extends BasePanelView {
         if (this.op) {
             for (var i = 0; i < gameDoc.playerInfoArr.length; i++) {
                 var playerInfo = gameDoc.playerInfoArr[i];
-                this.getElem("#player" + i).value = playerInfo.playerData.id;
+                if (playerInfo)
+                    this.getElem("#player" + i).value = playerInfo.playerData.id;
             }
         }
 
@@ -203,7 +204,12 @@ export class StagePanelView extends BasePanelView {
 
     onShowWin() {
         console.log('onShowWin mvp ', this.mvpIdx);
-        this.opReq(`${CommandId.cs_fadeInWinPanel}`, {mvpIdx: this.mvpIdx});
+        var isBlueMvp = this.mvpIdx < 4;
+        if (this.scorePanel.isBlueWin != isBlueMvp) {
+            alert('比赛结果与mvp不符')
+        }
+        else
+            this.opReq(`${CommandId.cs_fadeInWinPanel}`, {mvpIdx: this.mvpIdx});
     }
 
     onHideWin() {
@@ -212,11 +218,19 @@ export class StagePanelView extends BasePanelView {
     }
 
     onSubmitGame() {
-        var date = new Date();
-        var dateTime = date.getTime();
-        console.log('onSubmitGame', dateTime);
-        if (this.scorePanel.leftScoreText) {
+        var isBlueMvp = this.mvpIdx < 4;
 
+        if (this.scorePanel.isBlueWin != isBlueMvp) {
+            alert('比赛结果与mvp不符')
+        }
+        else {
+            var date = new Date();
+            var dateTime = date.getTime();
+            // var gameResult:any = {date:dateTime};
+            console.log('onSubmitGame', dateTime);
+            this.opReq(`${CommandId.cs_saveGameRec}`, {date: dateTime}, (res)=> {
+                console.log(res);
+            });
         }
     }
 

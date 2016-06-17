@@ -3,10 +3,12 @@ import {_path} from "../Env";
 import {ascendingProp} from "../utils/JsFunc";
 import {EloConf} from "../utils/EloUtil";
 import {ExternalInfo} from "./external/ExternalInfo";
+import {GameInfo} from "./GameInfo";
+import {TeamInfo} from "./TeamInfo";
 export var db:any;
 var Datastore = require('nedb');
 
-class BaseDB {
+export class BaseDB {
     dataStore:any;
     config:any;
     dbPath:string;
@@ -259,7 +261,40 @@ class GameDB extends BaseDB {
         })
     }
 
+    saveGameRecToPlayer(gameInfo:GameInfo, callback) {
+        var gameId = gameInfo.id;
+        // if (this.isUnsaved) {
+        // if (this.gameState === GameInfo.GAME_STATE_ING) {
+        //     if (isRedWin)
+        //         this.setRightTeamWin();
+        //     else
+        //         this.setLeftTeamWin();
+        // }
+        if (gameInfo.gameState < GameInfo.GAME_STATE_SAVE) {
+            var saveTeamPlayerData = (teamInfo:TeamInfo)=> {
+                for (var playerInfo of teamInfo.playerInfoArr) {
+                    console.log("playerData", JSON.stringify(playerInfo));
+                    if (!playerInfo.gameRec())
+                        playerInfo.gameRec([]);
+                    playerInfo.gameRec().push(gameId);
+                    console.log(playerInfo.name(), " cur player score:", playerInfo.eloScore(), playerInfo.dtScore());
+                    db.player.ds().update({id: playerInfo.id()}, {$set: playerInfo.playerData}, {}, (err, doc)=> {
+                        savePlayerCount--;
+                        console.log("saveGameRecToPlayer:", savePlayerCount);
+                        if (savePlayerCount === 0) {
+                            console.log("change game state 2 and callback");
+                            gameInfo.gameState = GameInfo.GAME_STATE_SAVE;
+                            db.player.syncDataMap(callback);
+                        }
+                    });
+                }
+            };
 
+            var savePlayerCount = 8;
+            saveTeamPlayerData(gameInfo._winTeam);
+            saveTeamPlayerData(gameInfo._loseTeam);
+        }
+    }
 }
 class PlayerDB extends BaseDB {
     clearGameDataByPlayerId(playerId) {

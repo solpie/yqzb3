@@ -1,5 +1,5 @@
 import {CommandId} from "../event/Command";
-import {PanelId, ViewEvent} from "../event/Const";
+import {PanelId, ViewEvent, ServerConst} from "../event/Const";
 import {ServerConf} from "../Env";
 import {panelRouter} from "./PanelRouter";
 import {GameInfo} from "../model/GameInfo";
@@ -121,8 +121,19 @@ export class StagePanelHandle {
                 this.io.emit(`${CommandId.updatePlayerBackNum}`, param);
             };
 
-            cmdMap[cmdId](param);
-            res.sendStatus(200);
+            cmdMap[`${CommandId.cs_saveGameRec}`] = (param)=> {
+                if (this.gameInfo.isFinish) {
+                    res.send(false);
+                }
+                else
+                    db.game.saveGameRecToPlayer(this.gameInfo,()=> {
+                        res.send(true);
+                    });
+                return ServerConst.SEND_ASYNC;
+            };
+            var isSend = cmdMap[cmdId](param);
+            if (!isSend)
+                res.sendStatus(200);
         });
     }
 
