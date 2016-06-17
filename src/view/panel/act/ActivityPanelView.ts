@@ -44,6 +44,8 @@ import {ActivityRender} from "../render/ActivityRender";
             default: []
         },
         gameSelected: {},
+        cdText: {type: String, default: '下一场比赛：'},
+        cdSec: {type: Number, default: 300},
     }
 })
 export class ActivityPanelView extends BasePanelView {
@@ -64,6 +66,8 @@ export class ActivityPanelView extends BasePanelView {
 
     activityInfoMap:any;
 
+    cdText:string;
+    cdSec:number;
 
     ready() {
         var io = super.ready(PanelId.actPanel);
@@ -95,7 +99,7 @@ export class ActivityPanelView extends BasePanelView {
             })
             .on(`${CommandId.fadeOutActivityPanel}`, (param)=> {
                 this.activityRender.fadeOut();
-            })
+            });
 
         if (this.op) {
             this.post('/db/act/combine', function (param) {
@@ -217,7 +221,7 @@ export class ActivityPanelView extends BasePanelView {
     onCountDownIn() {
         console.log('onCountDownIn');
         this.opReq(`${CommandId.cs_fadeInCountDown}`,
-            {cdSec: 50, cdText: 'coming up'},
+            {cdSec: this.cdSec, cdText: this.cdText},
             (param)=> {
                 console.log(param);
             });

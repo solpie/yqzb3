@@ -1,5 +1,6 @@
 import {db} from "../model/DbInfo";
 import {ExternalInfo} from "../model/external/ExternalInfo";
+import {Act619} from "../event/Const";
 export var dbRouter = require('express').Router();
 
 // dbRouter.get('/', function (req:any, res:any) {
@@ -33,6 +34,19 @@ dbRouter.post('/act/combine', function (req:any, res:any) {
 dbRouter.post('/game/', function (req:any, res:any) {
     if (!req.body) return res.sendStatus(400);
     res.send({gameMap: db.game.dataMap});
+});
+dbRouter.post('/act/19', function (req:any, res:any) {
+    if (!req.body) return res.sendStatus(400);
+    var act:any = Act619;
+    for (var gameDoc of act.gameDataArr) {
+        gameDoc.playerDocArr = [];
+        for (var i = 0; i < gameDoc.playerIdArr.length; i++) {
+            var playerId = gameDoc.playerIdArr[i];
+            console.log('playerId: ', playerId);
+            gameDoc.playerDocArr.push(db.player.dataMap[playerId]);
+        }
+    }
+    res.send(act);
 });
 
 dbRouter.post('/external/player', function (req:any, res:any) {

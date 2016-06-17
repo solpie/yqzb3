@@ -153,6 +153,19 @@ class ActivityDB extends BaseDB {
         })
     }
 
+    getGameDocByGameId(gameId) {
+        for (var k in this.dataMap) {
+            var roundDoc = this.dataMap[k];
+            for (var i = 0; i < roundDoc.gameDataArr.length; i++) {
+                var gameDoc = roundDoc.gameDataArr[i];
+                if (gameDoc.id == gameId)
+                    return gameDoc;
+            }
+
+        }
+        return null;
+    }
+
     getDataByRound(roundId, callback) {
         this.ds().findOne({round: roundId}, (err, doc)=> {
             callback(err, doc);

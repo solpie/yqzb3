@@ -27,8 +27,26 @@ export class Player extends VueEx {
     message:string;
     messages:{ date:string; text:string }[];
     playerArr:{}[];
+
+    pickPlayerIdArr:number[] = [];
+    pickPlayerIdArrArr:Array<number[]> = [];
     countPage:number[];
     isOpen:boolean;
+
+    data():any {
+        return {
+            year: 2015,
+            month: 12,
+            date: 4,
+            message: "",
+            messages: [],
+            playerArr: [],
+            pickPlayerIdArr: [],
+            pickPlayerIdArrArr: [],
+            countPage: [1],
+            isOpen: false
+        };
+    }
 
     ready() {
         // ($('#modal1')as any).leanModal({
@@ -61,6 +79,15 @@ export class Player extends VueEx {
         });
     }
 
+    onPickPlayer(playerId) {
+        this.pickPlayerIdArr.push(playerId);
+        if (this.pickPlayerIdArr.length == 4) {
+            console.log('pick team');
+            this.pickPlayerIdArrArr.push(this.pickPlayerIdArr);
+            this.pickPlayerIdArr=[];
+        }
+    }
+
     showFile(files) {
 
     }
@@ -83,18 +110,6 @@ export class Player extends VueEx {
         this.$broadcast(ViewEvent.PLAYER_EDIT, playerId);
     }
 
-    data():any {
-        return {
-            year: 2015,
-            month: 12,
-            date: 4,
-            message: "",
-            messages: [],
-            playerArr: [],
-            countPage: [1],
-            isOpen: false
-        };
-    }
 
     get today():string {
         return `${this.year}/${this.month}/${this.date}`;

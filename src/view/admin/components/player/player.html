@@ -1,11 +1,11 @@
 <style>
     #player-grid {
-        padding-left: 240px;
+        padding-left: 290px;
     }
 </style>
 <div>
     <div class="row">
-        <div class="col s12 m4 l3" style="position: fixed;width: 250px;z-index: 2">
+        <div class="col s12 m4 l3" style="position: fixed;width: 300px;z-index: 2">
             <!-- Note that "m4 l3" was added -->
             <!-- Grey navigation panel
                   This content will be:
@@ -21,6 +21,14 @@
                 </p>
                 <hr class="m-y-md">
             </div>
+
+            <div id="pick">
+                <div id="pickPlayer">{{pickPlayerIdArr | json}}</div>
+                <li v-for="team in pickPlayerIdArrArr">
+                    <div>{{team | json}}</div>
+                </li>
+            </div>
+
             <div class="col s3">
                 show
             </div>
@@ -69,6 +77,8 @@
             <div class="row" v-for="player in playerArr" style="display: inline-block;margin: 0">
                 <div class="col s12">
                     <div class="card small" style="width:300px;height: 200px">
+                        <i class="material-icons left waves-effect waves-block waves-light"
+                           @click="onPickPlayer(player.id)">playlist_add</i>
                         <div class="card-image waves-effect waves-block waves-light">
                             <img class="activator" src="{{player.avatar}}">
                         </div>
