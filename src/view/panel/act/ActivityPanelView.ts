@@ -95,7 +95,7 @@ export class ActivityPanelView extends BasePanelView {
             .on(`${CommandId.fadeInActivityPanel}`, (param)=> {
                 var gameDocArr = param.gameDocArr;
                 this.activityRender.fadeIn(gameDocArr);
-                console.log('fade in activity panel', gameDocArr);
+                console.log('fade in activity panel ', gameDocArr);
             })
             .on(`${CommandId.fadeOutActivityPanel}`, (param)=> {
                 this.activityRender.fadeOut();

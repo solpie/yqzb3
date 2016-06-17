@@ -15,7 +15,7 @@
                 <input id="player{{$index}}" type="text" @keyup.enter="onQueryPlayer($index)" style="width: 75px">
                 <input id="playerNum{{$index}}" type="text" @keyup.enter="onUpdatePlayerNum($index)"
                        style="width: 35px">
-                <a class="modal-trigger waves-effect waves-light btn" style="width: 75px;height: 25px"
+                <a class="waves-effect waves-light btn" style="width: 75px;height: 25px"
                    @click="onUpdatePlayer($index)">↓</a>
                 <p>
                     <input name="mvp" type="radio" id="mvp{{$index}}" value="{{$index}}" v-model="mvpIdx"/>
@@ -23,33 +23,38 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         game id:{{gameId}}
+        ````````````````````````````````````````
+        <a class="waves-effect waves-light btn"
+           @click="onStarting">starting line</a>
+        ````````````````````````````````````````
+    </div>
+    <div class="row" style="display: inline-flex">
         <div class="switch">
             <label>
                 pause
                 <input type="checkbox" @click="onToggleTimer">
                 <span class="lever"></span>
-                start
+                start::::::::
             </label>
         </div>
-        //////////////////////////////////////////<a class="modal-trigger waves-effect waves-light btn"
-                                                     @click="onStarting">starting line</a>
-        <!--<a class="modal-trigger waves-effect waves-light btn" @click="onToggleTimer">{{timerName}}</a>-->
-        <a class="modal-trigger waves-effect waves-light btn" @click="onResetTimer">Reset</a>
+        <a class="waves-effect waves-light btn" @click="onResetTimer" style="height: 35px">Reset</a>
     </div>
     <div class="row">
-        <a class="modal-trigger waves-effect waves-light btn" @click="onAddLeftScore">Left++</a>
-        <a class="modal-trigger waves-effect waves-light btn" @click="onMinLeftScore">Left--</a>
+        <a class="waves-effect waves-light btn" @click="onAddLeftScore">Left++</a>
+        <a class="waves-effect waves-light btn" @click="onMinLeftScore">Left--</a>
         <input type="checkbox" id="test5"/>
         <label for="test5">///////不限制分数\\\\\\\</label>
-        <a class="modal-trigger waves-effect waves-light btn" @click="onMinRightScore">Right--</a>
-        <a class="modal-trigger waves-effect waves-light btn" @click="onAddRightScore">Right++</a>
+        <a class="waves-effect waves-light btn" @click="onMinRightScore">Right--</a>
+        <a class="waves-effect waves-light btn" @click="onAddRightScore">Right++</a>
     </div>
     <div class="row">
-        <a class="modal-trigger waves-effect waves-light btn" @click="onShowWin">Show Win</a>
-        <a class="modal-trigger waves-effect waves-light btn" @click="onHideWin">Hide Win</a>
-        <a class="modal-trigger waves-effect waves-light btn" @click="onRefresh">Refresh</a>
+        <a class="waves-effect waves-light btn" @click="onShowWin">Show Win</a>
+        <a class="waves-effect waves-light btn" @click="onHideWin">Hide Win</a>
+        <a class="waves-effect waves-light btn" @click="onSubmitGame">Submit Game</a>
+        <a class="waves-effect waves-light btn" @click="onRefresh">Refresh</a>
     </div>
 </div>
 <div style="display: none">
@@ -63,4 +68,5 @@
     <img src="/img/panel/stage/win/huoWin.png">
     <img src="/img/panel/stage/win/shanWin.png">
     <img src="/img/panel/stage/win/linWin.png">
+    <img src="/img/panel/stage/newPlayer.png">
 </div>

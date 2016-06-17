@@ -115,7 +115,7 @@ class Game_PlayersXLSX extends BaseXLSX {
                 team.playerIdArr.push(xlsxObj.playerId);
                 if (!playerMap[xlsxObj.playerId]) {
                     team.isFake = true;
-                    // console.warn(`no player map data ${xlsxObj.playerId}`);
+                    console.warn(`no player map data ${xlsxObj.playerId} ,teamId${xlsxObj.teamId}`);
                 }
                 else {
                     team.playerInfoArr.push(playerMap[xlsxObj.playerId].playerInfo);

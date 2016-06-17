@@ -106,7 +106,14 @@ export class StagePlayerCard extends Container {
         if (playerInfo.gameRec().length >= 3)
             eloText = playerInfo.eloScore();
         else {
-            var newPlayerIcon;//todo
+            var newPlayerIcon = new createjs.Bitmap('/img/panel/stage/newPlayer.png');
+            if (isBlue)
+                newPlayerIcon.x = 37;
+            else
+                newPlayerIcon.x = 139;
+
+            newPlayerIcon.y = 61;
+            ctn.addChild(newPlayerIcon);
         }
         console.log(`player${playerInfo.name()}game Count`, playerInfo.gameCount());
         var eloScoreText = new createjs.Text(eloText, "18px Arial", "#fff");
@@ -168,7 +175,7 @@ export class StagePlayerCard extends Container {
                 "8": 9,
                 "9": 0
             },
-            images: ["/img/panel/scoreNum.png"],
+            images: ["/img/panel/stage/scoreNum.png"],
             frames: [[0, 0, 40, 54],
                 [41, 0, 40, 54],
                 [0, 55, 40, 54],

@@ -16,6 +16,9 @@ export class GameInfo {
     playerRecArr:any = [];
     isFinish:any = null;
     _timer:number = 0;
+    static GAME_STATE_ING = 0;
+    static GAME_STATE_WIN = 1;
+    static GAME_STATE_SAVE = 2;
     gameState:number = 0;//0 未确认胜负 1 确认胜负未录入数据 2确认胜负并录入数据
     unLimitScore:number = 0;///
     mvpPlayerId:number;
@@ -152,8 +155,8 @@ export class GameInfo {
     }
 
     setPlayerInfoByIdx(pos, playerInfo:PlayerInfo) {
-        playerInfo.isRed = (pos > 3);
         playerInfo.isBlue = (pos < 4);
+        playerInfo.isRed = !playerInfo.isBlue;
         this.playerInfoArr[pos] = playerInfo;
         return playerInfo;
     }
@@ -205,7 +208,6 @@ export class GameInfo {
     getLeftTeam(start = 0) {
         var team = [];
         for (var i = start; i < 4 + start; i++) {
-            // var pInfo = new PlayerInfo(this.playerDataArr[i]);
             var pInfo = this.playerInfoArr[i];
             team.push(pInfo);
             pInfo.isRed = (start > 0)
