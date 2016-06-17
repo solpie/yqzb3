@@ -104,7 +104,11 @@ export class StagePlayerCard extends Container {
         }
         ctn.addChild(backNumText);
 
-        var eloScoreText = new createjs.Text(playerInfo.eloScore(), "18px Arial", "#fff");
+        var eloText = '---';
+        if (playerInfo.gameRec().length >= 3)
+            eloText = playerInfo.eloScore();
+        console.log(`player${playerInfo.name()}game Count`, playerInfo.gameCount());
+        var eloScoreText = new createjs.Text(eloText, "18px Arial", "#fff");
         eloScoreText.y = 59;
         this.eloScoreText = eloScoreText;
         if (isBlue) {

@@ -86,6 +86,7 @@ export class StagePanelHandle {
                 for (var i = 0; i < param.playerIdArr.length; i++) {
                     var playerId = param.playerIdArr[i];
                     var playerInfo = db.player.getPlayerInfoById(playerId);
+                    console.log('cs_updatePlayerAll', playerInfo.gameCount(), playerInfo);
                     this.gameInfo.setPlayerInfoByIdx(i, playerInfo);
                     playerInfoArr.push(playerInfo);
                     if (param.backNumArr[i]) {

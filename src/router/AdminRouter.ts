@@ -79,7 +79,7 @@ adminRouter.post('/player/update', function (req:any, res:any) {
         function updatePlayer() {
             playerDocUpdate.avatar = avatarPathOld;
             console.log('/player/update playerDoc', playerDocUpdate);
-            db.player.ds().update({id: playerDocUpdate.id}, playerDocUpdate, {}, (err, newDoc) => {
+            db.player.ds().update({id: playerDocUpdate.id}, {$set: playerDocUpdate}, {}, (err, newDoc) => {
                 db.player.syncDataMap();
                 res.sendStatus(200);
             });
