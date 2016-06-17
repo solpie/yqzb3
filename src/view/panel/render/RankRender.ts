@@ -1,6 +1,7 @@
 import {loadImgArr} from "../../../utils/JsFunc";
 import {ViewConst} from "../../../event/Const";
 import {ActivityPanelView} from "../act/ActivityPanelView";
+import {PlayerInfo} from "../../../model/PlayerInfo";
 import Container = createjs.Container;
 export class RankRender {
     ctn:Container;
@@ -69,7 +70,10 @@ export class RankRender {
                 winPercent.y = nameLabel.y;
                 this.ctn.addChild(winPercent);
 
-                var eloScore = new createjs.Text(playerData.eloScore, "28px Arial", "#fff");
+                var eloText = '新秀';
+                if (PlayerInfo.gameCount(playerData) >= 3)
+                    eloText = playerData.eloScore;
+                var eloScore = new createjs.Text(eloText, "28px Arial", "#fff");
                 eloScore.textAlign = 'center';
                 eloScore.x = item.x + 900;
                 eloScore.y = nameLabel.y;

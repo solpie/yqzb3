@@ -8,6 +8,7 @@ import {RoundInfo} from "../../../model/RoundInfo";
 import {CommandId} from "../../../event/Command";
 import {CountDownPanel} from "./CountDownPanel";
 import {ActivityRender} from "../render/ActivityRender";
+import {PlayerInfo} from "../../../model/PlayerInfo";
 @Component({
     template: require('./activity-panel.html'),
     components: {OpLinks},
@@ -74,7 +75,19 @@ export class ActivityPanelView extends BasePanelView {
         io
             .on(`${CommandId.fadeInRankPanel}`, (param)=> {
                 console.log(param);
-                this.rankRender.fadeInRank(param.playerDocArr);
+                var playerDocArr = param.playerDocArr;
+                var newPlayerArr = [];
+                var a = [];
+                for (var i = 0; i < playerDocArr.length; i++) {
+                    var playerInfo = new PlayerInfo(playerDocArr[i]);
+                    if (playerInfo.gameCount() < 3) {
+                        newPlayerArr.push(playerDocArr[i]);
+                    }
+                    else
+                        a.push(playerDocArr[i]);
+                }
+
+                this.rankRender.fadeInRank(a.concat(newPlayerArr));
             })
 
             .on(`${CommandId.fadeOutRankPanel}`, (param)=> {

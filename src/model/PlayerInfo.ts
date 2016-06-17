@@ -95,6 +95,10 @@ export class PlayerInfo extends BaseInfo {
         return this.winGameCount() / this.gameCount();
     }
 
+    static gameCount(playerDoc) {
+        return playerDoc.loseGameCount + playerDoc.winGameCount;
+    }
+
     gameCount() {
         return this.loseGameCount() + this.winGameCount();
     }

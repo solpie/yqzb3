@@ -1,6 +1,6 @@
 import {PlayerInfo} from "./PlayerInfo";
 import {_path} from "../Env";
-import {ascendingProp} from "../utils/JsFunc";
+import {ascendingProp, descendingProp} from "../utils/JsFunc";
 import {EloConf} from "../utils/EloUtil";
 import {ExternalInfo} from "./external/ExternalInfo";
 import {GameInfo} from "./GameInfo";
@@ -376,7 +376,7 @@ class PlayerDB extends BaseDB {
             }
         }
         //ascending
-        playerDocArr.sort(ascendingProp('eloScore'));
+        playerDocArr.sort(descendingProp('eloScore'));
         return playerDocArr;
     }
 
