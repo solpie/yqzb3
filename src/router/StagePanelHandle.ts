@@ -12,19 +12,19 @@ import {PlayerInfo} from "../model/PlayerInfo";
 import Server = SocketIO.Server;
 import Socket = SocketIO.Socket;
 export class StagePanelHandle {
-    io:any;
-    gameInfo:GameInfo;
+    io: any;
+    gameInfo: GameInfo;
 
-    constructor(io:Server) {
+    constructor(io: Server) {
         console.log('StagePanelHandle!!');
         this.gameInfo = new GameInfo();
 
-        this.io = io.of(`/${ PanelId.stagePanel}`);
+        this.io = io.of(`/${PanelId.stagePanel}`);
         this.io
-            .on("connect", (socket:Socket)=> {
-                socket.emit(`${CommandId.initPanel}`, ScParam({gameInfo: this.gameInfo, isDev: ServerConf.isDev}));
+            .on("connect", (socket: Socket) => {
+                socket.emit(`${CommandId.initPanel}`, ScParam({ gameInfo: this.gameInfo, isDev: ServerConf.isDev }));
             })
-            .on('disconnect', function (socket:Socket) {
+            .on('disconnect', function (socket: Socket) {
                 console.log('disconnect');
             });
         this.initOp();
@@ -32,49 +32,59 @@ export class StagePanelHandle {
 
     initOp() {
         //post /panel/stage/:cmd
-        panelRouter.post(`/stage/:cmdId`, (req:Request, res:Response) => {
+        panelRouter.post(`/stage/:cmdId`, (req: Request, res: Response) => {
             if (!req.body) return res.sendStatus(400);
             var cmdId = req.params.cmdId;
             var param = req.body;
             console.log(`/stage/${cmdId}`);
-            var cmdMap:any = {};
+            var cmdMap: any = {};
 
 
-            cmdMap[`${CommandId.cs_addLeftScore}`] = ()=> {
+            cmdMap[`${CommandId.cs_minLeftScore}`] = () => {
+                this.gameInfo.minLeftScore();
+                this.io.emit(`${CommandId.addLeftScore}`, ScParam({ leftScore: this.gameInfo.leftScore }));
+            }
+
+            cmdMap[`${CommandId.cs_minRightScore}`] = () => {
+                this.gameInfo.minRightScore();
+                this.io.emit(`${CommandId.addRightScore}`, ScParam({ rightScore: this.gameInfo.rightScore }));
+            }
+
+            cmdMap[`${CommandId.cs_addLeftScore}`] = () => {
                 var straight = this.gameInfo.addLeftScore();
                 if (straight == 3) {
                     console.log("straight score 3");
-                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: ViewEvent.STRAIGHT3_LEFT}));
+                    this.io.emit(`${CommandId.straightScore3}`, ScParam({ team: ViewEvent.STRAIGHT3_LEFT }));
                 }
                 if (straight == 5) {
 
                 }
-                this.io.emit(`${CommandId.addLeftScore}`, ScParam({leftScore: this.gameInfo.leftScore}));
+                this.io.emit(`${CommandId.addLeftScore}`, ScParam({ leftScore: this.gameInfo.leftScore }));
             };
 
-            cmdMap[`${CommandId.cs_addRightScore}`] = ()=> {
+            cmdMap[`${CommandId.cs_addRightScore}`] = () => {
                 var straight = this.gameInfo.addRightScore();
                 if (straight == 3) {
                     console.log("straight score 3 right");
-                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: ViewEvent.STRAIGHT3_RIGHT}));
+                    this.io.emit(`${CommandId.straightScore3}`, ScParam({ team: ViewEvent.STRAIGHT3_RIGHT }));
                 }
                 if (straight == 5) {
 
                 }
-                this.io.emit(`${CommandId.addRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
+                this.io.emit(`${CommandId.addRightScore}`, ScParam({ rightScore: this.gameInfo.rightScore }));
             };
 
-            cmdMap[`${CommandId.cs_toggleTimer}`] = ()=> {
+            cmdMap[`${CommandId.cs_toggleTimer}`] = () => {
                 this.gameInfo.toggleTimer();
                 this.io.emit(`${CommandId.toggleTimer}`);
             };
 
-            cmdMap[`${CommandId.cs_resetTimer}`] = ()=> {
+            cmdMap[`${CommandId.cs_resetTimer}`] = () => {
                 this.gameInfo.resetTimer();
                 this.io.emit(`${CommandId.resetTimer}`);
             };
 
-            cmdMap[`${CommandId.cs_updatePlayer}`] = (param)=> {
+            cmdMap[`${CommandId.cs_updatePlayer}`] = (param) => {
                 if (this.gameInfo.gameState == GameInfo.GAME_STATE_ING) {
                     var playerId = param.playerId;
                     var playerIdx = param.idx;
@@ -88,7 +98,7 @@ export class StagePanelHandle {
 
             };
 
-            cmdMap[`${CommandId.cs_updatePlayerAll}`] = (param)=> {
+            cmdMap[`${CommandId.cs_updatePlayerAll}`] = (param) => {
                 var playerInfoArr = [];
                 for (var i = 0; i < param.playerIdArr.length; i++) {
                     var playerId = param.playerIdArr[i];
@@ -106,9 +116,9 @@ export class StagePanelHandle {
                 }));
             };
 
-            cmdMap[`${CommandId.cs_fadeInWinPanel}`] = (param)=> {
+            cmdMap[`${CommandId.cs_fadeInWinPanel}`] = (param) => {
                 console.log('cs_fadeInWinPanel', param.mvpIdx, this.gameInfo);
-                var winTeam:TeamInfo = this.gameInfo.setWinByMvpIdx(param.mvpIdx);
+                var winTeam: TeamInfo = this.gameInfo.setWinByMvpIdx(param.mvpIdx);
 
                 this.io.emit(`${CommandId.fadeInWinPanel}`, ScParam({
                     teamInfo: winTeam,
@@ -117,20 +127,20 @@ export class StagePanelHandle {
                 }));
             };
 
-            cmdMap[`${CommandId.cs_fadeOutWinPanel}`] = (param)=> {
+            cmdMap[`${CommandId.cs_fadeOutWinPanel}`] = (param) => {
                 this.io.emit(`${CommandId.fadeOutWinPanel}`);
             };
 
-            cmdMap[`${CommandId.cs_updatePlayerBackNum}`] = (param)=> {
+            cmdMap[`${CommandId.cs_updatePlayerBackNum}`] = (param) => {
                 this.io.emit(`${CommandId.updatePlayerBackNum}`, param);
             };
 
-            cmdMap[`${CommandId.cs_saveGameRec}`] = (param)=> {
+            cmdMap[`${CommandId.cs_saveGameRec}`] = (param) => {
                 if (this.gameInfo.isFinish) {
                     res.send(false);
                 }
                 else
-                    db.game.saveGameRecToPlayer(this.gameInfo, ()=> {
+                    db.game.saveGameRecToPlayer(this.gameInfo, () => {
                         res.send(true);
                     });
                 return ServerConst.SEND_ASYNC;

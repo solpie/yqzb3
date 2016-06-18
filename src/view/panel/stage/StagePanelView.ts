@@ -39,22 +39,22 @@ import {ScorePanel} from "./ScorePanel";
     }
 })
 export class StagePanelView extends BasePanelView {
-    scorePanel:ScorePanel;
-    playerPanel:PlayerPanel;
-    eventPanel:EventPanel;
+    scorePanel: ScorePanel;
+    playerPanel: PlayerPanel;
+    eventPanel: EventPanel;
 
-    mvpIdx:number;
-    timerName:string;
-    isInit:boolean;
-    gameId:number;
-    playerInfoArr:any;
+    mvpIdx: number;
+    timerName: string;
+    isInit: boolean;
+    gameId: number;
+    playerInfoArr: any;
 
 
-    isSubmited:boolean = false;
+    isSubmited: boolean = false;
 
     ready() {
         var io = super.ready(PanelId.stagePanel);
-        io.on(`${CommandId.initPanel}`, (data)=> {
+        io.on(`${CommandId.initPanel}`, (data) => {
             console.log(`${CommandId.initPanel}`, data);
             // ServerConf.isDev = data.isDev;
             if (!this.isInit)
@@ -62,14 +62,14 @@ export class StagePanelView extends BasePanelView {
         });
 
         io
-            .on(`${CommandId.addLeftScore}`, (data)=> {
+            .on(`${CommandId.addLeftScore}`, (data) => {
                 console.log(`${CommandId.addLeftScore}`, data);
                 this.scorePanel.setLeftScore(data.leftScore);
             })
-            .on(`${CommandId.addRightScore}`, (data)=> {
+            .on(`${CommandId.addRightScore}`, (data) => {
                 this.scorePanel.setRightScore(data.rightScore);
             })
-            .on(`${CommandId.straightScore3}`, (param)=> {
+            .on(`${CommandId.straightScore3}`, (param) => {
                 if (param.team === ViewEvent.STRAIGHT3_LEFT) {
                     this.eventPanel.fadeInStraight3(false);
                 }
@@ -77,49 +77,49 @@ export class StagePanelView extends BasePanelView {
                     this.eventPanel.fadeInStraight3(true);
                 }
             })
-            .on(`${CommandId.toggleTimer}`, (data)=> {
+            .on(`${CommandId.toggleTimer}`, (data) => {
                 if (this.timerName === 'start')
                     this.timerName = 'pause';
                 else
                     this.timerName = 'start';
                 this.scorePanel.toggleTimer1();
             })
-            .on(`${CommandId.resetTimer}`, (data)=> {
+            .on(`${CommandId.resetTimer}`, (data) => {
                 this.timerName = 'start';
                 this.scorePanel.resetTimer();
             })
-            .on(`${CommandId.updatePlayer}`, (data)=> {
+            .on(`${CommandId.updatePlayer}`, (data) => {
                 // this.getElem('#playerImg' + data.idx).src = data.playerDoc.avatar;
                 this.playerPanel.setPlayer(data.idx, new PlayerInfo(data.playerDoc));
                 this.scorePanel.setAvgEloScore(data.avgEloScore);
             })
-            .on(`${CommandId.updatePlayerAll}`, (param)=> {
+            .on(`${CommandId.updatePlayerAll}`, (param) => {
                 //todo effect
                 for (var i = 0; i < param.playerInfoArr.length; i++) {
-                    var playerInfo:PlayerInfo = new PlayerInfo(param.playerInfoArr[i]);
+                    var playerInfo: PlayerInfo = new PlayerInfo(param.playerInfoArr[i]);
                     this.playerPanel.setPlayer(i, playerInfo);
                 }
                 this.scorePanel.setLeftScore(0);
                 this.scorePanel.setRightScore(0);
                 this.scorePanel.setAvgEloScore(param.avgEloScore);
             })
-            .on(`${CommandId.fadeInWinPanel}`, (param)=> {
+            .on(`${CommandId.fadeInWinPanel}`, (param) => {
                 var teamInfo = param.teamInfo;
                 var mvpIdx = param.mvpIdx;
                 var mvpId = param.mvpId;
                 this.eventPanel.fadeInWinPanel(teamInfo, mvpIdx, mvpId);
             })
-            .on(`${CommandId.fadeOutWinPanel}`, (param)=> {
+            .on(`${CommandId.fadeOutWinPanel}`, (param) => {
                 this.eventPanel.fadeOutWinPanel();
             })
-            .on(`${CommandId.updatePlayerBackNum}`, (param)=> {
+            .on(`${CommandId.updatePlayerBackNum}`, (param) => {
                 this.playerPanel.playerCardArr[param.idx].setBackNumber(param.backNum);
             })
 
     }
 
 
-    initStage(gameDoc:any) {
+    initStage(gameDoc: any) {
         this.isInit = true;
         this.scorePanel = new ScorePanel(this);
         this.scorePanel.init(gameDoc);
@@ -151,7 +151,7 @@ export class StagePanelView extends BasePanelView {
     onAddLeftScore() {
         console.log('onAddLeftScore');
         this.opReq(`${CommandId.cs_addLeftScore}`,
-            {param: 'addLeftScore'});
+            { param: 'addLeftScore' });
     }
 
     onAddRightScore() {
@@ -162,7 +162,7 @@ export class StagePanelView extends BasePanelView {
     onQueryPlayer(idx) {
         var queryId = this.getElem("#player" + idx).value;
         console.log('onQueryPlayer', idx, queryId);
-        this.post(`/db/player/${queryId}`, (data)=> {
+        this.post(`/db/player/${queryId}`, (data) => {
             console.log('res: ', data);
             var playerDoc = data.playerDoc;
             this.getElem('#playerImg' + idx).src = playerDoc.avatar;
@@ -172,7 +172,7 @@ export class StagePanelView extends BasePanelView {
     onUpdatePlayerNum(idx) {
         var backNum = this.getElem("#playerNum" + idx).value;
         console.log('onUpdatePlayerNum', idx, backNum);
-        this.opReq(`${CommandId.cs_updatePlayerBackNum}`, {idx: idx, backNum: backNum});
+        this.opReq(`${CommandId.cs_updatePlayerBackNum}`, { idx: idx, backNum: backNum });
         // this.playerPanel.playerCardArr[idx].setBackNumber(playerNum);
     }
 
@@ -188,7 +188,7 @@ export class StagePanelView extends BasePanelView {
         // playerIdArr = [10002, 10003, 10004, 10005,
         //     10008, 10010, 10011, 10012];
         this.opReq(`${CommandId.cs_updatePlayerAll}`,
-            {playerIdArr: playerIdArr, backNumArr: backNumArr}
+            { playerIdArr: playerIdArr, backNumArr: backNumArr }
         );
     }
 
@@ -196,15 +196,17 @@ export class StagePanelView extends BasePanelView {
         console.log('onUpdatePlayer', idx);
         var queryId = Number(this.getElem("#player" + idx).value);
         console.log('onQueryPlayer', idx, queryId);
-        this.opReq(`${CommandId.cs_updatePlayer}`, {idx: idx, playerId: queryId});
+        this.opReq(`${CommandId.cs_updatePlayer}`, { idx: idx, playerId: queryId });
     }
 
     onMinRightScore() {
         console.log('onMinRightScore');
+        this.opReq(`${CommandId.cs_minRightScore}`);
     }
 
     onMinLeftScore() {
         console.log('onMinLeftScore');
+        this.opReq(`${CommandId.cs_minLeftScore}`);
     }
 
     onShowWin() {
@@ -214,7 +216,7 @@ export class StagePanelView extends BasePanelView {
             alert('比赛结果与mvp不符')
         }
         else
-            this.opReq(`${CommandId.cs_fadeInWinPanel}`, {mvpIdx: this.mvpIdx});
+            this.opReq(`${CommandId.cs_fadeInWinPanel}`, { mvpIdx: this.mvpIdx });
     }
 
     onHideWin() {
@@ -231,7 +233,7 @@ export class StagePanelView extends BasePanelView {
             var date = new Date();
             var dateTime = date.getTime();
             console.log('onSubmitGame', dateTime);
-            this.opReq(`${CommandId.cs_saveGameRec}`, {date: dateTime}, (res)=> {
+            this.opReq(`${CommandId.cs_saveGameRec}`, { date: dateTime }, (res) => {
                 console.log(res);
                 this.isSubmited = true;
                 if (res) {
