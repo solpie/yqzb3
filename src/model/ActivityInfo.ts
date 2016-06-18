@@ -1,21 +1,21 @@
 import {RoundInfo} from "./RoundInfo";
 import {BaseDoc} from "./BaseInfo";
 import {mapToArr} from "../utils/JsFunc";
-declare var db;
+// declare var db;
 export class ActivityDoc extends BaseDoc {
-    id:number = -1
+    id:number = -1;
     playerIdArr:number[] = [];//16 
     gameIdArr:number[] = [];
     date:number = -1;
 }
 export class ActivityInfo {
-    activityDoc:ActivityDoc;
+    // activityDoc:ActivityDoc;
     id:number;
     roundInfoArr:RoundInfo[];
 
     constructor() {
         this.roundInfoArr = [];
-        this.activityDoc = new ActivityDoc();
+        // this.activityDoc = new ActivityDoc();
     }
 
     getRoundInfoById(id) {
@@ -27,7 +27,6 @@ export class ActivityInfo {
     }
 
     getActivityPlayerIdArr() {
-        var playerInfoArr = [];
         var playerIdMap:any = {};
         for (var roundInfo of this.roundInfoArr) {
             for (var i = 0; i < roundInfo.gameInfoArr.length; i++) {
@@ -60,21 +59,23 @@ export class ActivityInfo {
 
 
     setPlayerIdArr(playerIdArr:number[]) {
-        if (playerIdArr.length != 16) {
-            throw new Error('人数不满足条件')
-        }
-        else {
-            this.activityDoc.playerIdArr = playerIdArr.concat();
-        }
+        // if (playerIdArr.length != 16) {
+        //     throw new Error('人数不满足条件')
+        // }
+        // else {
+        //     this.activityDoc.playerIdArr = playerIdArr.concat();
+        // }
     }
 
     /*
-     完全高低分组队 （高分和高分组队）
+     加赛两场 完全高低分组队 （高分和高分组队）
      */
-    createGameInHighLowMode() {
-        var playerDocArr = db.player.getPlayerRank(this.activityDoc.playerIdArr);
-
-
+    createExGameInHighLowMode(playerMap) {
+        // var playerDocArr = (this.activityDoc.playerIdArr);
+        // var game1PlayerIdArr = playerDocArr.slice(0, 7);
+        // var game2PlayerIdArr = playerDocArr.slice(8, 15);
+        // console.log('game1', game1PlayerIdArr);
+        // console.log('game2', game2PlayerIdArr);
     }
 
     /*

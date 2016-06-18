@@ -28,6 +28,12 @@ export function mapToArr(map) {
     return a;
 }
 
+// Array.sort().filter(arrUniqueFilter)
+export function arrUniqueFilter(el, i, a):boolean {
+    return i == a.indexOf(el);
+}
+
+
 export function loadImg(path1, callback) {
     var img = new Image();
     img.onload = callback;

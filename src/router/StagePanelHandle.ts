@@ -76,8 +76,12 @@ export class StagePanelHandle {
 
             cmdMap[`${CommandId.cs_updatePlayer}`] = (param)=> {
                 if (this.gameInfo.gameState == GameInfo.GAME_STATE_ING) {
-                    param.playerDoc = db.player.dataMap[param.playerId];
-                    this.gameInfo.setPlayerInfoByIdx(param.idx, db.player.getPlayerInfoById(param.playerId));
+                    var playerId = param.playerId;
+                    var playerIdx = param.idx;
+
+                    param.playerDoc = db.player.dataMap[playerId];
+                    this.gameInfo.setPlayerInfoByIdx(playerIdx, db.player.getPlayerInfoById(playerId));
+                    db.game.updatePlayerByPos(this.gameInfo.id, playerIdx, playerId);
                     param.avgEloScore = this.gameInfo.getAvgEloScore();
                     this.io.emit(`${CommandId.updatePlayer}`, ScParam(param))
                 }
@@ -126,7 +130,7 @@ export class StagePanelHandle {
                     res.send(false);
                 }
                 else
-                    db.game.saveGameRecToPlayer(this.gameInfo,()=> {
+                    db.game.saveGameRecToPlayer(this.gameInfo, ()=> {
                         res.send(true);
                     });
                 return ServerConst.SEND_ASYNC;

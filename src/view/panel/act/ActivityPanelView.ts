@@ -113,6 +113,11 @@ export class ActivityPanelView extends BasePanelView {
                 this.activityRender.fadeIn(gameDocArr);
                 console.log('fade in activity panel ', gameDocArr);
             })
+            .on(`${CommandId.fadeInActivityExGame}`, (param)=> {
+                var playerDocArr = param.playerDocArr;
+                
+                console.log('fade in ex game:', playerDocArr);
+            })
             .on(`${CommandId.fadeOutActivityPanel}`, (param)=> {
                 this.activityRender.fadeOut();
             });
@@ -228,10 +233,12 @@ export class ActivityPanelView extends BasePanelView {
             alert('没有选择比赛');
         }
     }
-    onRankNext(){
+
+    onRankNext() {
         this.opReq(`${CommandId.cs_fadeInNextRank}`);
-        
+
     }
+
     onRankOut() {
         console.log('onRankOut');
         this.opReq(`${CommandId.cs_fadeOutRankPanel}`);
@@ -258,6 +265,19 @@ export class ActivityPanelView extends BasePanelView {
             var gameIdArr = this.selActivityInfo.getGameIdArr();
             console.log('onActivityIn', gameIdArr);
             this.opReq(`${CommandId.cs_fadeInActivityPanel}`,
+                {gameIdArr: gameIdArr});
+        }
+        else {
+            alert(`无效赛程 id${this.activitySelected}`);
+        }
+    }
+
+    onActivityInExGameIn() {
+        var selActivityInfo = this.selActivityInfo;
+        if (selActivityInfo) {
+            var gameIdArr = this.selActivityInfo.getGameIdArr();
+            console.log('onActivityIn', gameIdArr);
+            this.opReq(`${CommandId.cs_fadeInActivityExGame}`,
                 {gameIdArr: gameIdArr});
         }
         else {

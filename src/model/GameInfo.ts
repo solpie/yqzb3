@@ -1,6 +1,9 @@
 import {TeamInfo} from "./TeamInfo";
 import {PlayerInfo} from "./PlayerInfo";
 import {setPropTo} from "./BaseInfo";
+class GameDoc{
+    
+}
 export class GameInfo {
     id:number = 0;
     winScore:number = 7;
@@ -165,7 +168,9 @@ export class GameInfo {
         }
         return this._winTeam;
     }
-
+    getGameDoc(){
+        return {}
+    }
 
     setLeftTeamWin():TeamInfo {
         return this._setGameResult(true);

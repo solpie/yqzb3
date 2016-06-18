@@ -6,7 +6,6 @@ export class RoundInfo {
     gameInfoArr:Array<GameInfo>;
     id:number;
     section:number;
-    curGameId:number;
 
     constructor() {
         this.gameInfoArr = [];
@@ -19,4 +18,8 @@ export class RoundInfo {
         }
         return null;
     }
+    
+    
+
+   
 }

@@ -89,16 +89,9 @@ export class TeamInfo {
         var winScoreArr = getScoreArr(this.playerInfoArr, loseTeamScore, true, mvpPlayerId);
         var loseScoreArr = getScoreArr(loserTeam.playerInfoArr, winTeamScore, false);
 
-        // var mvpPlayerInfo:PlayerInfo = this.getPlayerInfoById(mvpPlayerId);
-        // mvpPlayerInfo.eloScore(mvpPlayerInfo.eloScore() + dtScore);
-        // mvpPlayerInfo.dtScore(mvpPlayerInfo.dtScore() + dtScore);
-        // console.log('mvp ex dtScore:', mvpPlayerInfo.dtScore(), mvpPlayerInfo.eloScore(), mvpPlayerInfo.name());
 
         this.saveScoreArr(winScoreArr, true);
         loserTeam.saveScoreArr(loseScoreArr, false);
-
-        // console.log('mvp dtScore:', mvpPlayerInfo.dtScore(), mvpPlayerInfo.eloScore(), mvpPlayerInfo.name());
-
     }
 
 

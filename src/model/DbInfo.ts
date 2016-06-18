@@ -1,6 +1,6 @@
 import {PlayerInfo} from "./PlayerInfo";
 import {_path} from "../Env";
-import {ascendingProp, descendingProp} from "../utils/JsFunc";
+import {descendingProp} from "../utils/JsFunc";
 import {EloConf} from "../utils/EloUtil";
 import {ExternalInfo} from "./external/ExternalInfo";
 import {GameInfo} from "./GameInfo";
@@ -174,6 +174,9 @@ class ActivityDB extends BaseDB {
         });
     }
 
+    getActivityPlayerIdArr() {
+
+    }
 
     getDateArrByActivityId(actId, callback) {
         this.dataStore.find({activityId: actId}, function (err, docs) {
@@ -364,6 +367,7 @@ class PlayerDB extends BaseDB {
         // this.dataStore.find({$not: {id: 0}, activityId: actId}).sort({eloScore: 1}).exec(function (err, docs) {
         //     callback(err, docs);
         // });
+        
     }
 
     getPlayerRank(playerIdArr:number[]) {

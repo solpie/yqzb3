@@ -8,6 +8,7 @@ import {CommandId} from "../event/Command";
 import {ServerConf} from "../Env";
 import {panelRouter} from "./PanelRouter";
 import {db} from "../model/DbInfo";
+import {arrUniqueFilter} from "../utils/JsFunc";
 export class ActivityPanelHandle {
     io:any;
 
@@ -86,6 +87,21 @@ export class ActivityPanelHandle {
 
             cmdMap[`${CommandId.cs_fadeOutActivityPanel}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeOutActivityPanel}`);
+            };
+            cmdMap[`${CommandId.cs_fadeInActivityExGame}`] = (param)=> {
+                var gameIdArr = param.gameIdArr;
+                var gameDocArr = db.game.getDocArr(gameIdArr);
+                var playerIdArr = [];
+                for (var gameDoc of gameDocArr) {
+                    // playerDocArr = playerDocArr.concat();
+                    playerIdArr = playerIdArr.concat(gameDoc.playerIdArr);
+                }
+                console.log('ex game playerDoc Arr:', playerIdArr);
+                playerIdArr = playerIdArr.sort().filter(arrUniqueFilter);
+                console.log('ex game playerDoc Arr:', playerIdArr);
+                var playerDocArr = db.player.getPlayerRank(playerIdArr);
+                this.io.emit(`${CommandId.fadeInActivityExGame}`,
+                    ScParam({playerDocArr: playerDocArr}));
             };
             cmdMap[`${CommandId.cs_fadeInNextRank}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeInNextRank}`);
