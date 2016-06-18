@@ -17,9 +17,20 @@ export class TeamInfo {
         //     this.playerArr.push(player);
         // }
     }
-    length(){
+
+    getPlayerInfoById(playerId) {
+        for (var i = 0; i < this.playerInfoArr.length; i++) {
+            var playerInfo:PlayerInfo = this.playerInfoArr[i];
+            if (playerInfo.id() == playerId) {
+                return playerInfo;
+            }
+        }
+    }
+
+    length() {
         return this.playerInfoArr.length;
     }
+
     push(playerInfo:PlayerInfo) {
         this.playerInfoArr.push(playerInfo);
     }
@@ -49,25 +60,47 @@ export class TeamInfo {
     }
 
     beat(loserTeam:TeamInfo) {
-        // var Elo1 = this.score;
-        //
-        // var Elo2 = loserTeam.score;
-        //
-        // var K = EloConf.K;
-        //
-        // var EloDifference = Elo2 - Elo1;
-        //
-        // var percentage = 1 / ( 1 + Math.pow(10, EloDifference / 400) );
-        //
-        // var win = Math.round(K * ( 1 - percentage ));
-
         var win = EloUtil.classicMethod(this.score, loserTeam.score);
-        //this.score += win;
         this.saveScore(win, true);
         loserTeam.saveScore(-win, false);
-        //loserTeam.score -= win;
-        // this.getWinningPercent() = Math.round(percentage * 100);
     }
+
+    beat2(loserTeam:TeamInfo, mvpPlayerId) {
+        var winTeamScore = this.score;
+        var loseTeamScore = loserTeam.score;
+
+        function getScoreArr(playerInArr, teamScore, isWin, mvpId = -1) {
+            var scoreArr = [];
+            for (var i = 0; i < playerInArr.length; i++) {
+                var playerInfo:PlayerInfo = playerInArr[i];
+
+                var score = EloUtil.classicMethod(playerInfo.eloScore(), teamScore);
+                if (playerInfo.id() == mvpId) {
+                    var teamWinScore = EloUtil.classicMethod(winTeamScore, loseTeamScore);
+                    score += Math.floor(0.25 * teamWinScore);
+                }
+                if (!isWin)
+                    score = -score;
+                scoreArr.push(score);
+            }
+            return scoreArr;
+        }
+
+        var winScoreArr = getScoreArr(this.playerInfoArr, loseTeamScore, true, mvpPlayerId);
+        var loseScoreArr = getScoreArr(loserTeam.playerInfoArr, winTeamScore, false);
+
+        // var mvpPlayerInfo:PlayerInfo = this.getPlayerInfoById(mvpPlayerId);
+        // mvpPlayerInfo.eloScore(mvpPlayerInfo.eloScore() + dtScore);
+        // mvpPlayerInfo.dtScore(mvpPlayerInfo.dtScore() + dtScore);
+        // console.log('mvp ex dtScore:', mvpPlayerInfo.dtScore(), mvpPlayerInfo.eloScore(), mvpPlayerInfo.name());
+
+        this.saveScoreArr(winScoreArr, true);
+        loserTeam.saveScoreArr(loseScoreArr, false);
+
+        // console.log('mvp dtScore:', mvpPlayerInfo.dtScore(), mvpPlayerInfo.eloScore(), mvpPlayerInfo.name());
+
+    }
+
 
     //交换两队中的随机两人
     mix2(teamInfo:TeamInfo) {
@@ -97,6 +130,15 @@ export class TeamInfo {
     saveScore(score, isWin) {
         this.score += score;
         for (var i = 0; i < this.playerInfoArr.length; i++) {
+            var player = this.playerInfoArr[i];
+            player.saveScore(score, isWin);
+        }
+    }
+
+    saveScoreArr(scoreArr, isWin) {
+        for (var i = 0; i < this.playerInfoArr.length; i++) {
+            var score = scoreArr[i];
+            this.score += score;
             var player = this.playerInfoArr[i];
             player.saveScore(score, isWin);
         }

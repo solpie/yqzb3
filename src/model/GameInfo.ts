@@ -151,12 +151,12 @@ export class GameInfo {
             teamRight.setPlayerArr(this.getRightTeam());
 
             if (isLeftWin) {
-                teamLeft.beat(teamRight);
+                teamLeft.beat2(teamRight, this.mvpPlayerId);
                 this._winTeam = teamLeft;
                 this._loseTeam = teamRight;
             }
             else {
-                teamRight.beat(teamLeft);
+                teamRight.beat2(teamLeft, this.mvpPlayerId);
                 this._winTeam = teamRight;
                 this._loseTeam = teamLeft;
             }
