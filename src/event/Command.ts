@@ -63,6 +63,8 @@ export enum CommandId{
 
     cs_fadeInActivityPanel,
     fadeInActivityPanel,
+    cs_fadeInNextActivity,
+    fadeInNextActivity,
     cs_fadeInActivityExGame,
     fadeInActivityExGame,
     cs_fadeOutActivityPanel,

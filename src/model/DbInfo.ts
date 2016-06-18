@@ -135,7 +135,7 @@ class ActivityDB extends BaseDB {
             });
     }
 
-    addGame(activityId, roundId, playerIdArr, section, callback) {
+    addGame(activityId, roundId, playerIdArr, section, callback?) {
         this.ds().findOne({round: roundId}, (err, doc) => {
             // this.ds().findOne({activityId: activityId, $and: {round: roundId}}, (err, doc) => {
             console.log("findOne:", JSON.stringify(err), doc);
@@ -144,21 +144,22 @@ class ActivityDB extends BaseDB {
                     doc.gameDataArr = [];
 
                 var gameData:any = {};
-                gameData.id = this.getGameIdBase(roundId) + doc.gameDataArr.length;
+                gameData.id = this.getGameIdBase(roundId) + doc.gameDataArr.length + 1;
                 gameData.playerIdArr = playerIdArr;
                 gameData.section = section;
                 doc.gameDataArr.push(gameData);
                 console.log("update Round Data:", JSON.stringify(doc.gameDataArr.length));
-                console.log("update Round Data:", JSON.stringify(doc));
                 this.ds().update({round: roundId}, doc, {}, (newNum) => {
                     console.log("addGame:", newNum);
                     this.syncDataMap();
-                    callback(true);
+                    if (callback)
+                        callback(true);
                 });
             }
             else {
                 console.log("no activity:", activityId, "round:", roundId);
-                callback(false)
+                if (callback)
+                    callback(false)
             }
         })
     }
@@ -390,6 +391,15 @@ class PlayerDB extends BaseDB {
         //ascending
         playerDocArr.sort(descendingProp('eloScore'));
         return playerDocArr;
+    }
+
+    getPlayerIdArrRank(playerIdArr:number[]):number[] {
+        var playerDocArr = this.getPlayerRank(playerIdArr);
+        var a = [];
+        for (var playerDoc of playerDocArr) {
+            a.push(playerDoc.id);
+        }
+        return a;
     }
 
     getPlayerDataMapByIdArr(idArr, callback) {

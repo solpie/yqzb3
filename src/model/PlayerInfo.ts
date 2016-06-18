@@ -92,7 +92,9 @@ export class PlayerInfo extends BaseInfo {
     }
 
     static winPercent(playerDoc) {
-        return playerDoc.winGameCount / PlayerInfo.gameCount(playerDoc);
+        var p = playerDoc.winGameCount / PlayerInfo.gameCount(playerDoc)
+        if (!p)p = 0;
+        return p;
     }
 
     static winPercentStr(playerDoc) {
@@ -104,7 +106,9 @@ export class PlayerInfo extends BaseInfo {
     }
 
     static gameCount(playerDoc) {
-        return playerDoc.loseGameCount + playerDoc.winGameCount;
+        var c = playerDoc.loseGameCount + playerDoc.winGameCount;
+        if (!c)c = 0;
+        return c;
     }
 
     gameCount() {

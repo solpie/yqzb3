@@ -113,6 +113,9 @@ export class ActivityPanelView extends BasePanelView {
                 this.activityRender.fadeIn(gameDocArr);
                 console.log('fade in activity panel ', gameDocArr);
             })
+            .on(`${CommandId.fadeInNextActivity}`, (param)=> {
+                this.activityRender.nextPage();
+            })
             .on(`${CommandId.fadeInActivityExGame}`, (param)=> {
                 var gameDocArr = param.gameDocArr;
                 var roundId = this.roundSelected;
@@ -261,6 +264,10 @@ export class ActivityPanelView extends BasePanelView {
     onCountDownOut() {
         console.log('onCountDownOut');
         this.opReq(`${CommandId.cs_fadeOutCountDown}`);
+    }
+
+    onActivityNextIn() {
+        this.opReq(`${CommandId.cs_fadeInNextActivity}`);
     }
 
     onActivityIn() {

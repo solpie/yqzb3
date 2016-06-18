@@ -5,12 +5,15 @@ import {StagePlayerCard} from "./PlayerRender";
 import {ActivityPanelView} from "../act/ActivityPanelView";
 export class ActivityRender {
     ctn:Container;
+    nextPageArr:any;
+    pageNum:number;
 
     constructor(parent:ActivityPanelView) {
+        this.pageNum = 0;
         this.ctn = parent.ctn;
     }
 
-    fadeIn(gameDocArr) {
+    fadeIn(gameDocArr, pageNum = 0) {
         this.ctn.removeAllChildren();
         this.ctn.alpha = 0;
 
@@ -45,12 +48,13 @@ export class ActivityRender {
             for (var j = 0; j < gameDoc.playerDocArr.length; j++) {
                 var playerInfo = new PlayerInfo(gameDoc.playerDocArr[j]);
                 playerInfo.isBlue = (j < 4);
+                if (gameDoc.isFinish)
+                    playerInfo.eloScore(gameDoc.playerRecArr[j].eloScore);
                 var playerCtn = new StagePlayerCard(playerInfo, 1, playerInfo.isBlue);
                 playerCtn.y = 50;
                 var scoreText = StagePlayerCard.newScoreText();
                 scoreText.y = 70;
-                if (gameDoc.isFinish)
-                    playerInfo.eloScore(gameDoc.playerRecArr[j].eloScore);
+
                 if (playerInfo.isBlue) {
                     scoreText.text = gameDoc.redScore + "";
                     scoreText.x = 830;
@@ -88,20 +92,28 @@ export class ActivityRender {
         createjs.Tween.get(this.ctn)
             .to({alpha: 1}, 300);
 
-        if (6 < gameDocArr.length) {
+        if (gameDocArr.length > 6) {
             var nextPage = [];
             for (var i = 6; i < gameDocArr.length; i++) {
                 var gameInfo = gameDocArr[i];
                 nextPage.push(gameInfo);
             }
-            createjs.Tween.get(this).wait(5000).call(()=> {
-                this.fadeIn(nextPage);
-            });
+            this.nextPageArr = nextPage;
+            this.pageNum++;
+
+            // createjs.Tween.get(this).wait(5000).call(()=> {
+            //     this.fadeIn(nextPage);
+            // });
         }
         else {
+            this.pageNum = 0;
             // createjs.Tween.get(this.ctn)
             //     .wait(5000).to({alpha: 0}, 300);
         }
+    }
+
+    nextPage() {
+        this.fadeIn(this.nextPageArr, this.pageNum);
     }
 
     fadeOut() {

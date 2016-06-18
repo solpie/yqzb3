@@ -75,6 +75,7 @@ export class ActivityPanelHandle {
                 db.game.syncDataMap(()=> {
                     var gameIdArr = param.gameIdArr;
                     var gameDocArr = db.game.getDocArr(gameIdArr);
+                    console.log('cs_fadeInActivityPanel', gameDocArr);
                     for (var gameDoc of gameDocArr) {
                         gameDoc.playerDocArr = [];
                         for (var playerId of gameDoc.playerIdArr) {
@@ -95,13 +96,14 @@ export class ActivityPanelHandle {
                 var roundId = param.roundId;
 
                 var gameDocArr = db.game.getDocArr(gameIdArr);
-                var playerIdArr = [];
+                var playerIdArr:any = [];
                 for (var gameDoc of gameDocArr) {
                     playerIdArr = playerIdArr.concat(gameDoc.playerIdArr);
                 }
                 playerIdArr = playerIdArr.sort().filter(arrUniqueFilter);
                 console.log('ex game playerDoc Arr:', playerIdArr);
-                // var playerDocArr = db.player.getPlayerRank(playerIdArr);
+                //排序
+                playerIdArr = db.player.getPlayerIdArrRank(playerIdArr);
 
                 //组合球员
                 var t1 = gameDocArr[0].playerIdArr.slice(0, 4);
@@ -111,7 +113,7 @@ export class ActivityPanelHandle {
                 var lastTeamArr = [t1, t2, t3, t4];
                 //
 
-                function minAbsScoreTeam(combineTeamArr):any {
+                function minAbsScoreTeam(combineTeamArr, sameLimit = 3):any {
                     console.log('combine team', combineTeamArr.length, lastTeamArr);
                     var matchTeam = {t1: null, t2: null};
                     var minAbsScore = -1;
@@ -124,15 +126,15 @@ export class ActivityPanelHandle {
                         var countSameOps = arrCountSame(lastTeamArr[1], teamPlayerIdArrOps);
                         var countSame2 = arrCountSame(lastTeamArr[2], teamPlayerIdArr);
                         var countSameOps3 = arrCountSame(lastTeamArr[3], teamPlayerIdArrOps);
-                        if ((countSame < 3 && countSameOps < 3)
-                            || (countSame2 < 3 && countSameOps3 < 3)) {
+                        if ((countSame < sameLimit && countSameOps < sameLimit)
+                            || (countSame2 < sameLimit && countSameOps3 < sameLimit)) {
                             // mixTeam.push(teamPlayerIdArr);
                             var t1Score = db.player.getPlayerArrEloScore(teamPlayerIdArr);
                             var t2Score = db.player.getPlayerArrEloScore(teamPlayerIdArrOps);
                             var absScore = Math.abs(t1Score - t2Score);
                             if (minAbsScore == -1)
                                 minAbsScore = absScore;
-                            if (absScore < minAbsScore) {
+                            if (absScore <= minAbsScore) {
                                 minAbsScore = absScore;
                                 matchTeam.t1 = teamPlayerIdArr;
                                 matchTeam.t2 = teamPlayerIdArrOps;
@@ -140,6 +142,24 @@ export class ActivityPanelHandle {
                             }
                         }
                     }
+                    if (!matchTeam.t1) {//找不到至少两个拆队的情况
+                        for (var i = 0; i < combineTeamArr.length; i++) {
+                            var teamPlayerIdArr = combineTeamArr[i];
+                            var teamPlayerIdArrOps = combineTeamArr[combineTeamArr.length - 1 - i];
+                            var t1Score = db.player.getPlayerArrEloScore(teamPlayerIdArr);
+                            var t2Score = db.player.getPlayerArrEloScore(teamPlayerIdArrOps);
+                            var absScore = Math.abs(t1Score - t2Score);
+                            if (minAbsScore == -1)
+                                minAbsScore = absScore;
+                            if (absScore <= minAbsScore) {
+                                minAbsScore = absScore;
+                                matchTeam.t1 = teamPlayerIdArr;
+                                matchTeam.t2 = teamPlayerIdArrOps;
+                                console.log("min fit ", matchTeam, t1Score, t2Score);
+                            }
+                        }
+                    }
+                    // else
                     return matchTeam;
                 }
 
@@ -154,24 +174,29 @@ export class ActivityPanelHandle {
                 gameDoc.playerIdArr = exPlayerIdArr;
                 db.game.startGame(gameDoc);
                 exGameDocArr.push(gameDoc);
+                db.activity.addGame(activityId, roundId, exPlayerIdArr, 1, ()=> {
+                    var cLow8 = combineArr(playerIdArr.slice(8, 16), 4);
+                    var matchTeamLow = minAbsScoreTeam(cLow8);
 
-                var cLow8 = combineArr(playerIdArr.slice(8, 16), 4);
-                var matchTeamLow = minAbsScoreTeam(cLow8);
-
-                exPlayerIdArr = matchTeamLow.t1.concat(matchTeamLow.t2);
-                playerDocArr = db.player.getDocArr(exPlayerIdArr);
-                gameDoc = new GameDoc();
-                gameDoc.id = roundId * 1000 + gameDocArr.length + 2;//todo
-                gameDoc.playerDocArr = playerDocArr;
-                gameDoc.playerIdArr = exPlayerIdArr;
-                db.game.startGame(gameDoc);
-                exGameDocArr.push(gameDoc);
-
-                this.io.emit(`${CommandId.fadeInActivityExGame}`,
-                    ScParam({gameDocArr: exGameDocArr}));
+                    exPlayerIdArr = matchTeamLow.t1.concat(matchTeamLow.t2);
+                    playerDocArr = db.player.getDocArr(exPlayerIdArr);
+                    gameDoc = new GameDoc();
+                    gameDoc.id = roundId * 1000 + gameDocArr.length + 2;//todo
+                    gameDoc.playerDocArr = playerDocArr;
+                    gameDoc.playerIdArr = exPlayerIdArr;
+                    db.game.startGame(gameDoc);
+                    exGameDocArr.push(gameDoc);
+                    db.activity.addGame(activityId, roundId, exPlayerIdArr, 1, null);
+                    this.io.emit(`${CommandId.fadeInActivityExGame}`,
+                        ScParam({gameDocArr: exGameDocArr}));
+                });
             };
             cmdMap[`${CommandId.cs_fadeInNextRank}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeInNextRank}`);
+            };
+            
+            cmdMap[`${CommandId.cs_fadeInNextActivity}`] = (param)=> {
+                this.io.emit(`${CommandId.fadeInNextActivity}`);
             };
 
             var isSend = cmdMap[cmdId](param);

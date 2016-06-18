@@ -49,6 +49,9 @@ export class StagePanelView extends BasePanelView {
     gameId:number;
     playerInfoArr:any;
 
+
+    isSubmited:boolean = false;
+
     ready() {
         var io = super.ready(PanelId.stagePanel);
         io.on(`${CommandId.initPanel}`, (data)=> {
@@ -96,6 +99,8 @@ export class StagePanelView extends BasePanelView {
                     var playerInfo:PlayerInfo = new PlayerInfo(param.playerInfoArr[i]);
                     this.playerPanel.setPlayer(i, playerInfo);
                 }
+                this.scorePanel.setLeftScore(0);
+                this.scorePanel.setRightScore(0);
                 this.scorePanel.setAvgEloScore(param.avgEloScore);
             })
             .on(`${CommandId.fadeInWinPanel}`, (param)=> {
@@ -219,23 +224,31 @@ export class StagePanelView extends BasePanelView {
 
     onSubmitGame() {
         var isBlueMvp = this.mvpIdx < 4;
-
         if (this.scorePanel.isBlueWin != isBlueMvp) {
             alert('比赛结果与mvp不符')
         }
         else {
             var date = new Date();
             var dateTime = date.getTime();
-            // var gameResult:any = {date:dateTime};
             console.log('onSubmitGame', dateTime);
             this.opReq(`${CommandId.cs_saveGameRec}`, {date: dateTime}, (res)=> {
                 console.log(res);
+                this.isSubmited = true;
+                if (res) {
+                    alert('比赛结果提交成功');
+                }
+                else {
+                    alert('比赛结果已经提交过了');
+                }
             });
         }
     }
 
     onRefresh() {
         console.log('onRefresh');
-        window.location.reload()
+        if (this.isSubmited)
+            window.location.reload();
+        else
+            alert('还没提交比赛结果');
     }
 }
