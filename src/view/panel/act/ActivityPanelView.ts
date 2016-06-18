@@ -86,10 +86,13 @@ export class ActivityPanelView extends BasePanelView {
                     else
                         a.push(playerDocArr[i]);
                 }
-
+                this.rankRender.isCurRank = true;
                 this.rankRender.fadeInRank(a.concat(newPlayerArr));
             })
 
+            .on(`${CommandId.fadeInNextRank}`, (param)=> {
+                this.rankRender.nextPage();
+            })
             .on(`${CommandId.fadeOutRankPanel}`, (param)=> {
                 console.log(param);
                 this.rankRender.fadeOut();
@@ -225,7 +228,10 @@ export class ActivityPanelView extends BasePanelView {
             alert('没有选择比赛');
         }
     }
-
+    onRankNext(){
+        this.opReq(`${CommandId.cs_fadeInNextRank}`);
+        
+    }
     onRankOut() {
         console.log('onRankOut');
         this.opReq(`${CommandId.cs_fadeOutRankPanel}`);

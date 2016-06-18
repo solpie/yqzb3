@@ -7,10 +7,14 @@ export class RankRender {
     ctn:Container;
     stageWidth:number = ViewConst.STAGE_WIDTH;
     stageHeight:number = ViewConst.STAGE_HEIGHT;
+    isCurRank:boolean;
+    nextPlayerArr:any;
+    pageNum:number;
 
-    constructor(parant:ActivityPanelView) {
+    constructor(parent:ActivityPanelView) {
+        this.pageNum = 0;
         this.ctn = new Container();
-        parant.stage.addChild(this.ctn);
+        parent.stage.addChild(this.ctn);
     }
 
     fadeInRank(playerDocArr, pageNum = 0) {
@@ -22,10 +26,16 @@ export class RankRender {
         modal.graphics.beginFill("#000").drawRect(0, 0, this.stageWidth, this.stageHeight);
         this.ctn.addChild(modal);
 
-        var title = new createjs.Bitmap('/img/panel/act/rankTitle.png');
-        title.x = (this.stageWidth - 1200) * .5;
-        title.y = 20;
-        this.ctn.addChild(title);
+        if (this.isCurRank) {
+            var title = new createjs.Bitmap('/img/panel/act/curRank.png');
+            this.ctn.addChild(title);
+        }
+
+
+        var curRoundTitle = new createjs.Bitmap('/img/panel/act/rankTitle.png');
+        curRoundTitle.x = (this.stageWidth - 1200) * .5;
+        curRoundTitle.y = 20;
+        this.ctn.addChild(curRoundTitle);
 
         var imgArr = [];
         for (var i = 0; i < 10; i++) {
@@ -41,8 +51,8 @@ export class RankRender {
                 imgArr.push(playerData.avatar);
 
                 var item = new createjs.Bitmap('/img/panel/act/rankItem.png');
-                item.x = title.x;
-                item.y = title.y + i * 95 + 105;
+                item.x = curRoundTitle.x;
+                item.y = curRoundTitle.y + i * 95 + 105;
                 this.ctn.addChild(item);
 
                 var avatar = new createjs.Bitmap(playerData.avatar);
@@ -58,11 +68,13 @@ export class RankRender {
                 nameLabel.y = item.y + 30;
                 this.ctn.addChild(nameLabel);
 
-                var gameCount = new createjs.Text(playerData.gameCount, "28px Arial", "#fff");
-                gameCount.textAlign = 'center';
-                gameCount.x = item.x + 495;
-                gameCount.y = nameLabel.y;
-                this.ctn.addChild(gameCount);
+                var gameCount = PlayerInfo.gameCount(playerData);
+                
+                var gameCountText = new createjs.Text(gameCount, "28px Arial", "#fff");
+                gameCountText.textAlign = 'center';
+                gameCountText.x = item.x + 495;
+                gameCountText.y = nameLabel.y;
+                this.ctn.addChild(gameCountText);
 
                 var winPercent = new createjs.Text(((playerData.winpercent || 0) * 100).toFixed(2) + "%", "28px Arial", "#fff");
                 winPercent.textAlign = 'center';
@@ -71,7 +83,7 @@ export class RankRender {
                 this.ctn.addChild(winPercent);
 
                 var eloText = '新秀';
-                if (PlayerInfo.gameCount(playerData) >= 3)
+                if (gameCount >= 3)
                     eloText = playerData.eloScore;
                 var eloScore = new createjs.Text(eloText, "28px Arial", "#fff");
                 eloScore.textAlign = 'center';
@@ -91,16 +103,23 @@ export class RankRender {
         createjs.Tween.get(this.ctn)
             .to({alpha: 1}, 300);
 
-        if (10 < playerDocArr.length) {
+        if (playerDocArr.length > 10) {
             var nextPage = [];
             for (var i = 10; i < playerDocArr.length; i++) {
                 var playerData = playerDocArr[i];
                 nextPage.push(playerData);
             }
-            createjs.Tween.get(this).wait(10000).call(()=> {
-                this.fadeInRank(nextPage, pageNum + 1);
-            });
+            this.nextPlayerArr = nextPage;
+            this.pageNum++;
         }
+        else {
+            this.pageNum = 0;
+        }
+    }
+
+
+    nextPage() {
+        this.fadeInRank(this.nextPlayerArr, this.pageNum);
     }
 
     fadeOut() {

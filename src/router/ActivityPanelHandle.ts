@@ -87,6 +87,9 @@ export class ActivityPanelHandle {
             cmdMap[`${CommandId.cs_fadeOutActivityPanel}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeOutActivityPanel}`);
             };
+            cmdMap[`${CommandId.cs_fadeInNextRank}`] = (param)=> {
+                this.io.emit(`${CommandId.fadeInNextRank}`);
+            };
 
             var isSend = cmdMap[cmdId](param);
             if (!isSend)
