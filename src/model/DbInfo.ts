@@ -50,6 +50,14 @@ export class BaseDB {
         return this.dataMap[id];
     }
 
+    getDocArrByIdArr(idArr:number[]) {
+        var a = [];
+        for (var id of idArr) {
+            a.push(this.dataMap[id]);
+        }
+        return a;
+    }
+
     onloaded() {
     };
 
@@ -367,7 +375,7 @@ class PlayerDB extends BaseDB {
         // this.dataStore.find({$not: {id: 0}, activityId: actId}).sort({eloScore: 1}).exec(function (err, docs) {
         //     callback(err, docs);
         // });
-        
+
     }
 
     getPlayerRank(playerIdArr:number[]) {
@@ -418,6 +426,14 @@ class PlayerDB extends BaseDB {
         if (playerDoc)
             return new PlayerInfo(playerDoc);
         return null;
+    }
+
+    getPlayerArrEloScore(playerIdArr:number[]) {
+        var sum = 0;
+        for (var playerId of playerIdArr) {
+            sum += this.dataMap[playerId].eloScore;
+        }
+        return sum;
     }
 }
 

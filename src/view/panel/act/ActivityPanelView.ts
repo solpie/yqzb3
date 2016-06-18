@@ -114,9 +114,14 @@ export class ActivityPanelView extends BasePanelView {
                 console.log('fade in activity panel ', gameDocArr);
             })
             .on(`${CommandId.fadeInActivityExGame}`, (param)=> {
-                var playerDocArr = param.playerDocArr;
-                
-                console.log('fade in ex game:', playerDocArr);
+                var gameDocArr = param.gameDocArr;
+                var roundId = this.roundSelected;
+                for (var gameDoc of gameDocArr) {
+                    this.gameOptionArr.push({text: `game id:${gameDoc.id}`, value: gameDoc.id});
+                }
+                this.selActivityInfo.addGame(gameDocArr, roundId);
+                console.log('fade in ex game:', gameDocArr, this.selActivityInfo);
+                this.activityRender.fadeIn(gameDocArr);
             })
             .on(`${CommandId.fadeOutActivityPanel}`, (param)=> {
                 this.activityRender.fadeOut();
@@ -157,12 +162,11 @@ export class ActivityPanelView extends BasePanelView {
 
     onRoundSelected() {
         console.log('onRoundSelected');
-        var selActivityInfo:ActivityInfo = this.activityInfoMap[this.activitySelected];
-        var selRoundInfo:RoundInfo = selActivityInfo.getRoundInfoById(this.roundSelected);
+        var selRoundInfo:RoundInfo = this.selActivityInfo.getRoundInfoById(this.roundSelected);
         this.gameOptionArr = [];
         for (var i = 0; i < selRoundInfo.gameInfoArr.length; i++) {
-            var gameData:any = selRoundInfo.gameInfoArr[i];
-            this.gameOptionArr.push({text: `game id:${gameData.id}`, value: gameData.id});
+            var gameDoc:any = selRoundInfo.gameInfoArr[i];
+            this.gameOptionArr.push({text: `game id:${gameDoc.id}`, value: gameDoc.id});
         }
     }
 
@@ -219,6 +223,7 @@ export class ActivityPanelView extends BasePanelView {
         return this.activityInfoMap[this.activitySelected];
     }
 
+
     onRankIn() {
         console.log('onRankIn', this.selGameDoc);
         var playerIdArr = this.curActivityPlayerIdArr;
@@ -251,7 +256,6 @@ export class ActivityPanelView extends BasePanelView {
             (param)=> {
                 console.log(param);
             });
-
     }
 
     onCountDownOut() {
@@ -274,14 +278,18 @@ export class ActivityPanelView extends BasePanelView {
 
     onActivityInExGameIn() {
         var selActivityInfo = this.selActivityInfo;
-        if (selActivityInfo) {
+        if (selActivityInfo && this.roundSelected) {
             var gameIdArr = this.selActivityInfo.getGameIdArr();
-            console.log('onActivityIn', gameIdArr);
+            console.log('onActivityInExGameIn', gameIdArr, this.roundSelected);
             this.opReq(`${CommandId.cs_fadeInActivityExGame}`,
-                {gameIdArr: gameIdArr});
+                {
+                    gameIdArr: gameIdArr,
+                    activityId: this.activitySelected,
+                    roundId: this.roundSelected
+                });
         }
         else {
-            alert(`无效赛程 id${this.activitySelected}`);
+            alert(`无效赛程 activityId:${this.activitySelected} roundId:${this.roundSelected}`);
         }
     }
 

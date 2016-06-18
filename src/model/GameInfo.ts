@@ -1,8 +1,16 @@
 import {TeamInfo} from "./TeamInfo";
 import {PlayerInfo} from "./PlayerInfo";
 import {setPropTo} from "./BaseInfo";
-class GameDoc{
-    
+export class GameDoc{
+    id:number = -1;
+    playerDocArr:any;
+    playerIdArr:any;
+    isFinish:boolean;
+    isBlueWin:boolean;
+    isRedWin:boolean;
+    blueScore:number = 0;
+    redScore:number = 0;
+    mvp:number = 0;
 }
 export class GameInfo {
     id:number = 0;

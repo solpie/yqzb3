@@ -8,7 +8,8 @@ import {CommandId} from "../event/Command";
 import {ServerConf} from "../Env";
 import {panelRouter} from "./PanelRouter";
 import {db} from "../model/DbInfo";
-import {arrUniqueFilter} from "../utils/JsFunc";
+import {arrUniqueFilter, combineArr, arrCountSame} from "../utils/JsFunc";
+import {GameDoc} from "../model/GameInfo";
 export class ActivityPanelHandle {
     io:any;
 
@@ -90,18 +91,84 @@ export class ActivityPanelHandle {
             };
             cmdMap[`${CommandId.cs_fadeInActivityExGame}`] = (param)=> {
                 var gameIdArr = param.gameIdArr;
+                var activityId = param.activityId;
+                var roundId = param.roundId;
+
                 var gameDocArr = db.game.getDocArr(gameIdArr);
                 var playerIdArr = [];
                 for (var gameDoc of gameDocArr) {
-                    // playerDocArr = playerDocArr.concat();
                     playerIdArr = playerIdArr.concat(gameDoc.playerIdArr);
                 }
-                console.log('ex game playerDoc Arr:', playerIdArr);
                 playerIdArr = playerIdArr.sort().filter(arrUniqueFilter);
                 console.log('ex game playerDoc Arr:', playerIdArr);
-                var playerDocArr = db.player.getPlayerRank(playerIdArr);
+                // var playerDocArr = db.player.getPlayerRank(playerIdArr);
+
+                //组合球员
+                var t1 = gameDocArr[0].playerIdArr.slice(0, 4);
+                var t2 = gameDocArr[0].playerIdArr.slice(4, 8);
+                var t3 = gameDocArr[1].playerIdArr.slice(0, 4);
+                var t4 = gameDocArr[1].playerIdArr.slice(4, 8);
+                var lastTeamArr = [t1, t2, t3, t4];
+                //
+
+                function minAbsScoreTeam(combineTeamArr):any {
+                    console.log('combine team', combineTeamArr.length, lastTeamArr);
+                    var matchTeam = {t1: null, t2: null};
+                    var minAbsScore = -1;
+                    for (var i = 0; i < combineTeamArr.length; i++) {
+                        var teamPlayerIdArr = combineTeamArr[i];
+                        var teamPlayerIdArrOps = combineTeamArr[combineTeamArr.length - 1 - i];
+                        // for (var lastTeamPlayerIdArr of lastTeamArr) {
+                        // playerDocArr = playerDocArr.concat();
+                        var countSame = arrCountSame(lastTeamArr[0], teamPlayerIdArr);
+                        var countSameOps = arrCountSame(lastTeamArr[1], teamPlayerIdArrOps);
+                        var countSame2 = arrCountSame(lastTeamArr[2], teamPlayerIdArr);
+                        var countSameOps3 = arrCountSame(lastTeamArr[3], teamPlayerIdArrOps);
+                        if ((countSame < 3 && countSameOps < 3)
+                            || (countSame2 < 3 && countSameOps3 < 3)) {
+                            // mixTeam.push(teamPlayerIdArr);
+                            var t1Score = db.player.getPlayerArrEloScore(teamPlayerIdArr);
+                            var t2Score = db.player.getPlayerArrEloScore(teamPlayerIdArrOps);
+                            var absScore = Math.abs(t1Score - t2Score);
+                            if (minAbsScore == -1)
+                                minAbsScore = absScore;
+                            if (absScore < minAbsScore) {
+                                minAbsScore = absScore;
+                                matchTeam.t1 = teamPlayerIdArr;
+                                matchTeam.t2 = teamPlayerIdArrOps;
+                                console.log("fit ", matchTeam, t1Score, t2Score);
+                            }
+                        }
+                    }
+                    return matchTeam;
+                }
+
+                var exGameDocArr:GameDoc[] = [];
+                var cHigh8 = combineArr(playerIdArr.slice(0, 8), 4);
+                var matchTeamHigh = minAbsScoreTeam(cHigh8);
+                var exPlayerIdArr:any[] = matchTeamHigh.t1.concat(matchTeamHigh.t2);
+                var playerDocArr = db.player.getDocArr(exPlayerIdArr);
+                var gameDoc:any = new GameDoc();
+                gameDoc.id = roundId * 1000 + gameDocArr.length + 1;//todo
+                gameDoc.playerDocArr = playerDocArr;
+                gameDoc.playerIdArr = exPlayerIdArr;
+                db.game.startGame(gameDoc);
+                exGameDocArr.push(gameDoc);
+
+                var cLow8 = combineArr(playerIdArr.slice(8, 16), 4);
+                var matchTeamLow = minAbsScoreTeam(cLow8);
+
+                exPlayerIdArr = matchTeamLow.t1.concat(matchTeamLow.t2);
+                playerDocArr = db.player.getDocArr(exPlayerIdArr);
+                gameDoc = new GameDoc();
+                gameDoc.id = roundId * 1000 + gameDocArr.length + 2;//todo
+                gameDoc.playerDocArr = playerDocArr;
+                gameDoc.playerIdArr = exPlayerIdArr;
+                db.game.startGame(gameDoc);
+                exGameDocArr.push(gameDoc);
+
                 this.io.emit(`${CommandId.fadeInActivityExGame}`,
-                    ScParam({playerDocArr: playerDocArr}));
+                    ScParam({gameDocArr: exGameDocArr}));
             };
             cmdMap[`${CommandId.cs_fadeInNextRank}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeInNextRank}`);

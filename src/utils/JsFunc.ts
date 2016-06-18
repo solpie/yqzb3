@@ -20,6 +20,7 @@ export function mapToSortArray(map, prop, sortFunc) {
     return arr;
 }
 //转换唯一数组
+
 export function mapToArr(map) {
     var a = [];
     for (var k in map) {
@@ -27,7 +28,17 @@ export function mapToArr(map) {
     }
     return a;
 }
-
+//数组相同元素个数
+export function arrCountSame(arrA:Array<any>, arrB:Array<any>) {
+    var n = 0;
+    for (var i = 0; i < arrB.length; i++) {
+        var obj = arrB[i];
+        if (arrA.indexOf(obj) > -1) {
+            n++;
+        }
+    }
+    return n;
+}
 // Array.sort().filter(arrUniqueFilter)
 export function arrUniqueFilter(el, i, a):boolean {
     return i == a.indexOf(el);
@@ -56,7 +67,18 @@ export function loadImgArr(pathArr, callback) {
         img.src = p;
     }
 }
-
+export function combineArr(arr, num) {
+    var r = [];
+    (function f(t, a, n) {
+        if (n == 0) {
+            return r.push(t);
+        }
+        for (var i = 0, l = a.length; i <= l - n; i++) {
+            f(t.concat(a[i]), a.slice(i + 1), n - 1);
+        }
+    })([], arr, num);
+    return r;
+}
 export function formatSecond(sec, minStr = ":", secStr = "") {
     var min = Math.floor(sec / 60);
     var s = sec % 60;

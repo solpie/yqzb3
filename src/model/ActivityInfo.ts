@@ -18,7 +18,7 @@ export class ActivityInfo {
         // this.activityDoc = new ActivityDoc();
     }
 
-    getRoundInfoById(id) {
+    getRoundInfoById(id):RoundInfo {
         for (var roundInfo of this.roundInfoArr) {
             if (roundInfo.id === id)
                 return roundInfo;
@@ -57,6 +57,9 @@ export class ActivityInfo {
         return null;
     }
 
+    addGame(gameDocArr, roundId) {
+        this.getRoundInfoById(roundId).gameInfoArr = this.getRoundInfoById(roundId).gameInfoArr.concat(gameDocArr);
+    }
 
     setPlayerIdArr(playerIdArr:number[]) {
         // if (playerIdArr.length != 16) {
