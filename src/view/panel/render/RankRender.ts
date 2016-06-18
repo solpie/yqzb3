@@ -69,14 +69,14 @@ export class RankRender {
                 this.ctn.addChild(nameLabel);
 
                 var gameCount = PlayerInfo.gameCount(playerData);
-                
+
                 var gameCountText = new createjs.Text(gameCount, "28px Arial", "#fff");
                 gameCountText.textAlign = 'center';
                 gameCountText.x = item.x + 495;
                 gameCountText.y = nameLabel.y;
                 this.ctn.addChild(gameCountText);
 
-                var winPercent = new createjs.Text(((playerData.winpercent || 0) * 100).toFixed(2) + "%", "28px Arial", "#fff");
+                var winPercent = new createjs.Text(PlayerInfo.winPercentStr(playerData), "28px Arial", "#fff");
                 winPercent.textAlign = 'center';
                 winPercent.x = item.x + 710;
                 winPercent.y = nameLabel.y;

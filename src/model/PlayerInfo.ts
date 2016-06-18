@@ -91,6 +91,14 @@ export class PlayerInfo extends BaseInfo {
         return prop(this.playerData, "gameRec", val);
     }
 
+    static winPercent(playerDoc) {
+        return playerDoc.winGameCount / PlayerInfo.gameCount(playerDoc);
+    }
+
+    static winPercentStr(playerDoc) {
+        return (PlayerInfo.winPercent(playerDoc) * 100).toFixed(1) + "%"
+    }
+
     winpercent(val?:any) {
         return this.winGameCount() / this.gameCount();
     }
