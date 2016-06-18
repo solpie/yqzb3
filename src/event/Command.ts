@@ -10,9 +10,9 @@ export enum CommandId{
     resetTimer,
     cs_resetTimer,
     disableTracker,
-    addLeftScore,
+    updateLeftScore,
     cs_addLeftScore,//1000010
-    addRightScore,
+    updateRightScore,
     cs_addRightScore,
 
     minLeftScore,
@@ -101,8 +101,8 @@ export class Command extends EventDispatcher {
     constructor() {
         super();
         this.cmdArr = [];
-        this.newCmd(CommandId.addLeftScore, "addLeftScore");
-        this.newCmd(CommandId.addRightScore, "addRightScore");
+        this.newCmd(CommandId.updateLeftScore, "addLeftScore");
+        this.newCmd(CommandId.updateRightScore, "addRightScore");
         this.newCmd(CommandId.toggleTracker, "toggleTracker");
         this.newCmd(CommandId.toggleTimer, "toggleTimer");
         this.newCmd(CommandId.toggleBallRolling, "toggleBallRolling");

@@ -42,12 +42,12 @@ export class StagePanelHandle {
 
             cmdMap[`${CommandId.cs_minLeftScore}`] = () => {
                 this.gameInfo.minLeftScore();
-                this.io.emit(`${CommandId.addLeftScore}`, ScParam({ leftScore: this.gameInfo.leftScore }));
+                this.io.emit(`${CommandId.updateLeftScore}`, ScParam({ leftScore: this.gameInfo.leftScore }));
             }
 
             cmdMap[`${CommandId.cs_minRightScore}`] = () => {
                 this.gameInfo.minRightScore();
-                this.io.emit(`${CommandId.addRightScore}`, ScParam({ rightScore: this.gameInfo.rightScore }));
+                this.io.emit(`${CommandId.updateRightScore}`, ScParam({ rightScore: this.gameInfo.rightScore }));
             }
 
             cmdMap[`${CommandId.cs_addLeftScore}`] = () => {
@@ -59,7 +59,7 @@ export class StagePanelHandle {
                 if (straight == 5) {
 
                 }
-                this.io.emit(`${CommandId.addLeftScore}`, ScParam({ leftScore: this.gameInfo.leftScore }));
+                this.io.emit(`${CommandId.updateLeftScore}`, ScParam({ leftScore: this.gameInfo.leftScore }));
             };
 
             cmdMap[`${CommandId.cs_addRightScore}`] = () => {
@@ -71,7 +71,7 @@ export class StagePanelHandle {
                 if (straight == 5) {
 
                 }
-                this.io.emit(`${CommandId.addRightScore}`, ScParam({ rightScore: this.gameInfo.rightScore }));
+                this.io.emit(`${CommandId.updateRightScore}`, ScParam({ rightScore: this.gameInfo.rightScore }));
             };
 
             cmdMap[`${CommandId.cs_toggleTimer}`] = () => {

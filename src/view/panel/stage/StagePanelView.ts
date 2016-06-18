@@ -62,11 +62,11 @@ export class StagePanelView extends BasePanelView {
         });
 
         io
-            .on(`${CommandId.addLeftScore}`, (data) => {
-                console.log(`${CommandId.addLeftScore}`, data);
+            .on(`${CommandId.updateLeftScore}`, (data) => {
+                console.log(`${CommandId.updateLeftScore}`, data);
                 this.scorePanel.setLeftScore(data.leftScore);
             })
-            .on(`${CommandId.addRightScore}`, (data) => {
+            .on(`${CommandId.updateRightScore}`, (data) => {
                 this.scorePanel.setRightScore(data.rightScore);
             })
             .on(`${CommandId.straightScore3}`, (param) => {
