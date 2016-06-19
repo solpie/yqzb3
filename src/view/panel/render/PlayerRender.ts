@@ -76,8 +76,14 @@ export class StagePlayerCard extends Container {
                 .lineTo(0, 0);
         }
 
-        loadImg(playerInfo.avatar(), ()=> {
-            var avatarBmp = new createjs.Bitmap(playerInfo.avatar());
+        var avatarPath;
+        if (isBlue)
+            avatarPath = '/img/panel/stage/blue.png';
+        else
+            avatarPath = '/img/panel/stage/red.png';
+        avatarPath = playerInfo.avatar() || avatarPath;
+        loadImg(avatarPath, ()=> {
+            var avatarBmp = new createjs.Bitmap(avatarPath);
             avatarBmp.mask = avatarMask;
             avatarCtn.addChild(avatarMask);
             avatarCtn.addChild(avatarBmp);

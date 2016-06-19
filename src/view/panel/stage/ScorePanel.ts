@@ -121,7 +121,7 @@ export class ScorePanel {
 
         px = 770;
         var lTxt = new createjs.Text("", "28px Arial", "#fff");
-        lTxt.text = '0'
+        lTxt.text = '0';
         lTxt.textAlign = 'center';
         lTxt.x = px;
         lTxt.y = 22;
@@ -129,7 +129,7 @@ export class ScorePanel {
         scoreCtn.addChild(lTxt);
 
         var rTxt = new createjs.Text("", "28px Arial", "#fff");
-        rTxt.text = '0'
+        rTxt.text = '0';
         rTxt.textAlign = 'center';
         rTxt.x = lTxt.x + 385;
         rTxt.y = lTxt.y;
