@@ -39,18 +39,18 @@ import {ScorePanel} from "./ScorePanel";
     }
 })
 export class StagePanelView extends BasePanelView {
-    scorePanel: ScorePanel;
-    playerPanel: PlayerPanel;
-    eventPanel: EventPanel;
+    scorePanel:ScorePanel;
+    playerPanel:PlayerPanel;
+    eventPanel:EventPanel;
 
-    mvpIdx: number;
-    timerName: string;
-    isInit: boolean;
-    gameId: number;
-    playerInfoArr: any;
+    mvpIdx:number;
+    timerName:string;
+    isInit:boolean;
+    gameId:number;
+    playerInfoArr:any;
 
 
-    isSubmited: boolean = false;
+    isSubmited:boolean = false;
 
     ready() {
         var io = super.ready(PanelId.stagePanel);
@@ -96,7 +96,7 @@ export class StagePanelView extends BasePanelView {
             .on(`${CommandId.updatePlayerAll}`, (param) => {
                 //todo effect
                 for (var i = 0; i < param.playerInfoArr.length; i++) {
-                    var playerInfo: PlayerInfo = new PlayerInfo(param.playerInfoArr[i]);
+                    var playerInfo:PlayerInfo = new PlayerInfo(param.playerInfoArr[i]);
                     this.playerPanel.setPlayer(i, playerInfo);
                 }
                 this.scorePanel.setLeftScore(0);
@@ -119,7 +119,7 @@ export class StagePanelView extends BasePanelView {
     }
 
 
-    initStage(gameDoc: any) {
+    initStage(gameDoc:any) {
         this.isInit = true;
         this.scorePanel = new ScorePanel(this);
         this.scorePanel.init(gameDoc);
@@ -151,7 +151,7 @@ export class StagePanelView extends BasePanelView {
     onAddLeftScore() {
         console.log('onAddLeftScore');
         this.opReq(`${CommandId.cs_addLeftScore}`,
-            { param: 'addLeftScore' });
+            {param: 'addLeftScore'});
     }
 
     onAddRightScore() {
@@ -172,7 +172,7 @@ export class StagePanelView extends BasePanelView {
     onUpdatePlayerNum(idx) {
         var backNum = this.getElem("#playerNum" + idx).value;
         console.log('onUpdatePlayerNum', idx, backNum);
-        this.opReq(`${CommandId.cs_updatePlayerBackNum}`, { idx: idx, backNum: backNum });
+        this.opReq(`${CommandId.cs_updatePlayerBackNum}`, {idx: idx, backNum: backNum});
         // this.playerPanel.playerCardArr[idx].setBackNumber(playerNum);
     }
 
@@ -188,15 +188,23 @@ export class StagePanelView extends BasePanelView {
         // playerIdArr = [10002, 10003, 10004, 10005,
         //     10008, 10010, 10011, 10012];
         this.opReq(`${CommandId.cs_updatePlayerAll}`,
-            { playerIdArr: playerIdArr, backNumArr: backNumArr }
+            {playerIdArr: playerIdArr, backNumArr: backNumArr}
         );
+    }
+
+    onUpdateBackNum() {
+        for (var idx = 0; idx < 8; idx++) {
+            var backNum = this.getElem("#playerNum" + idx).value;
+            console.log('onUpdatePlayerNum', idx, backNum);
+            this.opReq(`${CommandId.cs_updatePlayerBackNum}`, {idx: idx, backNum: backNum});
+        }
     }
 
     onUpdatePlayer(idx) {
         console.log('onUpdatePlayer', idx);
         var queryId = Number(this.getElem("#player" + idx).value);
         console.log('onQueryPlayer', idx, queryId);
-        this.opReq(`${CommandId.cs_updatePlayer}`, { idx: idx, playerId: queryId });
+        this.opReq(`${CommandId.cs_updatePlayer}`, {idx: idx, playerId: queryId});
     }
 
     onMinRightScore() {
@@ -216,7 +224,7 @@ export class StagePanelView extends BasePanelView {
             alert('比赛结果与mvp不符')
         }
         else
-            this.opReq(`${CommandId.cs_fadeInWinPanel}`, { mvpIdx: this.mvpIdx });
+            this.opReq(`${CommandId.cs_fadeInWinPanel}`, {mvpIdx: this.mvpIdx});
     }
 
     onHideWin() {
@@ -233,7 +241,7 @@ export class StagePanelView extends BasePanelView {
             var date = new Date();
             var dateTime = date.getTime();
             console.log('onSubmitGame', dateTime);
-            this.opReq(`${CommandId.cs_saveGameRec}`, { date: dateTime }, (res) => {
+            this.opReq(`${CommandId.cs_saveGameRec}`, {date: dateTime}, (res) => {
                 console.log(res);
                 this.isSubmited = true;
                 if (res) {
