@@ -4,7 +4,7 @@ import {PlayerInfo} from "../../../model/PlayerInfo";
 import {StagePlayerCard} from "../render/PlayerRender";
 export class PlayerPanel {
     playerCardArr:StagePlayerCard[];
-    
+
     constructor(parent:StagePanelView) {
         this.playerCardArr = [];
         var ctn = parent.scorePanel.ctn;
@@ -13,7 +13,8 @@ export class PlayerPanel {
         var py = 12;
         var invert = 150;
         for (var i = 0; i < 4; i++) {
-            var playerCard = new StagePlayerCard(playerInfo, 1, true);
+            var playerCard = new StagePlayerCard(playerInfo, 1, true, true);
+            playerCard.delayShow(i * 600);
             playerCard.x = px + i * invert;
             playerCard.y = py;
             this.playerCardArr.push(playerCard);
@@ -21,7 +22,8 @@ export class PlayerPanel {
         }
         px = 1247;
         for (var i = 0; i < 4; i++) {
-            var playerCard = new StagePlayerCard(playerInfo, 1, false);
+            var playerCard = new StagePlayerCard(playerInfo, 1, false, true);
+            playerCard.delayShow((3 - i) * 600);
             playerCard.x = px + i * invert;
             playerCard.y = py;
             this.playerCardArr.push(playerCard);

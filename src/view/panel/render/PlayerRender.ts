@@ -1,5 +1,6 @@
 import {loadImg} from "../../../utils/JsFunc";
 import {PlayerInfo} from "../../../model/PlayerInfo";
+import {blink, delayCall} from "../../../utils/Fx";
 import Text = createjs.Text;
 import Container = createjs.Container;
 import Bitmap = createjs.Bitmap;
@@ -11,9 +12,13 @@ export class StagePlayerCard extends Container {
     _styleCtn:Container;
     isBlue:boolean;
     avatarBmp:Bitmap;
+    avatarCtn:Container;
+    isDelayShow:boolean;
+    _delayShowEnd:boolean = false;
 
-    constructor(playerInfo:PlayerInfo, scale = 1, isBlue = true) {
+    constructor(playerInfo:PlayerInfo, scale = 1, isBlue = true, isDelayShow = false) {
         super();
+        this.isDelayShow = isDelayShow;
         this.setPlayerInfo(playerInfo, scale, isBlue);
     }
 
@@ -50,6 +55,7 @@ export class StagePlayerCard extends Container {
         var avatarFrame = new createjs.Bitmap(_isBluePath('/img/panel/stage/avatarFrame'));//694x132
 
         var avatarCtn = new createjs.Container();
+        this.avatarCtn = avatarCtn;
         if (isBlue) {
             avatarCtn.x = 19;
             avatarCtn.y = 1;
@@ -89,6 +95,14 @@ export class StagePlayerCard extends Container {
             avatarCtn.addChild(avatarBmp);
             // leftAvatarBmp = avatarBmp;
             this.avatarBmp = avatarBmp;
+            if (this.isDelayShow) {
+                if (this._delayShowEnd) {
+                    blink(avatarBmp)
+                }
+                else {
+                    avatarBmp.alpha = 0;
+                }
+            }
             avatarBmp.scaleX = avatarBmp.scaleY = 180 / avatarBmp.getBounds().width;
         });
 //        this.avatarArr.push(avatarCtn);
@@ -146,6 +160,7 @@ export class StagePlayerCard extends Container {
             styleCtn.x = 52;
         }
         styleCtn.y = 75;
+        blink(styleIcon);
         styleCtn.addChild(styleIcon);
 //        this.styleArr.push(styleCtn);
         ctn.addChild(styleCtn);
@@ -166,6 +181,26 @@ export class StagePlayerCard extends Container {
         return ctn;
     }
 
+    delayShow(delay) {
+        console.log('delay show', delay);
+        this._delayShowEnd = false;
+        // this.avatarCtn.alpha = 0;
+        createjs.Tween.get(this.avatarCtn).wait(delay).call(()=> {
+            this._delayShowEnd = true;
+            if (this.avatarBmp) {
+                blink(this.avatarBmp);
+                // this.avatarBmp.alpha = 0;
+            }
+            if (this._styleCtn) {
+                blink(this._styleCtn);
+            }
+            // this.avatarCtn.alpha = 1;
+        });
+        delayCall(delay, ()=> {
+            this.avatarBmp.alpha = 0;
+            // this.avatarCtn.alpha = 1;
+        })
+    }
 
     static newScoreText() {
         var sheet = new createjs.SpriteSheet({

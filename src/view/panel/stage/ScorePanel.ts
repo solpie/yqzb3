@@ -6,17 +6,7 @@ import Text = createjs.Text;
 import {StagePanelView} from "./StagePanelView";
 import {formatSecond} from "../../../utils/JsFunc";
 import {GameInfo} from "../../../model/GameInfo";
-
-function blink(target) {
-    var blink = 80;
-    createjs.Tween.get(target)
-        .to({alpha: 1}, blink)
-        .to({alpha: 0}, blink)
-        .to({alpha: 1}, blink)
-        .to({alpha: 0}, blink)
-        .to({alpha: 1}, blink);
-}
-
+import {blink} from "../../../utils/Fx";
 
 export class ScorePanel {
     timeText:Text;
@@ -186,20 +176,6 @@ export class ScorePanel {
     }
 
     setAvgEloScore(data) {
-        // function getAvgRight(start, playerInfoArr) {
-        //     var sum = 0;
-        //     var count = 0;
-        //     for (var i = start; i < start + 4; i++) {
-        //         var playerInfo:PlayerInfo = playerInfoArr[i];
-        //         if (playerInfo) {
-        //             count++;
-        //             sum += playerInfo.eloScore();
-        //         }
-        //     }
-        //     var ret = Math.floor(sum / count);
-        //     return ret ? ret : 0;
-        // }
-
         this.leftAvgEloScoreText.text = data.left + "";
         this.rightAvgEloScoreText.text = data.right + "";
     }
