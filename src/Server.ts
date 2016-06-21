@@ -5,7 +5,6 @@ import {dbRouter} from "./router/DbRouter";
 import {SocketIOSrv} from "./SocketIOSrv";
 import {panelRouter} from "./router/PanelRouter";
 import {getIPAddress} from "./utils/NodeJsFunc";
-import {ExternalInfo} from "./model/external/ExternalInfo";
 var colors = require('colors');
 
 var dataObj:any;
@@ -27,10 +26,10 @@ export class WebServer {
     }
 
     test() {
-        
+
         // ExternalInfo.importHuiTi();
     }
-    
+
     initNedb() {
         initDB();
     }
@@ -48,6 +47,7 @@ export class WebServer {
         fs.readFile(_path('app/package.json'), (err:any, data:any)=> {
             if (err) throw err;
             dataObj = JSON.parse(data);
+            ServerConf.port = Number(dataObj.server.port);
             ServerConf.host = dataObj.server.host;
             ServerConf.wsPort = dataObj.server.wsPort;
             this.serverConf = ServerConf;
@@ -99,7 +99,7 @@ export class WebServer {
         app.use('/db', dbRouter);
 
 
-        app.listen(80, () => {
+        app.listen(ServerConf.port, () => {
             this.initSocketIO();
             //and... we're live
             console.log("server on:  ws port:");

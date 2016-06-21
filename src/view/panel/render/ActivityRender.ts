@@ -76,7 +76,7 @@ export class ActivityRender {
             var leftAvgElo = new createjs.Text(Math.floor(leftScore / 4) + "", "18px Arial", "#fff");
             leftAvgElo.textAlign = 'center';
             leftAvgElo.x = 686;
-            leftAvgElo.y = 133;
+            leftAvgElo.y = 135;
             gameCtn.addChild(leftAvgElo);
 
             var rightAvgElo = new createjs.Text(Math.floor(rightScore / 4) + "", "18px Arial", "#fff");
