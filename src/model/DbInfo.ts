@@ -83,16 +83,29 @@ export class BaseDB {
         return this.dataStore;
     }
 
-    create(doc, callback) {
+    create(doc, callback?) {
         this.ds().insert(doc, (err, newDoc)=> {
             if (!err) {
                 this.saveIdUsed();
                 this.syncDataMap(function () {
-                    callback(err, newDoc);
+                    if (callback)
+                        callback(err, newDoc);
                 });
             }
             else
                 throw err;
+        });
+    }
+
+    remove(queryOption, callback?) {
+        this.ds().remove(queryOption, {}, (err, numRemoved)=> {
+            if (!err)
+                this.syncDataMap(function () {
+                    if (callback)
+                        callback(err, numRemoved);
+                });
+            else
+                throw  err;
         });
     }
 
@@ -112,16 +125,16 @@ export class BaseDB {
 }
 
 class ActivityDB extends BaseDB {
-    addRound(data, callback) {
-        data.round = this.config.idUsed;
-        this.dataStore.insert(data, (err, newDoc) => {
-            if (!err) {
-                var newId = this.saveIdUsed();
-            }
-            if (callback)
-                callback(err, newDoc);
-        })
-    }
+    // addRound(data, callback) {
+    //     data.round = this.config.idUsed;
+    //     this.dataStore.insert(data, (err, newDoc) => {
+    //         if (!err) {
+    //             var newId = this.saveIdUsed();
+    //         }
+    //         if (callback)
+    //             callback(err, newDoc);
+    //     })
+    // }
 
     getGameIdBase(roundId) {
         return roundId * 1000;

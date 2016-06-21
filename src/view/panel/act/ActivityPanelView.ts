@@ -9,9 +9,10 @@ import {CommandId} from "../../../event/Command";
 import {CountDownPanel} from "./CountDownPanel";
 import {ActivityRender} from "../render/ActivityRender";
 import {PlayerInfo} from "../../../model/PlayerInfo";
+import {Modaler} from "../../admin/components/modal/modal";
 @Component({
     template: require('./activity-panel.html'),
-    components: {OpLinks},
+    components: {OpLinks, Modaler},
     props: {
         op: {
             type: Boolean,
@@ -47,6 +48,7 @@ import {PlayerInfo} from "../../../model/PlayerInfo";
         gameSelected: {},
         cdText: {type: String, default: '下一场比赛：'},
         cdSec: {type: Number, default: 300},
+        isOpen: {type: Boolean, default: false}
     }
 })
 export class ActivityPanelView extends BasePanelView {
@@ -69,6 +71,7 @@ export class ActivityPanelView extends BasePanelView {
 
     cdText:string;
     cdSec:number;
+    isOpen:boolean;
 
     ready() {
         var io = super.ready(PanelId.actPanel);
@@ -192,6 +195,17 @@ export class ActivityPanelView extends BasePanelView {
                 }
                 console.log(param);
             })
+    }
+
+    onDeleteOk() {
+        console.log('onDeleteOk');
+
+    }
+
+    onDeleteGame() {
+        console.log('onDeleteGame');
+        $("#delDialog").appendTo("body");
+        this.isOpen = true;
     }
 
     onResetGame() {

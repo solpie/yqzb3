@@ -21,6 +21,7 @@ adminRouter.post('/player/add', function (req:any, res:any) {
 
     var playerData = req.body.playerData;
     var playerInfo = new PlayerInfo(playerData);
+    console.log('/admin/player/add', db.player.getIdNew());
     playerInfo.id(db.player.getIdNew());
     function createPlayer() {
         db.player.create(playerInfo.playerData, function (err, newDoc) {
@@ -52,8 +53,7 @@ adminRouter.post('/player/add', function (req:any, res:any) {
 adminRouter.post('/player/delete', function (req:any, res:any) {
     if (!req.body) return res.sendStatus(400);
     var playerId = req.body.id;
-    db.player.ds().remove({id: playerId}, {}, function (err, numRemoved) {
-        db.player.syncDataMap();
+    db.player.remove({id: playerId}, function (err, numRemoved) {
         // numRemoved = 1
         if (!err) {
             res.sendStatus(200);
@@ -99,4 +99,12 @@ adminRouter.post('/player/update', function (req:any, res:any) {
     else {
         console.log('/player/update no playerDoc in map');
     }
+});
+
+////////////// game admin 
+adminRouter.get('/game/delete/:gameId', function (req:any, res:any) {
+    var gameId = Number(req.params.gameId);
+    console.log('/admin/game/delete/', gameId);
+    // db.game.remove({id: gameId});
+    res.sendStatus(200);
 });

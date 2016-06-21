@@ -50,16 +50,16 @@ export class Player extends VueEx {
 
     ready() {
         // ($('#modal1')as any).leanModal({
-        //         dismissible: true, // Modal can be dismissed by clicking outside of the modal
+        //         dismissible: true, // Modaler can be dismissed by clicking outside of the modal
         //         opacity: .5, // Opacity of modal background
         //         in_duration: 300, // Transition in duration
         //         out_duration: 200, // Transition out duration
         //         ready: function () {
         //             alert('Ready');
-        //         }, // Callback for Modal open
+        //         }, // Callback for Modaler open
         //         complete: function () {
         //             alert('Closed');
-        //         } // Callback for Modal close
+        //         } // Callback for Modaler close
         //     }
         // );
         console.log('player Ready!!');

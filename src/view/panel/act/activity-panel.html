@@ -38,6 +38,7 @@
     <div class="row">
         <a class="waves-effect waves-light btn" @click="onStartGame">start game</a>
         <a class="waves-effect waves-light btn" @click="onResetGame">reset game</a>
+        <a class="waves-effect waves-light btn" @click="onDeleteGame">delete game</a>
     </div>
 
     <div class="row">
@@ -59,8 +60,20 @@
         <a class="waves-effect waves-light btn" @click="onActivityInExGameIn">Ex Game in</a>
         <a class="waves-effect waves-light btn" @click="onActivityOut">activity out</a>
     </div>
-</div>
 
+</div>
+<modaler id="delDialog" title="确定删除" :is-open="isOpen">
+    <div slot="body">
+    </div>
+    <div slot="footer">
+        <a @click="onDeleteOk" class="modal-action waves-effect waves-green btn-flat">
+            <i class="material-icons">done</i>
+        </a>
+        <a class="modal-action waves-effect waves-green btn-flat">
+            <i class="material-icons">close</i>
+        </a>
+    </div>
+</modaler>
 <div style="display: none">
     <img src="/img/panel/act/bg.png">
     <img src="/img/panel/act/rankItem.png">

@@ -1,5 +1,4 @@
-import Vue = require('vue');
-import Component from "vue-class-component";
+import {VueEx, Component} from "../../../VueEx";
 
 @Component({
     template: require('./modal.html'),
@@ -17,18 +16,15 @@ import Component from "vue-class-component";
         isOpen: 'onChange'
     }
 })
-export class Modal extends Vue{
-
+export class Modaler extends VueEx {
     isOpen:boolean;
-
     title:string;
-
     $els:{
-        modal:HTMLElement
+        modaler:HTMLElement
     };
 
     onChange(value:boolean) {
-        // ($(this.$els.modal) as any).modal(value ? 'show' : 'hide');
+        ($(this.$els.modaler) as any).openModal(value ? 'show' : 'hide');
     }
 
     close() {
