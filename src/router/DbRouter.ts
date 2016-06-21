@@ -3,8 +3,6 @@ import {ExternalInfo} from "../model/external/ExternalInfo";
 import {Act619} from "../event/Const";
 export var dbRouter = require('express').Router();
 
-// dbRouter.get('/', function (req:any, res:any) {
-// });
 // /db/player
 dbRouter.post('/player/', function (req:any, res:any) {
     if (!req.body) return res.sendStatus(400);

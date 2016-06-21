@@ -12,19 +12,19 @@ import {PlayerInfo} from "../model/PlayerInfo";
 import Server = SocketIO.Server;
 import Socket = SocketIO.Socket;
 export class StagePanelHandle {
-    io: any;
-    gameInfo: GameInfo;
+    io:any;
+    gameInfo:GameInfo;
 
-    constructor(io: Server) {
+    constructor(io:Server) {
         console.log('StagePanelHandle!!');
         this.gameInfo = new GameInfo();
 
         this.io = io.of(`/${PanelId.stagePanel}`);
         this.io
-            .on("connect", (socket: Socket) => {
-                socket.emit(`${CommandId.initPanel}`, ScParam({ gameInfo: this.gameInfo, isDev: ServerConf.isDev }));
+            .on("connect", (socket:Socket) => {
+                socket.emit(`${CommandId.initPanel}`, ScParam({gameInfo: this.gameInfo, isDev: ServerConf.isDev}));
             })
-            .on('disconnect', function (socket: Socket) {
+            .on('disconnect', function (socket:Socket) {
                 console.log('disconnect');
             });
         this.initOp();
@@ -32,46 +32,46 @@ export class StagePanelHandle {
 
     initOp() {
         //post /panel/stage/:cmd
-        panelRouter.post(`/stage/:cmdId`, (req: Request, res: Response) => {
+        panelRouter.post(`/stage/:cmdId`, (req:Request, res:Response) => {
             if (!req.body) return res.sendStatus(400);
             var cmdId = req.params.cmdId;
             var param = req.body;
             console.log(`/stage/${cmdId}`);
-            var cmdMap: any = {};
+            var cmdMap:any = {};
 
 
             cmdMap[`${CommandId.cs_minLeftScore}`] = () => {
                 this.gameInfo.minLeftScore();
-                this.io.emit(`${CommandId.updateLeftScore}`, ScParam({ leftScore: this.gameInfo.leftScore }));
+                this.io.emit(`${CommandId.updateLeftScore}`, ScParam({leftScore: this.gameInfo.leftScore}));
             }
 
             cmdMap[`${CommandId.cs_minRightScore}`] = () => {
                 this.gameInfo.minRightScore();
-                this.io.emit(`${CommandId.updateRightScore}`, ScParam({ rightScore: this.gameInfo.rightScore }));
+                this.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
             }
 
             cmdMap[`${CommandId.cs_addLeftScore}`] = () => {
                 var straight = this.gameInfo.addLeftScore();
                 if (straight == 3) {
                     console.log("straight score 3");
-                    this.io.emit(`${CommandId.straightScore3}`, ScParam({ team: ViewEvent.STRAIGHT3_LEFT }));
+                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: ViewEvent.STRAIGHT3_LEFT}));
                 }
                 if (straight == 5) {
 
                 }
-                this.io.emit(`${CommandId.updateLeftScore}`, ScParam({ leftScore: this.gameInfo.leftScore }));
+                this.io.emit(`${CommandId.updateLeftScore}`, ScParam({leftScore: this.gameInfo.leftScore}));
             };
 
             cmdMap[`${CommandId.cs_addRightScore}`] = () => {
                 var straight = this.gameInfo.addRightScore();
                 if (straight == 3) {
                     console.log("straight score 3 right");
-                    this.io.emit(`${CommandId.straightScore3}`, ScParam({ team: ViewEvent.STRAIGHT3_RIGHT }));
+                    this.io.emit(`${CommandId.straightScore3}`, ScParam({team: ViewEvent.STRAIGHT3_RIGHT}));
                 }
                 if (straight == 5) {
 
                 }
-                this.io.emit(`${CommandId.updateRightScore}`, ScParam({ rightScore: this.gameInfo.rightScore }));
+                this.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
             };
 
             cmdMap[`${CommandId.cs_toggleTimer}`] = () => {
@@ -118,7 +118,7 @@ export class StagePanelHandle {
 
             cmdMap[`${CommandId.cs_fadeInWinPanel}`] = (param) => {
                 console.log('cs_fadeInWinPanel', param.mvpIdx, this.gameInfo);
-                var winTeam: TeamInfo = this.gameInfo.setWinByMvpIdx(param.mvpIdx);
+                var winTeam:TeamInfo = this.gameInfo.setWinByMvpIdx(param.mvpIdx);
 
                 this.io.emit(`${CommandId.fadeInWinPanel}`, ScParam({
                     teamInfo: winTeam,
@@ -139,10 +139,11 @@ export class StagePanelHandle {
                 if (this.gameInfo.isFinish) {
                     res.send(false);
                 }
-                else
+                else {
                     db.game.saveGameRecToPlayer(this.gameInfo, () => {
-                        res.send(true);
                     });
+                    res.send(true);
+                }
                 return ServerConst.SEND_ASYNC;
             };
             var isSend = cmdMap[cmdId](param);

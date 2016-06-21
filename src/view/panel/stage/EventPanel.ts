@@ -230,7 +230,7 @@ export class EventPanel {
                 winpercent.y += 35;
             ctn.addChild(winpercent);
 
-            var gameCount = new createjs.Text("总场数" + p.gameCount(), "18px Arial", col);
+            var gameCount = new createjs.Text("场数" + p.gameCount(), "18px Arial", col);
             gameCount.textAlign = 'center';
             gameCount.x = name.x;
             gameCount.y = 350;

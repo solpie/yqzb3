@@ -1,11 +1,21 @@
-import Vue = require('vue');
-import Component from "vue-class-component";
-
+import {VueEx, Component} from "../../../VueEx";
+import {mapToArr, descendingProp} from "../../../../utils/JsFunc";
 @Component({
-    template: require('./rank.html')
+    template: require('./rank.html'),
+    props: {
+        playerDocArr: {
+            type: Array
+        }
+    }
 })
-export class Rank extends Vue {
+export class Rank extends VueEx {
+    playerDocArr:any;
     ready() {
-        console.log("rank")
+        console.log("rank");
+        this.post('/db/player', {}, (data)=> {
+            var playerMap = data.PlayerMap;
+            this.playerDocArr  = mapToArr(playerMap).sort(descendingProp('eloScore'));
+            // this.playerDocArr = rank;
+        });
     }
 }
