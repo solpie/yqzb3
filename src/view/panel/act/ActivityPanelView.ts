@@ -199,7 +199,7 @@ export class ActivityPanelView extends BasePanelView {
 
     onDeleteOk() {
         console.log('onDeleteOk');
-
+        this.isOpen = false;
     }
 
     onDeleteGame() {

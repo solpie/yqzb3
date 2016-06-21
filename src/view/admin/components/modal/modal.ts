@@ -24,10 +24,13 @@ export class Modaler extends VueEx {
     };
 
     onChange(value:boolean) {
-        ($(this.$els.modaler) as any).openModal(value ? 'show' : 'hide');
+        if (value)
+            this.modaler.openModal();
+        else
+            this.modaler.closeModal();
     }
 
-    close() {
-        this.isOpen = false;
+    get modaler():any {
+        return $(this.$els.modaler)
     }
 }
