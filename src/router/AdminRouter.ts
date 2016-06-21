@@ -25,7 +25,6 @@ adminRouter.post('/player/add', function (req:any, res:any) {
     function createPlayer() {
         db.player.create(playerInfo.playerData, function (err, newDoc) {
             if (!err) {
-                db.player.saveIdUsed();
                 res.sendStatus(200);
             }
             else
