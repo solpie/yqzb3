@@ -4,7 +4,7 @@
   "description": "YuanQiTV2",
   "main": "main.js",
   "server": {
-    "port": "80",
+    "port": 80,
     "host": "localhost",
     "wsPort": "6969"
   }

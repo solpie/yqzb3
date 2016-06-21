@@ -123,7 +123,7 @@ export class StagePlayerCard extends Container {
         ctn.addChild(backNumText);
 
         var eloText = '';
-        if (playerInfo.gameRec().length >= 3)
+        if (playerInfo.gameRec().length >= 3)//3
             eloText = playerInfo.eloScore();
         else {
             var newPlayerIcon = new createjs.Bitmap('/img/panel/stage/newPlayer.png');

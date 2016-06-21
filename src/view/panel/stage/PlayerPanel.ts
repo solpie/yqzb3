@@ -32,6 +32,10 @@ export class PlayerPanel {
         // parent.scorePanel.ctn.addChild(ctn);
     }
 
+    setEloScore(idx:number, eloScore:number) {
+        this.playerCardArr[idx].setEloScore(eloScore);
+    }
+
     setPlayer(idx:number, playerInfo:PlayerInfo) {
         var playerCard = this.playerCardArr[idx];
         playerCard.setPlayerInfo(playerInfo, 1, playerCard.isBlue);

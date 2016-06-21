@@ -106,9 +106,7 @@ export class PlayerInfo extends BaseInfo {
     }
 
     static gameCount(playerDoc) {
-        var c = playerDoc.loseGameCount + playerDoc.winGameCount;
-        if (!c)c = 0;
-        return c;
+        return (playerDoc.loseGameCount + playerDoc.winGameCount)||0;
     }
 
     gameCount() {

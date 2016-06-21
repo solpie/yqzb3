@@ -47,7 +47,7 @@ export class WebServer {
         fs.readFile(_path('app/package.json'), (err:any, data:any)=> {
             if (err) throw err;
             dataObj = JSON.parse(data);
-            ServerConf.port = Number(dataObj.server.port);
+            ServerConf.port = dataObj.server.port;
             ServerConf.host = dataObj.server.host;
             ServerConf.wsPort = dataObj.server.wsPort;
             this.serverConf = ServerConf;

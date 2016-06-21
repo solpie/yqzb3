@@ -192,6 +192,11 @@ export class StagePanelView extends BasePanelView {
         );
     }
 
+    onSetEloScore(idx) {
+        var eloScore = Number(this.getElem("#eloScore" + idx).value);
+        this.playerPanel.setEloScore(idx, eloScore);
+    }
+
     onUpdateBackNum() {
         for (var idx = 0; idx < 8; idx++) {
             var backNum = this.getElem("#playerNum" + idx).value;
