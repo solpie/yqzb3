@@ -36,10 +36,12 @@ export class Activity extends VueEx {
         _this_ = this;
         console.log('Activity');
         this.teamArr = [];
-        this.post('/db/act/19', (res)=> {
+        
+        this.post('/admin/act/19', (res)=> {
             console.log(res);
             this.teamArr = res.gameDataArr;
         });
+        
         PDFJS.getDocument('/img/gameSheet.pdf').then(function (pdf) {
             // Fetch the page.
             pdf.getPage(1).then(function (page) {

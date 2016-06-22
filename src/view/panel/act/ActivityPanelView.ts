@@ -222,13 +222,6 @@ export class ActivityPanelView extends BasePanelView {
     get curActivityPlayerIdArr() {
         var selActivityInfo:ActivityInfo = this.activityInfoMap[this.activitySelected];
         return selActivityInfo.getActivityPlayerIdArr();
-        // console.log(playerInfoArr);
-        // var playerIdArr:number[] = [];
-        // for (var i = 0; i < playerInfoArr.length; i++) {
-        //     var playerInfo = playerInfoArr[i];
-        //     playerIdArr.push(playerInfo.id);
-        // }
-        // return playerIdArr;
     }
 
     get selGameDoc():any {

@@ -1,42 +1,43 @@
 import {TeamInfo} from "./TeamInfo";
 import {PlayerInfo} from "./PlayerInfo";
 import {setPropTo} from "./BaseInfo";
+import {TimerState} from "../event/Const";
 export class GameDoc {
-    id: number = -1;
-    playerDocArr: any;
-    playerIdArr: any;
-    isFinish: boolean;
-    isBlueWin: boolean;
-    isRedWin: boolean;
-    blueScore: number = 0;
-    redScore: number = 0;
-    mvp: number = 0;
+    id:number = -1;
+    playerDocArr:any;
+    playerIdArr:any;
+    isFinish:boolean;
+    isBlueWin:boolean;
+    isRedWin:boolean;
+    blueScore:number = 0;
+    redScore:number = 0;
+    mvp:number = 0;
 }
 export class GameInfo {
-    id: number = 0;
-    winScore: number = 7;
-    leftScore: number = 0;
-    rightScore: number = 0;
-    time: number = 0;
-    timerState: number = 0;
-    data: Date;//开始时间
-    straightScoreLeft: number = 0;//连杀判定
-    straightScoreStack: any = [];//history [{left,right}]
-    straightScoreRight: number = 0;//连杀判定
-    playerInfoArr: PlayerInfo[] = new Array(8);
-    playerRecArr: any = [];
-    _timer: number = 0;
+    id:number = 0;
+    winScore:number = 7;
+    leftScore:number = 0;
+    rightScore:number = 0;
+    time:number = 0;
+    timerState:number = 0;
+    data:Date;//开始时间
+    straightScoreLeft:number = 0;//连杀判定
+    straightScoreStack:any = [];//history [{left,right}]
+    straightScoreRight:number = 0;//连杀判定
+    playerInfoArr:PlayerInfo[] = new Array(8);
+    playerRecArr:any = [];
+    _timer:number = 0;
     static GAME_STATE_ING = 0;
     static GAME_STATE_FIN = 1;
     static GAME_STATE_SAVE = 2;
-    gameState: number = 0;//0 未确认胜负 1 确认胜负未录入数据 2确认胜负并录入数据
-    unLimitScore: number = 0;///
-    mvpPlayerId: number;
+    gameState:number = 0;//0 未确认胜负 1 确认胜负未录入数据 2确认胜负并录入数据
+    unLimitScore:number = 0;///
+    mvpPlayerId:number;
 
-    _winTeam: TeamInfo;
-    _loseTeam: TeamInfo;
+    _winTeam:TeamInfo;
+    _loseTeam:TeamInfo;
 
-    constructor(gameDoc?: any) {
+    constructor(gameDoc?:any) {
         if (gameDoc) {
             setPropTo(gameDoc, this);
             var playerDocArr = this.playerInfoArr;
@@ -52,7 +53,7 @@ export class GameInfo {
         var count = 0;
         var leftPlayerArr = this.getLeftTeam();
         for (var i = 0; i < leftPlayerArr.length; i++) {
-            var obj: PlayerInfo = leftPlayerArr[i];
+            var obj:PlayerInfo = leftPlayerArr[i];
             if (obj) {
                 count++;
                 sum += obj.eloScore();
@@ -63,7 +64,7 @@ export class GameInfo {
         count = 0;
         var playerArr = this.getRightTeam();
         for (var i = 0; i < playerArr.length; i++) {
-            var obj: PlayerInfo = playerArr[i];
+            var obj:PlayerInfo = playerArr[i];
             if (obj) {
                 count++;
                 sum += obj.eloScore();
@@ -71,7 +72,7 @@ export class GameInfo {
         }
         var right = Math.floor(sum / count);
 
-        return { left: left, right: right };
+        return {left: left, right: right};
     }
 
     addLeftScore() {
@@ -91,6 +92,7 @@ export class GameInfo {
         return this.straightScoreLeft;
         // cmd.emit(CommandId.straightScore5, {team: "left"}, this.pid);
     }
+
     minLeftScore() {
         if (this.unLimitScore === 1)
             this.leftScore -= 1;
@@ -99,14 +101,17 @@ export class GameInfo {
 
         this.popStraightScore()
     }
+
     pushStraightScore() {
-        this.straightScoreStack.push({ left: this.straightScoreLeft, right: this.straightScoreRight })
+        this.straightScoreStack.push({left: this.straightScoreLeft, right: this.straightScoreRight})
     }
+
     popStraightScore() {
         var stack = this.straightScoreStack.pop()
         this.straightScoreLeft = stack.left
         this.straightScoreRight = stack.right
     }
+
     minRightScore() {
         if (this.unLimitScore === 1)
             this.rightScore -= 1;
@@ -115,6 +120,7 @@ export class GameInfo {
 
         this.popStraightScore()
     }
+
     addRightScore() {
         if (this.unLimitScore === 1)
             this.rightScore += 1;
@@ -141,17 +147,24 @@ export class GameInfo {
         return this.id;
     }
 
-    toggleTimer() {
-        if (this._timer) {
-            this.resetTimer();
-            this.timerState = 0;
+    toggleTimer(state?) {
+        if (state) {
+            if (state === TimerState.PAUSE) {
+                this.resetTimer();
+            }
         }
         else {
-            this._timer = setInterval(() => {
-                this.time++;
-            }, 1000);
-            this.timerState = 1;
+            if (this._timer) {
+                this.resetTimer();
+            }
+            else {
+                this._timer = setInterval(() => {
+                    this.time++;
+                }, 1000);
+                this.timerState = 1;
+            }
         }
+
     }
 
     get isFinish() {
@@ -161,16 +174,17 @@ export class GameInfo {
     resetTimer() {
         clearInterval(this._timer);
         this._timer = 0;
+        this.timerState = 0;
     }
 
-    setPlayerInfoByIdx(pos, playerInfo: PlayerInfo) {
+    setPlayerInfoByIdx(pos, playerInfo:PlayerInfo) {
         playerInfo.isBlue = (pos < 4);
         playerInfo.isRed = !playerInfo.isBlue;
         this.playerInfoArr[pos] = playerInfo;
         return playerInfo;
     }
 
-    setWinByMvpIdx(mvpIdx): TeamInfo {
+    setWinByMvpIdx(mvpIdx):TeamInfo {
         var isBlueWin = (mvpIdx < 4);
         this.mvpPlayerId = this.playerInfoArr[mvpIdx].id();
         if (isBlueWin) {
@@ -181,7 +195,7 @@ export class GameInfo {
         }
     }
 
-    _setGameResult(isLeftWin): TeamInfo {
+    _setGameResult(isLeftWin):TeamInfo {
         if (this.gameState === 0) {
             var teamLeft = new TeamInfo();
             teamLeft.setPlayerArr(this.getLeftTeam());
@@ -204,15 +218,16 @@ export class GameInfo {
         }
         return this._winTeam;
     }
+
     getGameDoc() {
         return {}
     }
 
-    setLeftTeamWin(): TeamInfo {
+    setLeftTeamWin():TeamInfo {
         return this._setGameResult(true);
     }
 
-    setRightTeamWin(): TeamInfo {
+    setRightTeamWin():TeamInfo {
         return this._setGameResult(false);
     }
 

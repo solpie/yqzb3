@@ -1,5 +1,5 @@
 import {CommandId} from "../event/Command";
-import {PanelId, ViewEvent, ServerConst} from "../event/Const";
+import {PanelId, ViewEvent, ServerConst, TimerState} from "../event/Const";
 import {ServerConf} from "../Env";
 import {panelRouter} from "./PanelRouter";
 import {GameInfo} from "../model/GameInfo";
@@ -74,9 +74,15 @@ export class StagePanelHandle {
                 this.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
             };
 
-            cmdMap[`${CommandId.cs_toggleTimer}`] = () => {
-                this.gameInfo.toggleTimer();
-                this.io.emit(`${CommandId.toggleTimer}`);
+            cmdMap[`${CommandId.cs_toggleTimer}`] = (param) => {
+                if (param) {
+                    this.gameInfo.toggleTimer(param.state);
+                    this.io.emit(`${CommandId.toggleTimer}`, ScParam(param));
+                }
+                else {
+                    this.gameInfo.toggleTimer();
+                    this.io.emit(`${CommandId.toggleTimer}`);
+                }
             };
 
             cmdMap[`${CommandId.cs_resetTimer}`] = () => {

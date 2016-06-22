@@ -1,7 +1,7 @@
 import {CommandId} from "../../../event/Command";
 import Component from "vue-class-component";
 import {BasePanelView} from "../BasePanelView";
-import {PanelId, ViewEvent} from "../../../event/Const";
+import {PanelId, ViewEvent, TimerState} from "../../../event/Const";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {PlayerPanel} from "./PlayerPanel";
 import {EventPanel} from "./EventPanel";
@@ -78,14 +78,14 @@ export class StagePanelView extends BasePanelView {
                 }
             })
             .on(`${CommandId.toggleTimer}`, (data) => {
-                if (this.timerName === 'start')
-                    this.timerName = 'pause';
+                if (this.timerName === TimerState.START_STR)
+                    this.timerName = TimerState.PAUSE_STR;
                 else
-                    this.timerName = 'start';
+                    this.timerName = TimerState.START_STR;
                 this.scorePanel.toggleTimer1();
             })
             .on(`${CommandId.resetTimer}`, (data) => {
-                this.timerName = 'start';
+                this.timerName = TimerState.START_STR;
                 this.scorePanel.resetTimer();
             })
             .on(`${CommandId.updatePlayer}`, (data) => {
@@ -228,8 +228,10 @@ export class StagePanelView extends BasePanelView {
         if (this.scorePanel.isBlueWin != isBlueMvp) {
             alert('比赛结果与mvp不符')
         }
-        else
+        else {
+            this.opReq(`${CommandId.cs_toggleTimer}`, {state: TimerState.PAUSE});
             this.opReq(`${CommandId.cs_fadeInWinPanel}`, {mvpIdx: this.mvpIdx});
+        }
     }
 
     onHideWin() {

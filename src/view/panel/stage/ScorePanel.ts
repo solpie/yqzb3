@@ -7,6 +7,7 @@ import {StagePanelView} from "./StagePanelView";
 import {formatSecond} from "../../../utils/JsFunc";
 import {GameInfo} from "../../../model/GameInfo";
 import {blink} from "../../../utils/Fx";
+import {TimerState} from "../../../event/Const";
 
 export class ScorePanel {
     timeText:Text;
@@ -185,7 +186,7 @@ export class ScorePanel {
 
     resetTimer() {
         this.timeOnSec = 0;
-        this.timerState = 0;
+        this.timerState = TimerState.PAUSE;//0
         this.timeText.text = formatSecond(this.timeOnSec);
     }
 
@@ -193,14 +194,14 @@ export class ScorePanel {
         if (this.timerId) {
             clearInterval(this.timerId);
             this.timerId = 0;
-            this.timerState = 0;
+            this.timerState = TimerState.PAUSE;
         }
         else {
             this.timerId = setInterval(()=> {
                 this.timeOnSec++;
                 this.timeText.text = formatSecond(this.timeOnSec);
             }, 1000);
-            this.timerState = 1;
+            this.timerState = TimerState.RUNNING;
         }
     }
 
