@@ -105,8 +105,10 @@ adminRouter.post('/player/update', function (req:any, res:any) {
 adminRouter.get('/game/delete/:gameId', function (req:any, res:any) {
     var gameId = Number(req.params.gameId);
     console.log('/admin/game/delete/', gameId);
-    // db.game.remove({id: gameId});
-    res.sendStatus(200);
+    db.game.remove({id: gameId});
+    db.activity.removeGame(gameId, (sus)=> {
+        res.send(sus);
+    });
 });
 
 //////////////////activity admin

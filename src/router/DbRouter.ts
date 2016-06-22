@@ -39,7 +39,7 @@ dbRouter.post('/external/player', function (req:any, res:any) {
     res.send({playerInfoMap: db.playerHuiTi.dataMap})
 });
 
-dbRouter.post('/external/import', function (req:any, res:any) {
+dbRouter.get('/external/import', function (req:any, res:any) {
     //https://github.com/SheetJS/js-xlsx
     console.log('/db/external');
     ExternalInfo.importHuiTi();

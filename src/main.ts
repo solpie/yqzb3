@@ -39,7 +39,6 @@ function devWatch() {
         detached: false
     });
 
-
     watchServer.stdout.on('data', sendServer);
 
     watchServer.stderr.on('data', sendServer);

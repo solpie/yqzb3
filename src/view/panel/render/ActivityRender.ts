@@ -3,13 +3,16 @@ import {ViewConst} from "../../../event/Const";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {StagePlayerCard} from "./PlayerRender";
 import {ActivityPanelView} from "../act/ActivityPanelView";
+import {blink} from "../../../utils/Fx";
 export class ActivityRender {
     ctn:Container;
     nextPageArr:any;
     pageNum:number;
+    gameCtnMap:any;
 
     constructor(parent:ActivityPanelView) {
         this.pageNum = 0;
+        this.gameCtnMap = {};
         this.ctn = parent.ctn;
     }
 
@@ -38,7 +41,9 @@ export class ActivityRender {
             if (!gameDocArr[i])
                 break;
             var gameDoc = gameDocArr[i];
+
             var gameCtn = new createjs.Container();
+            this.gameCtnMap[gameDoc.id] = gameCtn;
             gameCtn.x = (ViewConst.STAGE_WIDTH - 1540) * .5;
             gameCtn.y = i * 169;
             var bg = new createjs.Bitmap('/img/panel/act/bg.png');
@@ -54,12 +59,11 @@ export class ActivityRender {
                 playerCtn.y = 50;
                 var scoreText = StagePlayerCard.newScoreText();
                 scoreText.y = 70;
-
+                scoreText.name = 'scoreText';
                 if (playerInfo.isBlue) {
                     scoreText.text = gameDoc.redScore + "";
                     scoreText.x = 830;
                     rightScore += playerInfo.eloScore();
-                    // playerCtn = new StagePlayerCard(playerInfo, 1, playerInfo.isBlue);
                     playerCtn.x = 26 + j * 148;
                 }
                 else {
@@ -109,6 +113,29 @@ export class ActivityRender {
             this.pageNum = 0;
             // createjs.Tween.get(this.ctn)
             //     .wait(5000).to({alpha: 0}, 300);
+        }
+    }
+
+    setComing(gameId:number) {
+        var gameCtn:Container = this.gameCtnMap[gameId];
+        if (gameCtn) {
+            for (var i = 0; true; i++) {
+                var scoreText = gameCtn.getChildByName('scoreText');
+                if (scoreText)
+                    gameCtn.removeChild(scoreText);
+                else
+                    break;
+            }
+            var comingText = gameCtn.getChildByName('comingText');
+            if (!comingText) {
+                comingText = new createjs.Bitmap('/img/panel/act/comingText.png');
+                comingText.name = 'comingText';
+                comingText.x = 712;
+                comingText.y = 70;
+                gameCtn.addChild(comingText);
+                blink(comingText, 233, true);
+            }
+
         }
     }
 

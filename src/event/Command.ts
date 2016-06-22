@@ -75,6 +75,8 @@ export enum CommandId{
     fadeInRankPanel,
     cs_fadeInNextRank,
     fadeInNextRank,
+    cs_setGameComing,
+    setGameComing,
     cs_fadeOutRankPanel,
     fadeOutRankPanel,
 

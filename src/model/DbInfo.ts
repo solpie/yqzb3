@@ -109,11 +109,13 @@ export class BaseDB {
         });
     }
 
-    upsert(doc, callback?) {
-        this.ds().update({id: doc.id}, doc, {upsert: true}, (err, newDoc) => {
-            // this.syncDataMap(callback);
-        });
-    }
+    // upsert(queryOption, callback?) {
+    //     this.ds().update(queryOption, doc, {upsert: true}, (err, newDoc) => {
+    //         if (callback)
+    //             callback(err, newDoc);
+    //         // this.syncDataMap(callback);
+    //     });
+    // }
 
     getDocArr(idArr) {
         var a = [];
@@ -136,6 +138,7 @@ class ActivityDB extends BaseDB {
     //     })
     // }
 
+
     getGameIdBase(roundId) {
         return roundId * 1000;
     }
@@ -146,6 +149,31 @@ class ActivityDB extends BaseDB {
             .exec(function (err, docs) {
                 callback(err, docs);
             });
+    }
+
+    removeGame(gameId, callback) {
+        var isFind = false;
+        for (var k in this.dataMap) {
+            var actDoc = this.dataMap[k];
+            for (var i = 0; i < actDoc.gameDataArr.length; i++) {
+                var gameDoc = actDoc.gameDataArr[i];
+                console.log('act gameId', gameDoc.id, gameId);
+                if (gameDoc.id == gameId) {
+                    actDoc.gameDataArr.splice(i, 1);
+                    isFind = true;
+                    this.ds().update({_id: actDoc._id}, actDoc, {upsert: true}, (err, newDoc) => {
+                        this.syncDataMap();
+                        if (err)
+                            callback(false);
+                        else
+                            callback(true);
+                    });
+                    break;
+                }
+            }
+            if (isFind)
+                break;
+        }
     }
 
     addGame(activityId, roundId, playerIdArr, section, callback?) {

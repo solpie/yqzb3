@@ -29,6 +29,7 @@ class PlayerXLSX extends BaseXLSX {
         var playerWB = XLSX.readFile(xlsxPath);
         var playerSheet = playerWB.Sheets['Sheet4'];
         // var playerXLSXArr:PlayerXLSX[] = [];
+        var countPlayer = 0;
         for (var i = 2; ; i++) {
             var playerXLSX:PlayerXLSX = new PlayerXLSX(playerSheet, i);
             if (!playerXLSX.isEmpty) {
@@ -37,10 +38,12 @@ class PlayerXLSX extends BaseXLSX {
                 if (i < 10) {
                     console.log(playerXLSX);
                 }
+                countPlayer++;
             }
             else
                 break;
         }
+        console.log('player count:', countPlayer);
         return playerMap;
     }
 }

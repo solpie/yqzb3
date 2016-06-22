@@ -24,8 +24,15 @@ export class Modaler extends VueEx {
     };
 
     onChange(value:boolean) {
-        if (value)
-            this.modaler.openModal();
+        if (value) {
+            $(this.$els.modaler).appendTo("body");
+            this.modaler.openModal({
+                dismissible: true,
+                complete: () => {
+                    this.$dispatch('closeModal');
+                }
+            });
+        }
         else
             this.modaler.closeModal();
     }

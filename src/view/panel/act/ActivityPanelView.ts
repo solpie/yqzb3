@@ -48,7 +48,7 @@ import {Modaler} from "../../admin/components/modal/modal";
         gameSelected: {},
         cdText: {type: String, default: '下一场比赛：'},
         cdSec: {type: Number, default: 300},
-        isOpen: {type: Boolean, default: false}
+        isDeleteDialog: {type: Boolean, default: false, twoWay: true}
     }
 })
 export class ActivityPanelView extends BasePanelView {
@@ -71,7 +71,9 @@ export class ActivityPanelView extends BasePanelView {
 
     cdText:string;
     cdSec:number;
-    isOpen:boolean;
+
+
+    isDeleteDialog:boolean;
 
     ready() {
         var io = super.ready(PanelId.actPanel);
@@ -134,6 +136,20 @@ export class ActivityPanelView extends BasePanelView {
             });
 
         if (this.op) {
+            // ($('#delDialog') as any).leanModal({
+            //         dismissible: false, // Modal can be dismissed by clicking outside of the modal
+            //         opacity: .5, // Opacity of modal background
+            //         in_duration: 300, // Transition in duration
+            //         out_duration: 200, // Transition out duration
+            //         ready: function() { alert('Ready'); }, // Callback for Modal open
+            //         complete: function() { alert('Closed'); } // Callback for Modal close
+            //     }
+            // );
+            this.$on('closeModal', ()=> {
+                if (this.isDeleteDialog)
+                    this.isDeleteDialog = false;
+            });
+
             this.post('/db/act/combine', function (param) {
                 console.log('/db/act/combine', param);
                 this.activityMap = param.activityMap;
@@ -197,15 +213,29 @@ export class ActivityPanelView extends BasePanelView {
             })
     }
 
+    onDeleteCancel() {
+        console.log('onDeleteCancel');
+        this.isDeleteDialog = false;
+    }
+
     onDeleteOk() {
         console.log('onDeleteOk');
-        this.isOpen = false;
+        this.$http.get(`/admin/game/delete/${this.gameSelected}`, (sus)=> {
+            if (sus) {
+                alert("删除成功 ")
+
+            }
+            else {
+                alert("删除失败")
+            }
+
+        });
+        this.isDeleteDialog = false;
     }
 
     onDeleteGame() {
         console.log('onDeleteGame');
-        $("#delDialog").appendTo("body");
-        this.isOpen = true;
+        this.isDeleteDialog = true;
     }
 
     onResetGame() {
@@ -288,6 +318,13 @@ export class ActivityPanelView extends BasePanelView {
         else {
             alert(`无效赛程 id${this.activitySelected}`);
         }
+    }
+
+    onActivityComing() {
+        var gameId = this.gameSelected;
+        // this.opReq(`${CommandId.cs_setGameComing}`,
+        //     {gameId: gameId});
+        this.activityRender.setComing(gameId);
     }
 
     onActivityInExGameIn() {

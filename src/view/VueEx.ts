@@ -25,6 +25,7 @@ export class VueEx extends Vue {
         else
             this.$http.post(url, option)
     }
+    
 
     getElem(val:string):any {
         var _0 = val[0];
