@@ -97,7 +97,6 @@ export class WebServer {
         app.use('/panel', panelRouter);
         app.use('/db', dbRouter);
 
-
         app.listen(ServerConf.port, () => {
             this.initSocketIO();
             //and... we're live

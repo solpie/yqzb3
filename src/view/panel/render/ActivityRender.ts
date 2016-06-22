@@ -48,6 +48,12 @@ export class ActivityRender {
             gameCtn.y = i * 169;
             var bg = new createjs.Bitmap('/img/panel/act/bg.png');
             gameCtn.addChild(bg);
+            var vs = new createjs.Bitmap('/img/panel/act/vs.png');
+            vs.name = 'scoreText';
+            vs.x = 765;
+            vs.y = 80;
+            gameCtn.addChild(vs);
+
             var leftScore = 0;
             var rightScore = 0;
             for (var j = 0; j < gameDoc.playerDocArr.length; j++) {
