@@ -50,12 +50,15 @@ export class ActivityRender {
             gameCtn.addChild(bg);
             var vs = new createjs.Bitmap('/img/panel/act/vs.png');
             vs.name = 'scoreText';
-            vs.x = 765;
+            vs.x = 760;
             vs.y = 80;
             gameCtn.addChild(vs);
 
             var leftScore = 0;
             var rightScore = 0;
+            var scoreTextLeft = StagePlayerCard.newScoreText();
+            var scoreTextRight = StagePlayerCard.newScoreText();
+            var scoreText;//= StagePlayerCard.newScoreText();
             for (var j = 0; j < gameDoc.playerDocArr.length; j++) {
                 var playerInfo = new PlayerInfo(gameDoc.playerDocArr[j]);
                 playerInfo.isBlue = (j < 4);
@@ -63,22 +66,26 @@ export class ActivityRender {
                     playerInfo.eloScore(gameDoc.playerRecArr[j].eloScore);
                 var playerCtn = new StagePlayerCard(playerInfo, 1, playerInfo.isBlue);
                 playerCtn.y = 50;
-                var scoreText = StagePlayerCard.newScoreText();
-                scoreText.y = 70;
-                scoreText.name = 'scoreText';
                 if (playerInfo.isBlue) {
-                    scoreText.text = gameDoc.redScore + "";
-                    scoreText.x = 830;
+                    scoreText = scoreTextLeft;
+                    scoreText.text = gameDoc.blueScore + "";
+                    scoreText.x = 690;
                     rightScore += playerInfo.eloScore();
                     playerCtn.x = 26 + j * 148;
                 }
                 else {
-                    scoreText.text = gameDoc.blueScore + "";
-                    scoreText.x = 685;
+                    scoreText = scoreTextRight;
+                    scoreText.text = gameDoc.redScore + "";
+                    scoreText.x = 840;
                     leftScore += playerInfo.eloScore();
                     playerCtn.x = 305 + j * 148;
                 }
-                gameCtn.addChild(scoreText);
+
+                if (!scoreText.parent) {
+                    scoreText.y = 70;
+                    scoreText.name = 'scoreText';
+                    gameCtn.addChild(scoreText);
+                }
                 gameCtn.addChild(playerCtn);
 
             }
