@@ -1,11 +1,11 @@
 import {CommandId} from "../event/Command";
-import {PanelId, ViewEvent, ServerConst, TimerState} from "../event/Const";
+import {PanelId, ViewEvent, ServerConst} from "../event/Const";
 import {ServerConf} from "../Env";
 import {panelRouter} from "./PanelRouter";
 import {GameInfo} from "../model/GameInfo";
 import {Response} from "express-serve-static-core";
 import {Request} from "express";
-import {ScParam} from "../SocketIOSrv";
+import {ScParam, screenPanelHanle} from "../SocketIOSrv";
 import {db} from "../model/DbInfo";
 import {TeamInfo} from "../model/TeamInfo";
 import {PlayerInfo} from "../model/PlayerInfo";
@@ -43,12 +43,14 @@ export class StagePanelHandle {
             cmdMap[`${CommandId.cs_minLeftScore}`] = () => {
                 this.gameInfo.minLeftScore();
                 this.io.emit(`${CommandId.updateLeftScore}`, ScParam({leftScore: this.gameInfo.leftScore}));
-            }
+                screenPanelHanle.io.emit(`${CommandId.updateLeftScore}`, ScParam({leftScore: this.gameInfo.leftScore}));
+            };
 
             cmdMap[`${CommandId.cs_minRightScore}`] = () => {
                 this.gameInfo.minRightScore();
                 this.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
-            }
+                screenPanelHanle.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
+            };
 
             cmdMap[`${CommandId.cs_addLeftScore}`] = () => {
                 var straight = this.gameInfo.addLeftScore();
@@ -60,6 +62,7 @@ export class StagePanelHandle {
 
                 }
                 this.io.emit(`${CommandId.updateLeftScore}`, ScParam({leftScore: this.gameInfo.leftScore}));
+                screenPanelHanle.io.emit(`${CommandId.updateLeftScore}`, ScParam({leftScore: this.gameInfo.leftScore}));
             };
 
             cmdMap[`${CommandId.cs_addRightScore}`] = () => {
@@ -72,6 +75,7 @@ export class StagePanelHandle {
 
                 }
                 this.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
+                screenPanelHanle.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
             };
 
             cmdMap[`${CommandId.cs_toggleTimer}`] = (param) => {

@@ -12,8 +12,13 @@ export class ScreenView extends BasePanelView {
     ready() {
         var io = super.ready(PanelId.screenPanel);
         io
-            .on(`${CommandId.inScreenScore}`, (param)=> {
+            .on(`${CommandId.updateLeftScore}`, (param)=> {
+                this.bigScorePanel.setLeftScore(param.leftScore);
             })
+            
+            .on(`${CommandId.updateRightScore}`, (param)=> {
+                this.bigScorePanel.setRightScore(param.rightScore);
+            });
 
         this.initScreen()
     }
