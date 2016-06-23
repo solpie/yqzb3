@@ -1,7 +1,7 @@
 import {VueEx} from "../VueEx";
+import {ViewConst} from "../../event/Const";
 import Stage = createjs.Stage;
 import Container = createjs.Container;
-import {ViewConst} from "../../event/Const";
 export class BasePanelView extends VueEx {
     op:boolean;
     stageWidth:number;
@@ -28,8 +28,9 @@ export class BasePanelView extends VueEx {
         this.stage = stage;
     }
 
-    ready(pid?:string) {
-        this.initCanvas();
+    ready(pid?:string, isInitCanvas:boolean = true) {
+        if (isInitCanvas)
+            this.initCanvas();
         this.opReq = (cmdId:string, param:any, callback:any)=> {
             this.$http.post(`/panel/${pid}/${cmdId}`,
                 param,
