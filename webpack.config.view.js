@@ -24,7 +24,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ["", ".ts", ".tsx",".html", ".js"]
+        extensions: ["", ".ts", ".tsx", ".html", ".js"]
     },
     plugins: [
         new webpack.DefinePlugin({

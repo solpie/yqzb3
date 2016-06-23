@@ -2,6 +2,7 @@ export const PanelId = {
     stagePanel: 'stage',
     winPanel: 'win',
     actPanel: 'act',
+    screenPanel: 'screen',
     playerPanel: 'player'
 };
 export const ServerConst = {

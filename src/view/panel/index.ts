@@ -3,6 +3,7 @@ import {ActivityPanelView} from "./act/ActivityPanelView";
 import {PanelId} from "../../event/Const";
 import {VueEx} from "../VueEx";
 import {OpLinks} from "../admin/components/home/home";
+import {ScreenView} from "./screen/ScreenView";
 
 declare var io:any;
 declare var pid:string;
@@ -41,6 +42,9 @@ router.map({
         component: StagePanelView,
         name: 'stage'
     },
+    '/screen/:op': {
+        component: ScreenView,
+    },
     '/act/:op': {
         component: ActivityPanelView,
         name: 'act'
@@ -53,6 +57,8 @@ router.afterEach((transition) => {
         router.app.pid = PanelId.stagePanel;
     } else if (/\/act/.test(toPath)) {
         router.app.pid = PanelId.actPanel;
+    } else if (/\/screen/.test(toPath)) {
+        router.app.pid = PanelId.screenPanel;
     }
     console.log('after each!!!', toPath);
 });

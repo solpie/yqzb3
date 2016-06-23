@@ -85,6 +85,9 @@ export enum CommandId{
 
     cs_fadeOutCountDown,
     fadeOutCountDown,
+    ///screen
+    cs_inScreenScore,
+    inScreenScore,
     //db op
     cs_findPlayerData,
 }
