@@ -38,6 +38,16 @@ export class BigScorePanel {
             ]
         });
 
+// 0,0,0,315,435
+// 1,316,0,315,435
+// 2,0,436,315,435
+// 3,316,436,315,435
+// 4,632,0,315,435
+// 5,632,436,315,435
+// 6,948,0,315,435
+// 7,948,436,315,435
+// 8,0,872,315,435
+// 9,316,872,315,435
         var leftScoreText = new createjs.BitmapText("7", sheet);
         leftScoreText.x = 260;
         leftScoreText.y = 210;
@@ -71,14 +81,15 @@ export class BigScorePanel {
                 [332, 512, 165, 255]
             ]
         });
+
         var leftFoulText = new createjs.BitmapText("x", foulSheet);
         leftFoulText.x = 750;
-        leftFoulText.y = 130;
+        leftFoulText.y = 170;
         this.leftFoulText = leftFoulText;
         bigScoreCtn.addChild(leftFoulText);
 
-        var rightFoulText = new createjs.BitmapText("1", foulSheet);
-        rightFoulText.x = 1050;
+        var rightFoulText = new createjs.BitmapText("6", foulSheet);
+        rightFoulText.x = 1040;
         rightFoulText.y = leftFoulText.y;
         this.rightFoulText = rightFoulText;
         bigScoreCtn.addChild(rightFoulText);
@@ -100,16 +111,3 @@ export class BigScorePanel {
         this.rightFoulText.text = `${foulNum}`;
     }
 }
-
-
-// [0,0,315,435]
-// [316,0,315,435]
-// [0,436,315,435]
-// [316,436,315,435]
-// [632,0,315,435]
-// [632,436,315,435]
-// [948,0,315,435]
-// [948,436,315,435]
-// [0,872,315,435]
-// [316,872,315,435]
-

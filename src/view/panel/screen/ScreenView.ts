@@ -12,10 +12,18 @@ export class ScreenView extends BasePanelView {
     ready() {
         var io = super.ready(PanelId.screenPanel);
         io
+            .on(`${CommandId.updateLeftFoulNum}`, (param)=> {
+                this.bigScorePanel.setLeftFoulNum(param.leftNum);
+            })
+
+            .on(`${CommandId.updateRightFoulNum}`, (param)=> {
+                this.bigScorePanel.setRightFoulNum(param.rightNum);
+            })
+
             .on(`${CommandId.updateLeftScore}`, (param)=> {
                 this.bigScorePanel.setLeftScore(param.leftScore);
             })
-            
+
             .on(`${CommandId.updateRightScore}`, (param)=> {
                 this.bigScorePanel.setRightScore(param.rightScore);
             });

@@ -20,6 +20,9 @@ export enum CommandId{
     minRightScore,
     cs_minRightScore,
 
+    updateLeftFoulNum,
+    updateRightFoulNum,
+
     stageFadeOut,
     cs_fadeOut,
     playerScore,

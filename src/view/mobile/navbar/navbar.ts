@@ -1,6 +1,4 @@
-import Component from "vue-class-component";
-import Vue = require('vue');
-
+import {VueEx, Component} from "../../VueEx";
 @Component({
     template: require('./navbar.html'),
     props: {
@@ -10,6 +8,6 @@ import Vue = require('vue');
         }
     }
 })
-export class Navbar extends Vue {
+export class Navbar extends VueEx {
     public active:string
 }

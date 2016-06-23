@@ -4,6 +4,7 @@ var webpack = require('webpack');
 module.exports = {
     entry: {
         "static/admin/index": "./src/view/admin/index.ts",
+        "static/mobile/index": "./src/view/mobile/index.ts",
         "static/panel/index": "./src/view/panel/index.ts"
     },
     output: {
