@@ -49,15 +49,15 @@ export class StagePanelView extends BasePanelView {
     gameId:number;
     playerInfoArr:any;
 
-
     isSubmited:boolean = false;
 
-    ready() {
-        var io = super.ready(PanelId.stagePanel);
+    
+    ready(pid?:string, isInitCanvas:boolean = true) {
+        var io = super.ready(PanelId.stagePanel, isInitCanvas);
         io.on(`${CommandId.initPanel}`, (data) => {
             console.log(`${CommandId.initPanel}`, data);
             // ServerConf.isDev = data.isDev;
-            if (!this.isInit)
+            if (!this.isInit&&this.isInitCanvas)
                 this.initStage(data.gameInfo);
         });
 

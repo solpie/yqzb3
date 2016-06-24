@@ -33,12 +33,20 @@
     <link type="text/css" rel="stylesheet" href="/css/materialize.min.css" media="screen,projection"/>
 </head>
 <body>
-<router-view></router-view>
+<div id="app">
+    <router-view></router-view>
+</div>
+<script type="text/javascript">
+    var host = '<%= host %>'
+    var wsPort = '<%= wsPort %>'
+    console.log('host', host, 'wsPort', wsPort);
+</script>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/materialize.min.js"></script>
 <script src="/js/createjs/createjs.min.js"></script>
 <script src="/js/createjs/easeljs.min.js"></script>
 <script src="/js/createjs/tweenjs.min.js"></script>
-<script src="./index.js"></script>
+<script src="/js/socket.io-1.4.5.min.js"></script>
+<script src="/mobile/index.js"></script>
 </body>
 </html>

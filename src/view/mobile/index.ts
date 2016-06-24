@@ -11,7 +11,9 @@ export class Mobile extends VueEx {
     pid:string;
     isOp:boolean;
     panel:any;
-
+    ready(){
+        console.log('mobile ready');
+    }
     connect() {
         var wsUrl = `http://${host}:${wsPort}/${this.pid}`;
         console.log("init panel!!!", this.pid, this.isOp, wsUrl);
@@ -26,6 +28,7 @@ Vue.use(require('vue-resource'));
 
 import VueRouter = require('vue-router');
 import ComponentOption = vuejs.ComponentOption;
+import {StagePanelViewMobile} from "../panel/mobile/StagePanelViewMobile";
 Vue.use(VueRouter);
 
 var router = new VueRouter<Mobile>();
@@ -35,10 +38,10 @@ router.map({
         component: OpLinks,
         name: 'OpLinks'
     },
-    // '/stage/:op': {
-    //     component: StagePanelView,
-    //     name: 'stage'
-    // },
+    '/panel/stage/:op': {
+        component: StagePanelViewMobile,
+        name: 'stage'
+    },
     // '/screen/:op': {
     //     component: ScreenView,
     // },
@@ -59,5 +62,5 @@ router.afterEach((transition) => {
     }
     console.log('after each!!!', toPath);
 });
-router.start(Mobile, '#panel');
+router.start(Mobile, '#app');
 console.log('start router');

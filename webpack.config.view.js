@@ -1,11 +1,12 @@
 "use strict"
 var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: {
         "static/admin/index": "./src/view/admin/index.ts",
         "static/mobile/index": "./src/view/mobile/index.ts",
-        "static/panel/index": "./src/view/panel/index.ts"
+        "static/panel/index": "./src/view/panel/index.ts",
     },
     output: {
         path: './app',
@@ -39,4 +40,4 @@ module.exports = {
             }
         })
     ]
-}
+};

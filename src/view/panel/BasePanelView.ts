@@ -9,26 +9,29 @@ export class BasePanelView extends VueEx {
     stage:Stage;
     ctn:Container;
     opReq:(cmdId:string, param?:any, callback?:any)=>void;
-
+    isInitCanvas:boolean;
     initCanvas() {
         this.stageWidth = ViewConst.STAGE_WIDTH;
         this.stageHeight = ViewConst.STAGE_HEIGHT;
         var canvas = document.getElementById("stage");
-        canvas.setAttribute("width", this.stageWidth + "");
-        canvas.setAttribute("height", this.stageHeight + "");
-        var stage = new createjs.Stage(canvas);
-        stage.autoClear = true;
-        createjs.Ticker.framerate = 60;
-        createjs.Ticker.addEventListener("tick", function () {
-            stage.update();
-        });
+        if (canvas) {
+            canvas.setAttribute("width", this.stageWidth + "");
+            canvas.setAttribute("height", this.stageHeight + "");
+            var stage = new createjs.Stage(canvas);
+            stage.autoClear = true;
+            createjs.Ticker.framerate = 60;
+            createjs.Ticker.addEventListener("tick", function () {
+                stage.update();
+            });
 
-        this.ctn = new createjs.Container();
-        stage.addChild(this.ctn);
-        this.stage = stage;
+            this.ctn = new createjs.Container();
+            stage.addChild(this.ctn);
+            this.stage = stage;
+        }
     }
 
     ready(pid?:string, isInitCanvas:boolean = true) {
+        this.isInitCanvas = isInitCanvas;
         if (isInitCanvas)
             this.initCanvas();
         this.opReq = (cmdId:string, param:any, callback:any)=> {
