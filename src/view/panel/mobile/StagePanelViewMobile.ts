@@ -29,8 +29,12 @@ import {PanelId} from "../../../event/Const";
         }
     }
 })
-export class StagePanelViewMobile extends StagePanelView{
+export class StagePanelViewMobile extends StagePanelView {
     ready() {
-        var io = super.ready(PanelId.stagePanel,false);
+      super.ready(PanelId.stagePanel, false);
+    }
+
+    initIO(io:any) {
+        console.log('init io!!!');
     }
 }

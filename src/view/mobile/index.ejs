@@ -33,9 +33,29 @@
     <link type="text/css" rel="stylesheet" href="/css/materialize.min.css" media="screen,projection"/>
 </head>
 <body>
-<div id="app">
+<main id="app">
     <router-view></router-view>
-</div>
+    <!--<footerbar :active="active"></footerbar>-->
+    <div class="navbar-fixed bottom" style="position: absolute;bottom: 0;height: 128px">
+        <nav>
+            <div class="nav-wrapper indigo" style="height: 128px">
+                <div class="row">
+                    <ul class="col s6" style="display: block">
+                        <li :class="{active: active === 'stage'}">
+                            <a v-link="{name: 'stage'}">stage</a>
+                        </li>
+                    </ul>
+                    <ul class="col s6" style="display: block">
+                        <li :class="{active: active === 'home'}">
+                            <a v-link="{name: 'home'}">home</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+    </div>
+</main>
 <script type="text/javascript">
     var host = '<%= host %>'
     var wsPort = '<%= wsPort %>'

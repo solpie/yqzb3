@@ -51,13 +51,17 @@ export class StagePanelView extends BasePanelView {
 
     isSubmited:boolean = false;
 
-    
+
     ready(pid?:string, isInitCanvas:boolean = true) {
         var io = super.ready(PanelId.stagePanel, isInitCanvas);
+        this.initIO(io);
+    }
+
+    initIO(io:any) {
         io.on(`${CommandId.initPanel}`, (data) => {
             console.log(`${CommandId.initPanel}`, data);
             // ServerConf.isDev = data.isDev;
-            if (!this.isInit&&this.isInitCanvas)
+            if (!this.isInit && this.isInitCanvas)
                 this.initStage(data.gameInfo);
         });
 
@@ -115,9 +119,7 @@ export class StagePanelView extends BasePanelView {
             .on(`${CommandId.updatePlayerBackNum}`, (param) => {
                 this.playerPanel.playerCardArr[param.idx].setBackNumber(param.backNum);
             })
-
     }
-
 
     initStage(gameDoc:any) {
         this.isInit = true;

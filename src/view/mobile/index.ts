@@ -1,12 +1,18 @@
 import {PanelId} from "../../event/Const";
-import {VueEx} from "../VueEx";
+import {VueEx,Component} from "../VueEx";
 import {OpLinks} from "../admin/components/home/home";
+import {FooterBar} from "./footerbar/footerbar";
+import {Navbar} from "../admin/components/navbar/navbar";
 
 declare var io:any;
 declare var pid:string;
 declare var op:boolean;
 declare var host:any;
 declare var wsPort:any;
+
+@Component({
+    components: {FooterBar}
+})
 export class Mobile extends VueEx {
     pid:string;
     isOp:boolean;
@@ -36,9 +42,9 @@ var router = new VueRouter<Mobile>();
 router.map({
     '/': {
         component: OpLinks,
-        name: 'OpLinks'
+        name: 'home'
     },
-    '/panel/stage/:op': {
+    '/panel/stage/op': {
         component: StagePanelViewMobile,
         name: 'stage'
     },
