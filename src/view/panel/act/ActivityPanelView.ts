@@ -10,6 +10,7 @@ import {CountDownPanel} from "./CountDownPanel";
 import {ActivityRender} from "../render/ActivityRender";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {Modaler} from "../../admin/components/modal/modal";
+import {NoticePanel} from "./NoticePanel";
 @Component({
     template: require('./activity-panel.html'),
     components: {OpLinks, Modaler},
@@ -47,6 +48,7 @@ import {Modaler} from "../../admin/components/modal/modal";
         },
         gameSelected: {},
         cdText: {type: String, default: '下一场比赛：'},
+        noticeText: {type: String, default: ''},
         cdSec: {type: Number, default: 300},
         isDeleteDialog: {type: Boolean, default: false, twoWay: true}
     }
@@ -55,6 +57,7 @@ export class ActivityPanelView extends BasePanelView {
     rankRender:RankRender;
     countDownRender:CountDownPanel;
     activityRender:ActivityRender;
+    noticePanel:NoticePanel;
 
     activitySelected:number;
 
@@ -71,9 +74,10 @@ export class ActivityPanelView extends BasePanelView {
 
     cdText:string;
     cdSec:number;
-
-
     isDeleteDialog:boolean;
+
+
+    noticeText:string;
 
     ready() {
         var io = super.ready(PanelId.actPanel);
@@ -121,6 +125,8 @@ export class ActivityPanelView extends BasePanelView {
             .on(`${CommandId.fadeInNextActivity}`, (param)=> {
                 this.activityRender.nextPage();
             })
+
+
             .on(`${CommandId.fadeInActivityExGame}`, (param)=> {
                 var gameDocArr = param.gameDocArr;
                 var roundId = this.roundSelected;
@@ -133,6 +139,11 @@ export class ActivityPanelView extends BasePanelView {
             })
             .on(`${CommandId.fadeOutActivityPanel}`, (param)=> {
                 this.activityRender.fadeOut();
+            })
+
+            .on(`${CommandId.fadeInNotice}`, (param)=> {
+                var img = param.img;
+                this.noticePanel.fadeInNoticePanel(img);
             });
 
         if (this.op) {
@@ -164,6 +175,7 @@ export class ActivityPanelView extends BasePanelView {
         this.rankRender = new RankRender(this);
         this.countDownRender = new CountDownPanel(this);
         this.activityRender = new ActivityRender(this);
+        this.noticePanel = new NoticePanel(this);
     }
 
     onActivitySelected() {
@@ -347,5 +359,15 @@ export class ActivityPanelView extends BasePanelView {
     onActivityOut() {
         console.log('onActivityOut');
         this.opReq(`${CommandId.cs_fadeOutActivityPanel}`);
+    }
+
+    onNoticeIn() {
+        console.log('onNoticeIn', this.noticeText);
+        this.opReq(`${CommandId.cs_fadeInNotice}`, {notice: this.noticeText});
+
+    }
+
+    onNoticeOut() {
+        console.log('onNoticeOut');
     }
 }

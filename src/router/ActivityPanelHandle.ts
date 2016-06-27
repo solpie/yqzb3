@@ -10,6 +10,7 @@ import {panelRouter} from "./PanelRouter";
 import {db} from "../model/DbInfo";
 import {arrUniqueFilter, combineArr, arrCountSame} from "../utils/JsFunc";
 import {GameDoc} from "../model/GameInfo";
+import {text2ImgUtil} from "../utils/Text2ImgUtil";
 export class ActivityPanelHandle {
     io:any;
 
@@ -194,9 +195,15 @@ export class ActivityPanelHandle {
             cmdMap[`${CommandId.cs_fadeInNextRank}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeInNextRank}`);
             };
-            
+
             cmdMap[`${CommandId.cs_fadeInNextActivity}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeInNextActivity}`);
+            };
+
+            cmdMap[`${CommandId.cs_fadeInNotice}`] = (param)=> {
+                var noticeText = param.notice;
+                var img = text2ImgUtil.getNoticeImg(noticeText);
+                this.io.emit(`${CommandId.fadeInNotice}`, ScParam({img: img}));
             };
 
             var isSend = cmdMap[cmdId](param);

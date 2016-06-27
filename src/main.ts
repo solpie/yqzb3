@@ -10,7 +10,6 @@ var isWatch = false;
 var sender;
 function devWatch() {
     if (isWatch) {
-
         // watchServer.kill();
         // watchView.kill();
         return;

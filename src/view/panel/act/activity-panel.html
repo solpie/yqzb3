@@ -64,6 +64,11 @@
         <a class="waves-effect waves-light btn" @click="onActivityInExGameIn">Ex Game in</a>
     </div>
 
+    <div class="row">
+        <input id="notice" style="width: 100%" v-model="noticeText" placeholder="小喇叭广播" class="validate" length="99">
+        <a class="waves-effect waves-light btn" @click="onNoticeIn">发送 ctrl+enter</a>
+        <a class="waves-effect waves-light btn" @click="onNoticeOut">fade out</a>
+    </div>
 </div>
 <modaler id="delDialog" title="确定删除?" :is-open="isDeleteDialog" style="width: 30%;height: 20%">
     <div slot="body">

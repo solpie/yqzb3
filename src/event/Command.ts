@@ -37,8 +37,8 @@ export enum CommandId{
     cs_updatePlayerAll,
     cs_updatePlayerBackNum,
     updatePlayerBackNum,
-    notice,//小喇叭
-    cs_notice,
+    fadeInNotice,//小喇叭
+    cs_fadeInNotice,
     cs_resetGame,//重置比分 时间 player
     cs_unLimitScore,//不限制比分显示
     unLimitScore,//不限制比分显示
