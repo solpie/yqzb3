@@ -1,7 +1,7 @@
 import {PanelId} from "../event/Const";
 import {ServerConf} from "../Env";
 import {CommandId} from "../event/Command";
-import {ScParam} from "../SocketIOSrv";
+import {ScParam, stagePanelHandle} from "../SocketIOSrv";
 import Socket = SocketIO.Socket;
 
 class ScreenInfo {
@@ -16,7 +16,8 @@ export class ScreenPanelHandle {
         this.io = io.of(`/${PanelId.screenPanel}`);
         this.io
             .on("connect", (socket:Socket) => {
-                socket.emit(`${CommandId.initPanel}`, ScParam({screenInfo: this.screenInfo, isDev: ServerConf.isDev}));
+                var gameInfo = stagePanelHandle.gameInfo;
+                socket.emit(`${CommandId.initPanel}`, ScParam({gameInfo: gameInfo, isDev: ServerConf.isDev}));
             })
     }
 

@@ -78,6 +78,24 @@ export class StagePanelHandle {
                 screenPanelHanle.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
             };
 
+            //// foul
+            cmdMap[`${CommandId.cs_addRightFoul}`] = () => {
+                var rightFoul:number = this.gameInfo.addRightFoul();
+                screenPanelHanle.io.emit(`${CommandId.updateRightFoul}`, ScParam({rightFoul: rightFoul}));
+            };
+            cmdMap[`${CommandId.cs_minRightFoul}`] = () => {
+                var rightFoul:number = this.gameInfo.minRightFoul();
+                screenPanelHanle.io.emit(`${CommandId.updateRightFoul}`, ScParam({rightFoul: rightFoul}));
+            };
+            cmdMap[`${CommandId.cs_addLeftFoul}`] = () => {
+                var leftFoul:number = this.gameInfo.addLeftFoul();
+                screenPanelHanle.io.emit(`${CommandId.updateLeftFoul}`, ScParam({leftFoul: leftFoul}));
+            };
+            cmdMap[`${CommandId.cs_minLeftFoul}`] = () => {
+                var leftFoul:number = this.gameInfo.minLeftFoul();
+                screenPanelHanle.io.emit(`${CommandId.updateLeftFoul}`, ScParam({leftFoul: leftFoul}));
+            };
+
             cmdMap[`${CommandId.cs_toggleTimer}`] = (param) => {
                 if (param) {
                     this.gameInfo.toggleTimer(param.state);

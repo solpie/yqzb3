@@ -1,6 +1,7 @@
 import {StagePanelView} from "../stage/StagePanelView";
 import Component from "vue-class-component";
 import {PanelId} from "../../../event/Const";
+import {CommandId} from "../../../event/Command";
 @Component({
     template: require('./stage-panel-mobile.html'),
     props: {
@@ -31,10 +32,31 @@ import {PanelId} from "../../../event/Const";
 })
 export class StagePanelViewMobile extends StagePanelView {
     ready() {
-      super.ready(PanelId.stagePanel, false);
+        super.ready(PanelId.stagePanel, false);
     }
 
     initIO(io:any) {
         console.log('init io!!!');
+    
+    }
+
+    onAddLeftFoul() {
+        console.log('onAddLeftFoul');
+        this.opReq(`${CommandId.cs_addLeftFoul}`);
+    }
+
+    onMinLeftFoul() {
+        console.log('onMinLeftFoul');
+        this.opReq(`${CommandId.cs_minLeftFoul}`);
+    }
+
+    onMinRightFoul() {
+        console.log('onMinRightFoul');
+        this.opReq(`${CommandId.cs_minRightFoul}`);
+    }
+
+    onAddRightFoul() {
+        console.log('onAddRightFoul');
+        this.opReq(`${CommandId.cs_addRightFoul}`);
     }
 }

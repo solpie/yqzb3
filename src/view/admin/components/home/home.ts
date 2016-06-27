@@ -14,6 +14,7 @@ export class OpLinks {
                 {title: "activity op", url: "/panel/#!/act/op"},
                 {title: "stage op", url: "/panel/#!/stage/op"},
                 {title: "stage op mobile", url: "/m/#!/panel/stage/op"},
+                {title: "screen ob", url: "/panel/#!/screen/ob"},
                 {title: "player op", url: "/panel/#!/player/op"}
             ]
         };

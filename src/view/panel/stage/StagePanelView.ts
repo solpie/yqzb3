@@ -53,7 +53,9 @@ export class StagePanelView extends BasePanelView {
 
 
     ready(pid?:string, isInitCanvas:boolean = true) {
-        var io = super.ready(PanelId.stagePanel, isInitCanvas);
+        if (!pid)
+            pid = PanelId.stagePanel;
+        var io = super.ready(pid, isInitCanvas);
         this.initIO(io);
     }
 

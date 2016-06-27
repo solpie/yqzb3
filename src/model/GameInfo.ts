@@ -18,6 +18,8 @@ export class GameInfo {
     winScore:number = 7;
     leftScore:number = 0;
     rightScore:number = 0;
+    leftFoul:number = 0;
+    rightFoul:number = 0;
     time:number = 0;
     timerState:number = 0;
     data:Date;//开始时间
@@ -247,5 +249,27 @@ export class GameInfo {
 
     getRightTeam() {
         return this.getLeftTeam(4);
+    }
+
+
+    ///foul 
+    addRightFoul() {
+        this.rightFoul++;
+        return this.rightFoul;
+    }
+
+    minRightFoul() {
+        this.rightFoul--;
+        return this.rightFoul;
+    }
+
+    addLeftFoul() {
+        this.leftFoul++;
+        return this.leftFoul;
+    }
+
+    minLeftFoul() {
+        this.leftFoul--;
+        return this.leftFoul;
     }
 }

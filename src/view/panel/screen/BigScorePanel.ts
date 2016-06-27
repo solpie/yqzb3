@@ -103,11 +103,19 @@ export class BigScorePanel {
         this.rightScoreText.text = `${rightScore}`;
     }
 
-    setLeftFoulNum(foulNum:number) {
-        this.leftFoulText.text = `${foulNum}`;
+    setLeftFoul(foulNum:number) {
+        if (foulNum < 0)return;
+        if (foulNum > 9)
+            this.leftFoulText.text = 'x';
+        else
+            this.leftFoulText.text = `${foulNum}`;
     }
 
-    setRightFoulNum(foulNum:number) {
-        this.rightFoulText.text = `${foulNum}`;
+    setRightFoul(foulNum:number) {
+        if (foulNum < 0)return;
+        if (foulNum > 9)
+            this.rightFoulText.text = 'x';
+        else
+            this.rightFoulText.text = `${foulNum}`;
     }
 }
