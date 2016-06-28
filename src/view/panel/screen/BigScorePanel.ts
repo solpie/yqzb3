@@ -1,8 +1,8 @@
 import {ScreenView} from "./ScreenView";
 import Container = createjs.Container;
 import BitmapText = createjs.BitmapText;
-export class BigScorePanel {
-    ctn:Container;
+import {BaseScreen} from "./BaseScreen";
+export class BigScorePanel extends BaseScreen{
     leftFoulText:BitmapText;
     rightFoulText:BitmapText;
     leftScoreText:BitmapText;
@@ -118,4 +118,5 @@ export class BigScorePanel {
         else
             this.rightFoulText.text = `${foulNum}`;
     }
+
 }

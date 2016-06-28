@@ -4,13 +4,16 @@ import {PanelId} from "../../../event/Const";
 import {CommandId} from "../../../event/Command";
 import {BigScorePanel} from "./BigScorePanel";
 import {GameInfo} from "../../../model/GameInfo";
+import {BaseScreen} from "./BaseScreen";
 @Component({
     template: require('./screen.html')
 })
 export class ScreenView extends BasePanelView {
     bigScorePanel:BigScorePanel;
+    panelArr:BaseScreen[];
 
     ready() {
+        this.panelArr = [];
         var io = super.ready(PanelId.screenPanel);
         this.initScreen();
         io
@@ -41,6 +44,16 @@ export class ScreenView extends BasePanelView {
 
     initScreen() {
         this.bigScorePanel = new BigScorePanel(this);
+        this.panelArr.push(this.bigScorePanel);
+    }
+
+    showOnly(target:BaseScreen) {
+        for (var panel:BaseScreen of this.panelArr) {
+            if (panel != target)
+                panel.hide();
+            else
+                panel.show();
+        }
     }
 
     setGameInfo(gameInfo:GameInfo) {
