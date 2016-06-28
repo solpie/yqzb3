@@ -9,6 +9,7 @@ export class BigScorePanel extends BaseScreen{
     rightScoreText:BitmapText;
 
     constructor(parent:ScreenView) {
+        super();
         var bigScoreCtn = new createjs.Container();
         parent.stage.addChild(bigScoreCtn);
         this.ctn = bigScoreCtn;

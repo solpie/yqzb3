@@ -96,6 +96,10 @@ export class StagePanelHandle {
                 screenPanelHanle.io.emit(`${CommandId.updateLeftFoul}`, ScParam({leftFoul: leftFoul}));
             };
 
+            cmdMap[`${CommandId.cs_fadeInComingActivity}`] = () => {
+                screenPanelHanle.io.emit(`${CommandId.fadeInComingActivity}`);
+            };
+            ////////////////////screen only /////////////////////
             cmdMap[`${CommandId.cs_toggleTimer}`] = (param) => {
                 if (param) {
                     this.gameInfo.toggleTimer(param.state);

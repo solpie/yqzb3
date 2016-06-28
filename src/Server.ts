@@ -74,7 +74,6 @@ export class WebServer {
         // });
         // var morgan = require('morgan');
         // app.use(morgan('dev'));                     // log every request to the console
-
         var bodyParser = require('body-parser');
         app.use(bodyParser.urlencoded({extended: false, limit: '55mb'}));// create application/x-www-form-urlencoded parser
         app.use(bodyParser.json({limit: '50mb'}));

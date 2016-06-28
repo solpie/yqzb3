@@ -95,6 +95,8 @@ export enum CommandId{
     ///screen
     cs_inScreenScore,
     inScreenScore,
+    cs_fadeInComingActivity,
+    fadeInComingActivity,
     //db op
     cs_findPlayerData,
 }

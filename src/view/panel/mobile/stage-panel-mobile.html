@@ -10,21 +10,21 @@
 </style>
 <div id="stage-panel" class="card-panel grey lighten-3" v-if="op">
     <!--<div class="row">-->
-        <!--<div class="col" v-for="playerInfo in playerInfoArr">-->
-            <!--<div class="col" style="width: 85px">-->
-                <!--<img src="/img/panel/stage/blue.png" id="playerImg{{$index}}" style="width: 80px">-->
-                <!--<input id="player{{$index}}" type="text" @keyup.enter="onQueryPlayer($index)" style="width: 75px">-->
-                <!--<input id="playerNum{{$index}}" type="text" @keyup.enter="onUpdatePlayerNum($index)"-->
-                       <!--style="width: 35px">-->
-                <!--<a class="waves-effect waves-light btn" style="width: 75px;height: 25px"-->
-                   <!--@click="onUpdatePlayer($index)">↓</a>-->
-                <!--<p>-->
-                    <!--<input name="mvp" type="radio" id="mvp{{$index}}" value="{{$index}}" v-model="mvpIdx"/>-->
-                    <!--<label for="mvp{{$index}}">mvp{{$index}}</label>-->
-                    <!--&lt;!&ndash;<input id="eloScore{{$index}}" type="text" @keyup.enter="onSetEloScore($index)" style="width: 75px">&ndash;&gt;-->
+    <!--<div class="col" v-for="playerInfo in playerInfoArr">-->
+    <!--<div class="col" style="width: 85px">-->
+    <!--<img src="/img/panel/stage/blue.png" id="playerImg{{$index}}" style="width: 80px">-->
+    <!--<input id="player{{$index}}" type="text" @keyup.enter="onQueryPlayer($index)" style="width: 75px">-->
+    <!--<input id="playerNum{{$index}}" type="text" @keyup.enter="onUpdatePlayerNum($index)"-->
+    <!--style="width: 35px">-->
+    <!--<a class="waves-effect waves-light btn" style="width: 75px;height: 25px"-->
+    <!--@click="onUpdatePlayer($index)">↓</a>-->
+    <!--<p>-->
+    <!--<input name="mvp" type="radio" id="mvp{{$index}}" value="{{$index}}" v-model="mvpIdx"/>-->
+    <!--<label for="mvp{{$index}}">mvp{{$index}}</label>-->
+    <!--&lt;!&ndash;<input id="eloScore{{$index}}" type="text" @keyup.enter="onSetEloScore($index)" style="width: 75px">&ndash;&gt;-->
 
-            <!--</div>-->
-        <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
     <!--</div>-->
     <div class="row">
         game id:{{gameId}}
@@ -63,6 +63,10 @@
         <a class="waves-effect waves-light btn" @click="onHideWin">Hide Win</a>
         <a class="waves-effect waves-light btn" @click="onSubmitGame">Submit Game</a>
         <a class="waves-effect waves-light btn" @click="onRefresh">Refresh</a>
+    </div>
+
+    <div class="row">
+        <a class="waves-effect waves-light btn" @click="onComingActivity">Coming Act</a>
     </div>
 </div>
 <div style="display: none">

@@ -59,4 +59,9 @@ export class StagePanelViewMobile extends StagePanelView {
         console.log('onAddRightFoul');
         this.opReq(`${CommandId.cs_addRightFoul}`);
     }
+
+    onComingActivity() {
+        console.log('onComingActivity');
+        this.opReq(`${CommandId.cs_fadeInComingActivity}`);
+    }
 }

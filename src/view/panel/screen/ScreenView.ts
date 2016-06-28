@@ -5,11 +5,13 @@ import {CommandId} from "../../../event/Command";
 import {BigScorePanel} from "./BigScorePanel";
 import {GameInfo} from "../../../model/GameInfo";
 import {BaseScreen} from "./BaseScreen";
+import {BigActivityPanel} from "./BigActivityPanel";
 @Component({
     template: require('./screen.html')
 })
 export class ScreenView extends BasePanelView {
     bigScorePanel:BigScorePanel;
+    activityPanel:BigActivityPanel;
     panelArr:BaseScreen[];
 
     ready() {
@@ -40,15 +42,23 @@ export class ScreenView extends BasePanelView {
                 this.bigScorePanel.setRightScore(param.rightScore);
             })
 
+            .on(`${CommandId.fadeInComingActivity}`, (param)=> {
+                // this.activityPanel
+                this.showOnly(this.activityPanel);
+                this.activityPanel.fadeIn();
+            })
+
     }
 
     initScreen() {
         this.bigScorePanel = new BigScorePanel(this);
         this.panelArr.push(this.bigScorePanel);
+        this.activityPanel = new BigActivityPanel(this);
+        this.panelArr.push(this.activityPanel);
     }
 
     showOnly(target:BaseScreen) {
-        for (var panel:BaseScreen of this.panelArr) {
+        for (var panel of this.panelArr) {
             if (panel != target)
                 panel.hide();
             else
