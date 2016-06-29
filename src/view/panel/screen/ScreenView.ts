@@ -44,8 +44,10 @@ export class ScreenView extends BasePanelView {
 
             .on(`${CommandId.setGameComing}`, (param)=> {
                 // this.activityPanel
+                var gameDoc = param.gameDoc;
+                console.log('set game coming', gameDoc);
                 this.showOnly(this.activityPanel);
-                this.activityPanel.fadeIn();
+                this.activityPanel.fadeIn(gameDoc.playerDocArr);
             })
 
     }

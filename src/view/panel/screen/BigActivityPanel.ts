@@ -10,6 +10,8 @@ class ScreenActivityCard extends Container {
     avatarCtn:Container;
     styleCtn:Container;
     avtMask:Shape;
+    nameText:any;
+    eloScoreText:any;
 
     constructor(playerInfo:PlayerInfo) {
         super();
@@ -48,6 +50,7 @@ class ScreenActivityCard extends Container {
             nameText.x = 145;
         else
             nameText.x = 465;
+        this.nameText = nameText;
         this.addChild(nameText);
 
         var eloScoreText = new createjs.Text(playerInfo.eloScore(), "bold 28px Arial", "#fff");
@@ -57,6 +60,7 @@ class ScreenActivityCard extends Container {
             eloScoreText.x = 145;
         else
             eloScoreText.x = 465;
+        this.eloScoreText = eloScoreText;
         this.addChild(eloScoreText);
 
         var styleCtn = new createjs.Container();
@@ -72,8 +76,11 @@ class ScreenActivityCard extends Container {
         this.setStyle(playerInfo.style());
     }
 
-    setPlayerInfo(playerInfo:PlayerInfo) {
-
+    setPlayerDoc(playerDoc) {
+        this.setAvatar(playerDoc.avatar);
+        this.setStyle(playerDoc.style);
+        this.nameText.text = playerDoc.name;
+        this.eloScoreText.text = playerDoc.eloScore;
     }
 
     setStyle(style:number) {
@@ -99,9 +106,11 @@ export class BigActivityPanel extends BaseScreen {
     ctn:Container;
     leftEloScoreText:any;
     rightEloScoreText:any;
+    playerCardArr:ScreenActivityCard[];
 
     constructor(parent:ScreenView) {
         super();
+        this.playerCardArr = [];
         this.ctn = new createjs.Container();
         this.parent = parent.stage;
         var bg = new createjs.Bitmap('/img/panel/screen/activity/bg.png');
@@ -118,6 +127,7 @@ export class BigActivityPanel extends BaseScreen {
             sum += playerInfo.eloScore();
             card.x = 50;
             card.y = i * 250 + 50;
+            this.playerCardArr.push(card);
             this.ctn.addChild(card);
         }
         this.leftEloScoreText = new createjs.Text("", "bold 28px Arial", "#fff");
@@ -138,6 +148,7 @@ export class BigActivityPanel extends BaseScreen {
             sum += playerInfo.eloScore();
             card.x = 1300;
             card.y = i * 250 + 50;
+            this.playerCardArr.push(card);
             this.ctn.addChild(card);
         }
         this.rightEloScoreText = new createjs.Text("", "bold 28px Arial", "#fff");
@@ -157,8 +168,23 @@ export class BigActivityPanel extends BaseScreen {
 
     }
 
-    fadeIn() {
+    fadeIn(playerDocArr:Array<any>) {
         if (!this.ctn.parent)
             this.parent.addChild(this.ctn);
+
+        var sum = 0;
+        for (var i = 0; i < 4; i++) {
+            var playerDoc = playerDocArr[i];
+            sum += playerDoc.eloScore;
+            this.playerCardArr[i].setPlayerDoc(playerDoc);
+            this.setLeftEloScore(Math.floor(sum / 4));
+        }
+        sum = 0;
+        for (var j = 4; j < 8; j++) {
+            var playerDoc = playerDocArr[j];
+            sum += playerDoc.eloScore;
+            this.playerCardArr[j].setPlayerDoc(playerDoc);
+            this.setRightEloScore(Math.floor(sum / 4));
+        }
     }
 }
