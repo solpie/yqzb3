@@ -1,7 +1,7 @@
 import Server = SocketIO.Server;
 import Socket = SocketIO.Socket;
 import {PanelId, ServerConst} from "../event/Const";
-import {ScParam, stagePanelHandle} from "../SocketIOSrv";
+import {ScParam, stagePanelHandle, screenPanelHanle} from "../SocketIOSrv";
 import {Response} from "express-serve-static-core";
 import {Request} from "express";
 import {CommandId} from "../event/Command";
@@ -198,6 +198,17 @@ export class ActivityPanelHandle {
 
             cmdMap[`${CommandId.cs_fadeInNextActivity}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeInNextActivity}`);
+            };
+            cmdMap[`${CommandId.cs_setGameComing}`] = (param)=> {
+                this.io.emit(`${CommandId.setGameComing}`, ScParam(param));
+
+                var gameDoc = db.game.dataMap[param.gameId];
+                gameDoc.playerDocArr = [];
+                for (var playerId of gameDoc.playerIdArr) {
+                    gameDoc.playerDocArr.push(db.player.dataMap[playerId]);
+                }
+                param.gameDoc = gameDoc;
+                screenPanelHanle.io.emit(`${CommandId.setGameComing}`, ScParam(param));
             };
 
             cmdMap[`${CommandId.cs_fadeInNotice}`] = (param)=> {

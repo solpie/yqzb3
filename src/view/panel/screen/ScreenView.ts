@@ -42,7 +42,7 @@ export class ScreenView extends BasePanelView {
                 this.bigScorePanel.setRightScore(param.rightScore);
             })
 
-            .on(`${CommandId.fadeInComingActivity}`, (param)=> {
+            .on(`${CommandId.setGameComing}`, (param)=> {
                 // this.activityPanel
                 this.showOnly(this.activityPanel);
                 this.activityPanel.fadeIn();

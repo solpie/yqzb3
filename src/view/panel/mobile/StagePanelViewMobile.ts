@@ -62,6 +62,6 @@ export class StagePanelViewMobile extends StagePanelView {
 
     onComingActivity() {
         console.log('onComingActivity');
-        this.opReq(`${CommandId.cs_fadeInComingActivity}`);
+        this.opReq(`${CommandId.cs_setGameComing}`);
     }
 }

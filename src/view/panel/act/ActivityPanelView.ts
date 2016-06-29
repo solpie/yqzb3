@@ -140,6 +140,9 @@ export class ActivityPanelView extends BasePanelView {
             .on(`${CommandId.fadeOutActivityPanel}`, (param)=> {
                 this.activityRender.fadeOut();
             })
+            .on(`${CommandId.setGameComing}`, (param)=> {
+                this.activityRender.setComing(param.gameId);
+            })
 
             .on(`${CommandId.fadeInNotice}`, (param)=> {
                 var img = param.img;
@@ -334,9 +337,8 @@ export class ActivityPanelView extends BasePanelView {
 
     onActivityComing() {
         var gameId = this.gameSelected;
-        // this.opReq(`${CommandId.cs_setGameComing}`,
-        //     {gameId: gameId});
-        this.activityRender.setComing(gameId);
+        this.opReq(`${CommandId.cs_setGameComing}`,
+            {gameId: gameId});
     }
 
     onActivityInExGameIn() {
