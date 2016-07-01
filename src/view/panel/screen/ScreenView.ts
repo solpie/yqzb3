@@ -50,6 +50,10 @@ export class ScreenView extends BasePanelView {
                 this.activityPanel.fadeIn(gameDoc.playerDocArr);
             })
 
+            .on(`${CommandId.startingLine}`, (param)=> {
+                this.showOnly(this.bigScorePanel);
+            })
+
     }
 
     initScreen() {

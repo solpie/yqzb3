@@ -37,8 +37,8 @@ export enum CommandId{
     cs_moveStagePanel,//1000020
     updatePlayer,
     cs_updatePlayer,
-    updatePlayerAll,
-    cs_updatePlayerAll,
+    startingLine,
+    cs_startingLine,
     cs_updatePlayerBackNum,
     updatePlayerBackNum,
     fadeInNotice,//小喇叭

@@ -130,19 +130,23 @@ export class StagePanelHandle {
 
             };
 
-            cmdMap[`${CommandId.cs_updatePlayerAll}`] = (param) => {
+            cmdMap[`${CommandId.cs_startingLine}`] = (param) => {
+                screenPanelHanle.io.emit(`${CommandId.startingLine}`);
+
                 var playerInfoArr = [];
                 for (var i = 0; i < param.playerIdArr.length; i++) {
                     var playerId = param.playerIdArr[i];
                     var playerInfo = db.player.getPlayerInfoById(playerId);
-                    console.log('cs_updatePlayerAll', playerInfo.gameCount(), playerInfo);
-                    this.gameInfo.setPlayerInfoByIdx(i, playerInfo);
-                    playerInfoArr.push(playerInfo);
-                    if (param.backNumArr[i]) {
-                        playerInfo.backNumber = param.backNumArr[i];
+                    // console.log('cs_startingLine', playerInfo.gameCount(), playerInfo);
+                    if (playerInfo) {
+                        this.gameInfo.setPlayerInfoByIdx(i, playerInfo);
+                        playerInfoArr.push(playerInfo);
+                        if (param.backNumArr[i]) {
+                            playerInfo.backNumber = param.backNumArr[i];
+                        }
                     }
                 }
-                this.io.emit(`${CommandId.updatePlayerAll}`, ScParam({
+                this.io.emit(`${CommandId.startingLine}`, ScParam({
                     avgEloScore: this.gameInfo.getAvgEloScore(),
                     playerInfoArr: playerInfoArr
                 }));

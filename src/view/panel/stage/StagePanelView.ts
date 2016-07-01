@@ -99,7 +99,7 @@ export class StagePanelView extends BasePanelView {
                 this.playerPanel.setPlayer(data.idx, new PlayerInfo(data.playerDoc));
                 this.scorePanel.setAvgEloScore(data.avgEloScore);
             })
-            .on(`${CommandId.updatePlayerAll}`, (param) => {
+            .on(`${CommandId.startingLine}`, (param) => {
                 //todo effect
                 for (var i = 0; i < param.playerInfoArr.length; i++) {
                     var playerInfo:PlayerInfo = new PlayerInfo(param.playerInfoArr[i]);
@@ -191,7 +191,7 @@ export class StagePanelView extends BasePanelView {
         }
         // playerIdArr = [10002, 10003, 10004, 10005,
         //     10008, 10010, 10011, 10012];
-        this.opReq(`${CommandId.cs_updatePlayerAll}`,
+        this.opReq(`${CommandId.cs_startingLine}`,
             {playerIdArr: playerIdArr, backNumArr: backNumArr}
         );
     }

@@ -34,7 +34,6 @@ Vue.use(require('vue-resource'));
 
 import VueRouter = require('vue-router');
 import ComponentOption = vuejs.ComponentOption;
-import {StagePanelViewMobile} from "../panel/mobile/StagePanelViewMobile";
 Vue.use(VueRouter);
 
 var router = new VueRouter<Mobile>();
@@ -43,11 +42,7 @@ router.map({
     '/': {
         component: OpLinks,
         name: 'home'
-    },
-    '/panel/stage/op': {
-        component: StagePanelViewMobile,
-        name: 'stage'
-    },
+    }
     // '/screen/:op': {
     //     component: ScreenView,
     // },

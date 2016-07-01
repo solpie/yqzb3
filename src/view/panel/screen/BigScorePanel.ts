@@ -120,4 +120,7 @@ export class BigScorePanel extends BaseScreen{
             this.rightFoulText.text = `${foulNum}`;
     }
 
+    fadeIn() {
+
+    }
 }

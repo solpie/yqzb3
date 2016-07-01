@@ -28,7 +28,7 @@ export class GameInfo {
     straightScoreRight:number = 0;//连杀判定
     playerInfoArr:PlayerInfo[] = new Array(8);
     playerRecArr:any = [];
-    _timer:number = 0;
+    _timer:any = null;
     static GAME_STATE_ING = 0;
     static GAME_STATE_FIN = 1;
     static GAME_STATE_SAVE = 2;
@@ -237,8 +237,10 @@ export class GameInfo {
         var team = [];
         for (var i = start; i < 4 + start; i++) {
             var pInfo = this.playerInfoArr[i];
-            team.push(pInfo);
-            pInfo.isRed = (start > 0)
+            if (pInfo) {
+                team.push(pInfo);
+                pInfo.isRed = (start > 0)
+            }
         }
         return team;
     }
