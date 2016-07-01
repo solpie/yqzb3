@@ -52,6 +52,7 @@ export class ScreenView extends BasePanelView {
 
             .on(`${CommandId.startingLine}`, (param)=> {
                 this.showOnly(this.bigScorePanel);
+                this.bigScorePanel.reset();
             })
 
     }

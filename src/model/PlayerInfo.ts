@@ -15,6 +15,7 @@ class PlayerDoc {
     loseGameCount:number = 0;
     winGameCount:number = 0;
     size:string;//衣服尺寸
+    backNumber:number = 0;//当场球衣号码
 }
 export class PlayerInfo extends BaseInfo {
     playerData:PlayerDoc = new PlayerDoc();
@@ -22,7 +23,7 @@ export class PlayerInfo extends BaseInfo {
     isRed:boolean = true;
     isBlue:boolean;
     isMvp:boolean = false;
-    backNumber:number = 0;//当场球衣号码 
+    // backNumber:number = 0;//当场球衣号码
 
     constructor(playerData?:any) {
         super();
@@ -45,13 +46,13 @@ export class PlayerInfo extends BaseInfo {
         if (data['isMvp'] != null)
             this.isMvp = data.isMvp;
         if (data['backNumber'] != null)
-            this.backNumber = data.backNumber;
+            this.playerData.backNumber = data.backNumber;
     }
 
     getPlayerData() {
         this.playerData['isRed'] = this.isRed;
         this.playerData['isMvp'] = this.isMvp;
-        this.playerData['backNumber'] = this.backNumber;
+        // this.playerData['backNumber'] = this.backNumber;
         return this.playerData;
     }
 
@@ -65,6 +66,10 @@ export class PlayerInfo extends BaseInfo {
 
     name(val?:any) {
         return prop(this.playerData, "name", val);
+    }
+
+    backNumber(val?:any) {
+        return prop(this.playerData, "backNumber", val);
     }
 
     activityId(val?:any) {

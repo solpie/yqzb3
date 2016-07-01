@@ -142,7 +142,7 @@ export class StagePanelHandle {
                         this.gameInfo.setPlayerInfoByIdx(i, playerInfo);
                         playerInfoArr.push(playerInfo);
                         if (param.backNumArr[i]) {
-                            playerInfo.backNumber = param.backNumArr[i];
+                            playerInfo.backNumber(param.backNumArr[i]);
                         }
                     }
                 }

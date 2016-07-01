@@ -109,7 +109,7 @@ export class StagePlayerCard extends Container {
         ctn.addChild(avatarCtn);
         ctn.addChild(avatarFrame);
 
-        var backNumText = new createjs.Text(playerInfo.backNumber + "", "18px Arial", "#fff");
+        var backNumText = new createjs.Text(playerInfo.backNumber() + "", "18px Arial", "#fff");
         backNumText.y = 5;
         this.backNumText = backNumText;
         if (isBlue) {

@@ -12,6 +12,7 @@ class ScreenActivityCard extends Container {
     avtMask:Shape;
     nameText:any;
     eloScoreText:any;
+    backNumText:any;
 
     constructor(playerInfo:PlayerInfo) {
         super();
@@ -63,6 +64,16 @@ class ScreenActivityCard extends Container {
         this.eloScoreText = eloScoreText;
         this.addChild(eloScoreText);
 
+        var backNumText = new createjs.Text(playerInfo.backNumber() + "", "bold 28px Arial", "#fff");
+        backNumText.textAlign = 'center';
+        backNumText.y = 163;
+        if (isBlue)
+            backNumText.x = 145;
+        else
+            backNumText.x = 465;
+        this.backNumText = backNumText;
+        this.addChild(backNumText);
+
         var styleCtn = new createjs.Container();
         styleCtn.y = 155;
         if (isBlue) {
@@ -79,6 +90,7 @@ class ScreenActivityCard extends Container {
     setPlayerDoc(playerDoc) {
         this.setAvatar(playerDoc.avatar);
         this.setStyle(playerDoc.style);
+        this.setBackNum(playerDoc.backNumber);
         this.nameText.text = playerDoc.name;
         this.eloScoreText.text = playerDoc.eloScore;
     }
@@ -87,6 +99,13 @@ class ScreenActivityCard extends Container {
         this.styleCtn.removeAllChildren();
         var img = new createjs.Bitmap(`/img/panel/screen/activity/style${style}.png`);
         this.styleCtn.addChild(img);
+    }
+
+    setBackNum(backNum:number) {
+        if (backNum != null)
+            this.backNumText.text = backNum + "";
+        else
+            this.backNumText.text = '';
     }
 
     setAvatar(path) {
@@ -165,7 +184,6 @@ export class BigActivityPanel extends BaseScreen {
 
     setRightEloScore(score:number) {
         this.rightEloScoreText.text = `${score}`;
-
     }
 
     fadeIn(playerDocArr:Array<any>) {

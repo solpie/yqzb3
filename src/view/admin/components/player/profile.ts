@@ -41,6 +41,11 @@ var _this_:Profile;
             required: true,
             default: 2000
         },
+        backNumber: {
+            type: Number,
+            required: true,
+            default: 30
+        },
         style: {
             type: Number,
             required: true,
@@ -85,6 +90,7 @@ export class Profile extends VueEx {
     phone:number;
     weight:number;
     height:number;
+    backNumber:number;
     qq:number;
     avatar:string;
     size:string;
@@ -124,6 +130,7 @@ export class Profile extends VueEx {
         toObj.style = data.style;
         toObj.weight = data.weight;
         toObj.height = data.height;
+        toObj.backNumber = data.backNumber;
         toObj['size'] = data.size;
     }
 
@@ -243,7 +250,7 @@ export class Profile extends VueEx {
         playerInfo.avatar(imagePath);
         playerInfo.eloScore(this.eloScore);
         playerInfo.style(this.style);
-        playerInfo.backNumber = 30;
+        playerInfo.backNumber(30);
         this.playerInfo = playerInfo;
         var bluePlayerCard = new StagePlayerCard(playerInfo, scale);
         this.bluePlayerCard = bluePlayerCard;
