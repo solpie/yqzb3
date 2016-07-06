@@ -39,13 +39,14 @@ export class ActivityInfo {
         return mapToArr(playerIdMap);
     }
 
-    getGameIdArr() {
+    getGameIdArr(roundId:number) {
         var gameIdArr = [];
         for (var roundInfo of this.roundInfoArr) {
-            for (var i = 0; i < roundInfo.gameInfoArr.length; i++) {
-                var gameDoc:any = roundInfo.gameInfoArr[i];
-                gameIdArr.push(gameDoc.id);
-            }
+            if (roundInfo.id == roundId)
+                for (var i = 0; i < roundInfo.gameInfoArr.length; i++) {
+                    var gameDoc:any = roundInfo.gameInfoArr[i];
+                    gameIdArr.push(gameDoc.id);
+                }
         }
         return gameIdArr;
     }
@@ -91,10 +92,11 @@ export class ActivityInfo {
     static build(activityId, activityMap, gameMap) {
         var activityMap = activityMap;
         var gameMap = gameMap;
-        var reBuildGameDataArr = [];
+        var reBuildGameDataArr;
         var actInfo = new ActivityInfo();
         for (var key in activityMap) {
             var roundData = activityMap[key];
+            reBuildGameDataArr = [];
             if (roundData.activityId == activityId) {
                 for (var gameData of roundData.gameDataArr) {
                     var gameDataInMap = gameMap[gameData.id];

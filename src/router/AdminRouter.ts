@@ -112,6 +112,24 @@ adminRouter.get('/game/delete/:gameId', function (req:any, res:any) {
 });
 
 //////////////////activity admin
+adminRouter.post('/act/add', function (req:any, res:any) {
+    var activityId = req.body.activityId;
+    var playerIdArr = db.player.getPlayerIdArrRank(req.body.playerIdArr);
+    //组合球员
+    var t1 = playerIdArr.slice(0, 4);
+    var t2 = playerIdArr.slice(4, 8);
+    var t3 = playerIdArr.slice(8, 12);
+    var t4 = playerIdArr.slice(12, 16);
+    console.log('/admin/act/add',req.body.playerIdArr, t1, t2, t3, t4);
+    var lastTeamArr = [t1, t2, t3, t4];
+    //
+    db.activity.addActivity(activityId, playerIdArr, (roundId)=> {
+        db.activity.addGame(activityId, roundId, t1.concat(t2), 1, ()=>{
+            db.activity.addGame(activityId, roundId, t3.concat(t4), 1, null);
+        });
+        res.sendStatus(200);
+    });
+});
 adminRouter.post('/act/19', function (req:any, res:any) {
     // if (!req.body) return res.sendStatus(400);
     // var act:any = Act619;

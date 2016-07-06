@@ -198,8 +198,8 @@ export class ActivityPanelView extends BasePanelView {
     }
 
     onRoundSelected() {
-        console.log('onRoundSelected');
         var selRoundInfo:RoundInfo = this.selActivityInfo.getRoundInfoById(this.roundSelected);
+        console.log('onRoundSelected', this.roundSelected, selRoundInfo);
         this.gameOptionArr = [];
         for (var i = 0; i < selRoundInfo.gameInfoArr.length; i++) {
             var gameDoc:any = selRoundInfo.gameInfoArr[i];
@@ -325,7 +325,7 @@ export class ActivityPanelView extends BasePanelView {
     onActivityIn() {
         var selActivityInfo = this.selActivityInfo;
         if (selActivityInfo) {
-            var gameIdArr = this.selActivityInfo.getGameIdArr();
+            var gameIdArr = this.selActivityInfo.getGameIdArr(this.roundSelected);
             console.log('onActivityIn', gameIdArr);
             this.opReq(`${CommandId.cs_fadeInActivityPanel}`,
                 {gameIdArr: gameIdArr});
@@ -344,7 +344,7 @@ export class ActivityPanelView extends BasePanelView {
     onActivityInExGameIn() {
         var selActivityInfo = this.selActivityInfo;
         if (selActivityInfo && this.roundSelected) {
-            var gameIdArr = this.selActivityInfo.getGameIdArr();
+            var gameIdArr = this.selActivityInfo.getGameIdArr(this.roundSelected);
             console.log('onActivityInExGameIn', gameIdArr, this.roundSelected);
             this.opReq(`${CommandId.cs_fadeInActivityExGame}`,
                 {

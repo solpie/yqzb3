@@ -84,7 +84,7 @@ export class Player extends VueEx {
         if (this.pickPlayerIdArr.length == 4) {
             console.log('pick team');
             this.pickPlayerIdArrArr.push(this.pickPlayerIdArr);
-            this.pickPlayerIdArr=[];
+            this.pickPlayerIdArr = [];
         }
     }
 
@@ -110,6 +110,20 @@ export class Player extends VueEx {
         this.$broadcast(ViewEvent.PLAYER_EDIT, playerId);
     }
 
+    onAddActivity() {
+        if (this.pickPlayerIdArrArr.length == 4) {
+            var playerIdArr = [];
+            for (var i = 0; i < this.pickPlayerIdArrArr.length; i++) {
+                playerIdArr = playerIdArr.concat(this.pickPlayerIdArrArr[i]);
+            }
+            this.$http.post('/admin/act/add', {activityId: 2, playerIdArr: playerIdArr}).then((res)=> {
+            })
+        }
+        else{
+            alert('诶？？哪里不对？！');
+        }
+
+    }
 
     get today():string {
         return `${this.year}/${this.month}/${this.date}`;

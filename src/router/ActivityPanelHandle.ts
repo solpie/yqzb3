@@ -28,6 +28,7 @@ export class ActivityPanelHandle {
         this.initOp();
     }
 
+
     initOp() {
         panelRouter.post(`/act/:cmdId`, (req:Request, res:Response) => {
             if (!req.body) return res.sendStatus(400);
@@ -76,7 +77,7 @@ export class ActivityPanelHandle {
                 db.game.syncDataMap(()=> {
                     var gameIdArr = param.gameIdArr;
                     var gameDocArr = db.game.getDocArr(gameIdArr);
-                    console.log('cs_fadeInActivityPanel', gameDocArr);
+                    console.log('cs_fadeInActivityPanel', gameIdArr, gameDocArr);
                     for (var gameDoc of gameDocArr) {
                         gameDoc.playerDocArr = [];
                         for (var playerId of gameDoc.playerIdArr) {

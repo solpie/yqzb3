@@ -137,7 +137,17 @@ class ActivityDB extends BaseDB {
     //             callback(err, newDoc);
     //     })
     // }
-
+    addActivity(activityId,  playerIdArr, callback) {
+        var roundId = this.config.idUsed;
+        var data:any = {activityId: activityId, round: roundId, date: ''};
+        this.dataStore.insert(data, (err, newDoc) => {
+            if (!err) {
+                var newId = this.saveIdUsed();
+            }
+            if (callback)
+                callback(roundId);
+        })
+    }
 
     getGameIdBase(roundId) {
         return roundId * 1000;
@@ -499,7 +509,7 @@ export function initDB() {
 
     db = {};
     db.player = new PlayerDB({filename: playerDb, autoload: true});
-    db.activity = new ActivityDB({filename: activityDb, autoload: true});
+    db.activity = new ActivityDB({filename: activityDb, autoload: true,indexName: '_id'});
     db.game = new GameDB({filename: gameDbPath, autoload: true});
     //hui ti
     db.gameHuiTi = new BaseDB({filename: huitiDbPath, autoload: true, indexName: '_id'});
