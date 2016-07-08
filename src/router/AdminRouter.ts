@@ -116,16 +116,18 @@ adminRouter.post('/act/add', function (req:any, res:any) {
     var activityId = req.body.activityId;
     var playerIdArr = db.player.getPlayerIdArrRank(req.body.playerIdArr);
     //组合球员
-    var t1 = playerIdArr.slice(0, 4);
-    var t2 = playerIdArr.slice(4, 8);
+    var t1 = playerIdArr.slice(0, 2).concat(playerIdArr.slice(6, 8));
+    var t2 = playerIdArr.slice(2, 4).concat(playerIdArr.slice(4, 6));
     var t3 = playerIdArr.slice(8, 12);
     var t4 = playerIdArr.slice(12, 16);
-    console.log('/admin/act/add',req.body.playerIdArr, t1, t2, t3, t4);
+    var gameOnePlayerIdArr = playerIdArr.slice(0, 8);
+    var gameTwoPlayerIdArr = playerIdArr.slice(8, 16);
+    console.log('/admin/act/add', req.body.playerIdArr);
     var lastTeamArr = [t1, t2, t3, t4];
     //
     db.activity.addActivity(activityId, playerIdArr, (roundId)=> {
-        db.activity.addGame(activityId, roundId, t1.concat(t2), 1, ()=>{
-            db.activity.addGame(activityId, roundId, t3.concat(t4), 1, null);
+        db.activity.addGame(activityId, roundId, gameOnePlayerIdArr, 1, ()=> {
+            db.activity.addGame(activityId, roundId, gameTwoPlayerIdArr, 1, null);
         });
         res.sendStatus(200);
     });
