@@ -39,6 +39,20 @@ export class ActivityInfo {
         return mapToArr(playerIdMap);
     }
 
+    getRoundPlayerIdArr(id:number) {
+        var playerIdMap:any = {};
+        for (var roundInfo of this.roundInfoArr) {
+            if (id == roundInfo.id)
+                for (var i = 0; i < roundInfo.gameInfoArr.length; i++) {
+                    var gameDoc:any = roundInfo.gameInfoArr[i];
+                    for (var playerId of gameDoc.playerIdArr) {
+                        playerIdMap[playerId] = playerId;
+                    }
+                }
+        }
+        return mapToArr(playerIdMap);
+    }
+
     getGameIdArr(roundId:number) {
         var gameIdArr = [];
         for (var roundInfo of this.roundInfoArr) {

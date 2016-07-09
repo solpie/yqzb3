@@ -281,7 +281,8 @@ export class ActivityPanelView extends BasePanelView {
 
     onRankIn() {
         console.log('onRankIn', this.selGameDoc);
-        var playerIdArr = this.curActivityPlayerIdArr;
+        var playerIdArr = this.selActivityInfo.getRoundPlayerIdArr(this.roundSelected);
+        // var playerIdArr = this.curActivityPlayerIdArr;
         if (playerIdArr.length) {
             this.opReq(`${CommandId.cs_fadeInRankPanel}`,
                 {playerIdArr: playerIdArr},
