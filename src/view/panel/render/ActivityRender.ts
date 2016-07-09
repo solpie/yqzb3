@@ -69,21 +69,21 @@ export class ActivityRender {
                 if (playerInfo.isBlue) {
                     scoreText = scoreTextLeft;
                     scoreText.text = gameDoc.blueScore + "";
+                    leftScore += playerInfo.eloScore();
                     scoreText.x = 690;
-                    rightScore += playerInfo.eloScore();
                     playerCtn.x = 26 + j * 148;
                 }
                 else {
                     scoreText = scoreTextRight;
                     scoreText.text = gameDoc.redScore + "";
                     scoreText.x = 840;
-                    leftScore += playerInfo.eloScore();
                     playerCtn.x = 305 + j * 148;
                 }
 
                 if (!scoreText.parent) {
                     scoreText.y = 70;
                     scoreText.name = 'scoreText';
+                    rightScore += playerInfo.eloScore();
                     gameCtn.addChild(scoreText);
                 }
                 gameCtn.addChild(playerCtn);

@@ -116,8 +116,10 @@ adminRouter.post('/act/add', function (req:any, res:any) {
     var activityId = req.body.activityId;
     var playerIdArr = db.player.getPlayerIdArrRank(req.body.playerIdArr);
     //组合球员
-    var t1 = playerIdArr.slice(0, 2).concat(playerIdArr.slice(6, 8));
-    var t2 = playerIdArr.slice(2, 4).concat(playerIdArr.slice(4, 6));
+    var t1 = playerIdArr.slice(0, 4);
+    var t2 = playerIdArr.slice(4, 8);
+    // var t1 = playerIdArr.slice(0, 2).concat(playerIdArr.slice(6, 8));
+    // var t2 = playerIdArr.slice(2, 4).concat(playerIdArr.slice(4, 6));
     var t3 = playerIdArr.slice(8, 12);
     var t4 = playerIdArr.slice(12, 16);
     var gameOnePlayerIdArr = playerIdArr.slice(0, 8);
