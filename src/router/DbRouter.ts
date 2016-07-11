@@ -34,6 +34,17 @@ dbRouter.post('/game/', function (req:any, res:any) {
     res.send({gameMap: db.game.dataMap});
 });
 
+dbRouter.post('/game/player', function (req:any, res:any) {
+    if (!req.body) return res.sendStatus(400);
+    var gameIdArr = req.body.gameIdArr;
+    var gameDocArr = db.game.getDocArr(gameIdArr);
+    var playerIdArr = [];
+    for (var gameDoc of gameDocArr) {
+        playerIdArr = playerIdArr.concat(gameDoc.playerIdArr);
+    }
+    res.send({playerIdArr: playerIdArr});
+});
+
 
 dbRouter.post('/external/player', function (req:any, res:any) {
     res.send({playerInfoMap: db.playerHuiTi.dataMap})

@@ -45,6 +45,7 @@ export function arrUniqueFilter(el, i, a):boolean {
 }
 
 
+
 export function loadImg(path1, callback) {
     var img = new Image();
     img.onload = callback;

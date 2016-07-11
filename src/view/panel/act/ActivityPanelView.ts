@@ -11,6 +11,7 @@ import {ActivityRender} from "../render/ActivityRender";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {Modaler} from "../../admin/components/modal/modal";
 import {NoticePanel} from "./NoticePanel";
+import {arrUniqueFilter} from "../../../utils/JsFunc";
 @Component({
     template: require('./activity-panel.html'),
     components: {OpLinks, Modaler},
@@ -47,6 +48,7 @@ import {NoticePanel} from "./NoticePanel";
             default: []
         },
         gameSelected: {},
+        pickExGameIdArr: {},
         cdText: {type: String, default: '下一场比赛：'},
         noticeText: {type: String, default: ''},
         cdSec: {type: Number, default: 300},
@@ -78,6 +80,7 @@ export class ActivityPanelView extends BasePanelView {
 
 
     noticeText:string;
+    pickExGameIdArr:number[];
 
     ready() {
         var io = super.ready(PanelId.actPanel);
@@ -262,6 +265,17 @@ export class ActivityPanelView extends BasePanelView {
             (param)=> {
                 console.log(param);
             })
+    }
+
+    onPickExGamePlayer() {
+        if(!this.pickExGameIdArr)
+            this.pickExGameIdArr = [];
+        this.pickExGameIdArr.push(this.gameSelected);
+        this.pickExGameIdArr = this.pickExGameIdArr.filter(arrUniqueFilter);
+        console.log('ex pickGameIdArr:', this.pickExGameIdArr);
+        this.post('/db/game/player',{gameIdArr: this.pickExGameIdArr},(res)=>{
+            console.log('ex playerIdArr:', res);
+        })
     }
 
     get curActivityPlayerIdArr() {
