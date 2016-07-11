@@ -8,7 +8,7 @@ import {CommandId} from "../event/Command";
 import {ServerConf} from "../Env";
 import {panelRouter} from "./PanelRouter";
 import {db} from "../model/DbInfo";
-import {arrUniqueFilter, combineArr, arrCountSame} from "../utils/JsFunc";
+import {combineArr, arrCountSame, arrMaxElem, mapToArr} from "../utils/JsFunc";
 import {GameDoc} from "../model/GameInfo";
 import {text2ImgUtil} from "../utils/Text2ImgUtil";
 export class ActivityPanelHandle {
@@ -96,25 +96,36 @@ export class ActivityPanelHandle {
                 var gameIdArr = param.gameIdArr;
                 var activityId = param.activityId;
                 var roundId = param.roundId;
+                var playerIdArr = param.playerIdArr;
 
-                var gameDocArr = db.game.getDocArr(gameIdArr);
-                var playerIdArr:any = [];
+                var gameDocArr = mapToArr(db.game.dataMap);
+                var roundGameDocArr = [];
                 for (var gameDoc of gameDocArr) {
-                    playerIdArr = playerIdArr.concat(gameDoc.playerIdArr);
+                    if (Math.floor(gameDoc.id / 1000) == roundId) {
+                        roundGameDocArr.push(gameDoc.id);
+                    }
                 }
-                playerIdArr = playerIdArr.sort().filter(arrUniqueFilter);
-                console.log('ex game playerDoc Arr:', playerIdArr);
-                //排序
-                playerIdArr = db.player.getPlayerIdArrRank(playerIdArr);
+                var maxGameId = arrMaxElem(roundGameDocArr);
+
+
+                // var gameDocArr = db.game.getDocArr(gameIdArr);
+                // var playerIdArr:any = [];
+                // for (var gameDoc of gameDocArr) {
+                //     playerIdArr = playerIdArr.concat(gameDoc.playerIdArr);
+                // }
+                // playerIdArr = playerIdArr.sort().filter(arrUniqueFilter);
+                console.log('ex game playerDoc Arr:', playerIdArr, 'maxGameId', maxGameId);
+
 
                 //组合球员
-                var t1 = gameDocArr[0].playerIdArr.slice(0, 4);
-                var t2 = gameDocArr[0].playerIdArr.slice(4, 8);
-                var t3 = gameDocArr[1].playerIdArr.slice(0, 4);
-                var t4 = gameDocArr[1].playerIdArr.slice(4, 8);
+                var t1 = playerIdArr.slice(0, 4);
+                var t2 = playerIdArr.slice(4, 8);
+                var t3 = playerIdArr.slice(8, 12);
+                var t4 = playerIdArr.slice(12, 16);
                 var lastTeamArr = [t1, t2, t3, t4];
                 //
-
+                //排序
+                playerIdArr = db.player.getPlayerIdArrRank(playerIdArr);
                 function minAbsScoreTeam(combineTeamArr, sameLimit = 3):any {
                     console.log('combine team', combineTeamArr.length, lastTeamArr);
                     var matchTeam = {t1: null, t2: null};
@@ -171,7 +182,7 @@ export class ActivityPanelHandle {
                 var exPlayerIdArr:any[] = matchTeamHigh.t1.concat(matchTeamHigh.t2);
                 var playerDocArr = db.player.getDocArr(exPlayerIdArr);
                 var gameDoc:any = new GameDoc();
-                gameDoc.id = roundId * 1000 + gameDocArr.length + 1;//todo
+                gameDoc.id = maxGameId + 1;
                 gameDoc.playerDocArr = playerDocArr;
                 gameDoc.playerIdArr = exPlayerIdArr;
                 db.game.startGame(gameDoc);
@@ -183,7 +194,7 @@ export class ActivityPanelHandle {
                     exPlayerIdArr = matchTeamLow.t1.concat(matchTeamLow.t2);
                     playerDocArr = db.player.getDocArr(exPlayerIdArr);
                     gameDoc = new GameDoc();
-                    gameDoc.id = roundId * 1000 + gameDocArr.length + 2;//todo
+                    gameDoc.id = maxGameId + 2;
                     gameDoc.playerDocArr = playerDocArr;
                     gameDoc.playerIdArr = exPlayerIdArr;
                     db.game.startGame(gameDoc);

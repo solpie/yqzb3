@@ -43,7 +43,12 @@ export function arrCountSame(arrA:Array<any>, arrB:Array<any>) {
 export function arrUniqueFilter(el, i, a):boolean {
     return i == a.indexOf(el);
 }
-
+export function arrMaxElem(arr) {
+    return Math.max.apply(Math, arr);
+}
+export function arrMixElem(arr) {
+    return Math.min.apply(Math, arr);
+}
 
 
 export function loadImg(path1, callback) {

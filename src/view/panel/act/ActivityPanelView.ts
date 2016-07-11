@@ -81,6 +81,7 @@ export class ActivityPanelView extends BasePanelView {
 
     noticeText:string;
     pickExGameIdArr:number[];
+    exGamePlayerIdArr:number[];
 
     ready() {
         var io = super.ready(PanelId.actPanel);
@@ -268,13 +269,14 @@ export class ActivityPanelView extends BasePanelView {
     }
 
     onPickExGamePlayer() {
-        if(!this.pickExGameIdArr)
+        if (!this.pickExGameIdArr)
             this.pickExGameIdArr = [];
         this.pickExGameIdArr.push(this.gameSelected);
         this.pickExGameIdArr = this.pickExGameIdArr.filter(arrUniqueFilter);
         console.log('ex pickGameIdArr:', this.pickExGameIdArr);
-        this.post('/db/game/player',{gameIdArr: this.pickExGameIdArr},(res)=>{
+        this.post('/db/game/player', {gameIdArr: this.pickExGameIdArr}, (res)=> {
             console.log('ex playerIdArr:', res);
+            this.exGamePlayerIdArr = res.playerIdArr;
         })
     }
 
@@ -346,7 +348,8 @@ export class ActivityPanelView extends BasePanelView {
                 {gameIdArr: gameIdArr});
         }
         else {
-            alert(`无效赛程 id${this.activitySelected}`);
+            alert(`无效赛程 id${this.activitySelected},pickExGameId:${this.pickExGameIdArr}`);
+
         }
     }
 
@@ -358,18 +361,20 @@ export class ActivityPanelView extends BasePanelView {
 
     onActivityInExGameIn() {
         var selActivityInfo = this.selActivityInfo;
-        if (selActivityInfo && this.roundSelected) {
+        if (selActivityInfo && this.roundSelected
+            && this.pickExGameIdArr && this.pickExGameIdArr.length == 2) {
             var gameIdArr = this.selActivityInfo.getGameIdArr(this.roundSelected);
-            console.log('onActivityInExGameIn', gameIdArr, this.roundSelected);
+            console.log('onActivityInExGameIn', gameIdArr, this.roundSelected, 'playerIdArr:', this.exGamePlayerIdArr);
             this.opReq(`${CommandId.cs_fadeInActivityExGame}`,
                 {
                     gameIdArr: gameIdArr,
                     activityId: this.activitySelected,
-                    roundId: this.roundSelected
+                    roundId: this.roundSelected,
+                    playerIdArr: this.exGamePlayerIdArr
                 });
         }
         else {
-            alert(`无效赛程 activityId:${this.activitySelected} roundId:${this.roundSelected}`);
+            alert(`无效赛程 activityId:${this.activitySelected} roundId:${this.roundSelected},pickExGameId:${this.pickExGameIdArr}`);
         }
     }
 

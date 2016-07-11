@@ -76,6 +76,7 @@ export class ActivityRender {
                 else {
                     scoreText = scoreTextRight;
                     scoreText.text = gameDoc.redScore + "";
+                    rightScore += playerInfo.eloScore();
                     scoreText.x = 840;
                     playerCtn.x = 305 + j * 148;
                 }
@@ -83,7 +84,6 @@ export class ActivityRender {
                 if (!scoreText.parent) {
                     scoreText.y = 70;
                     scoreText.name = 'scoreText';
-                    rightScore += playerInfo.eloScore();
                     gameCtn.addChild(scoreText);
                 }
                 gameCtn.addChild(playerCtn);
