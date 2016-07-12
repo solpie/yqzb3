@@ -1,4 +1,3 @@
-
 ////////////////////////////////ScorePanel///////////////////////////////////////////////
 import BitmapText = createjs.BitmapText;
 import Container = createjs.Container;
@@ -190,19 +189,48 @@ export class ScorePanel {
         this.timeText.text = formatSecond(this.timeOnSec);
     }
 
-    toggleTimer1() {
-        if (this.timerId) {
-            clearInterval(this.timerId);
-            this.timerId = 0;
-            this.timerState = TimerState.PAUSE;
-        }
-        else {
+    toggleTimer1(state?) {
+        var pauseTimer = ()=> {
+            if (this.timerId) {
+                clearInterval(this.timerId);
+                this.timerId = 0;
+                this.timerState = TimerState.PAUSE;
+            }
+        };
+
+        var playTimer = ()=> {
             this.timerId = setInterval(()=> {
                 this.timeOnSec++;
                 this.timeText.text = formatSecond(this.timeOnSec);
             }, 1000);
             this.timerState = TimerState.RUNNING;
+        };
+
+        if (state != null) {
+            if (state == TimerState.PAUSE) {
+                pauseTimer();
+            }
+            else if (state == TimerState.RUNNING) {
+                playTimer();
+            }
         }
+        else {
+            if (this.timerId) {
+                pauseTimer();
+                // clearInterval(this.timerId);
+                // this.timerId = 0;
+                // this.timerState = TimerState.PAUSE;
+            }
+            else {
+                playTimer();
+                // this.timerId = setInterval(()=> {
+                //     this.timeOnSec++;
+                //     this.timeText.text = formatSecond(this.timeOnSec);
+                // }, 1000);
+                // this.timerState = TimerState.RUNNING;
+            }
+        }
+
     }
 
     setTime(time, state:number) {

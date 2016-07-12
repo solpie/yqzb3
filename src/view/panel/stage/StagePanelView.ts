@@ -83,12 +83,18 @@ export class StagePanelView extends BasePanelView {
                     this.eventPanel.fadeInStraight3(true);
                 }
             })
-            .on(`${CommandId.toggleTimer}`, (data) => {
-                if (this.timerName === TimerState.START_STR)
-                    this.timerName = TimerState.PAUSE_STR;
-                else
-                    this.timerName = TimerState.START_STR;
-                this.scorePanel.toggleTimer1();
+            .on(`${CommandId.toggleTimer}`, (param) => {
+                if (param && param.hasOwnProperty('state')) {
+                    console.log('set Timer:', param);
+                    this.scorePanel.toggleTimer1(param.state);
+                }
+                else {
+                    if (this.timerName === TimerState.START_STR)
+                        this.timerName = TimerState.PAUSE_STR;
+                    else
+                        this.timerName = TimerState.START_STR;
+                    this.scorePanel.toggleTimer1();
+                }
             })
             .on(`${CommandId.resetTimer}`, (data) => {
                 this.timerName = TimerState.START_STR;
@@ -191,6 +197,7 @@ export class StagePanelView extends BasePanelView {
         }
         // playerIdArr = [10002, 10003, 10004, 10005,
         //     10008, 10010, 10011, 10012];
+        this.opReq(`${CommandId.cs_toggleTimer}`, {state: TimerState.RUNNING});
         this.opReq(`${CommandId.cs_startingLine}`,
             {playerIdArr: playerIdArr, backNumArr: backNumArr}
         );

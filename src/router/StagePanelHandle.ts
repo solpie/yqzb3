@@ -102,6 +102,7 @@ export class StagePanelHandle {
             ////////////////////screen only /////////////////////
             cmdMap[`${CommandId.cs_toggleTimer}`] = (param) => {
                 if (param) {
+                    console.log('cs_toggleTimer', param);
                     this.gameInfo.toggleTimer(param.state);
                     this.io.emit(`${CommandId.toggleTimer}`, ScParam(param));
                 }
