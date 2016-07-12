@@ -226,7 +226,7 @@ export class ActivityPanelHandle {
             cmdMap[`${CommandId.cs_fadeInNotice}`] = (param)=> {
                 var noticeText = param.notice;
                 var img = text2ImgUtil.getNoticeImg(noticeText);
-                this.io.emit(`${CommandId.fadeInNotice}`, ScParam({img: img}));
+                this.io.emit(`${CommandId.fadeInNotice}`, ScParam({img: img, count: param.count}));
             };
 
             var isSend = cmdMap[cmdId](param);

@@ -51,6 +51,7 @@ import {arrUniqueFilter} from "../../../utils/JsFunc";
         pickExGameIdArr: {},
         cdText: {type: String, default: '下一场比赛：'},
         noticeText: {type: String, default: ''},
+        noticeCount: {type: Number, default: 1},
         cdSec: {type: Number, default: 300},
         isDeleteDialog: {type: Boolean, default: false, twoWay: true}
     }
@@ -80,6 +81,8 @@ export class ActivityPanelView extends BasePanelView {
 
 
     noticeText:string;
+    noticeCount:number;
+
     pickExGameIdArr:number[];
     exGamePlayerIdArr:number[];
 
@@ -150,7 +153,8 @@ export class ActivityPanelView extends BasePanelView {
 
             .on(`${CommandId.fadeInNotice}`, (param)=> {
                 var img = param.img;
-                this.noticePanel.fadeInNoticePanel(img);
+                var count = param.count;
+                this.noticePanel.fadeInNoticePanel(img,count);
             });
 
         if (this.op) {
@@ -384,8 +388,9 @@ export class ActivityPanelView extends BasePanelView {
     }
 
     onNoticeIn() {
-        console.log('onNoticeIn', this.noticeText);
-        this.opReq(`${CommandId.cs_fadeInNotice}`, {notice: this.noticeText});
+        console.log('onNoticeIn:', this.noticeText,this.noticeCount);
+        this.opReq(`${CommandId.cs_fadeInNotice}`,
+            {notice: this.noticeText, count: this.noticeCount});
 
     }
 

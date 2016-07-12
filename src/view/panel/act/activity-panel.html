@@ -67,6 +67,7 @@
 
     <div class="row">
         <input id="notice" style="width: 100%" v-model="noticeText" placeholder="小喇叭广播" class="validate" length="99">
+        <input placeholder="播放次数" id="noticeCount" v-model="noticeCount" style="width: 100px" Number>
         <a class="waves-effect waves-light btn" @click="onNoticeIn">发送 ctrl+enter</a>
         <a class="waves-effect waves-light btn" @click="onNoticeOut">fade out</a>
     </div>

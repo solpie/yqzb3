@@ -45,13 +45,14 @@ export class NoticePanel {
         return this.noticeImg;
     }
 
-    fadeInNoticePanel(imgData) {
+    fadeInNoticePanel(imgData, count = 1) {
         if (!this.isInit)
             this.initPanel();
 
         var ctn = this.ctn;
         ctn.x = (1920 - 1070) * .5;
-        ctn.y = 1080 - 130;
+        ctn.y = 50;
+        // ctn.y = 1080 - 130;
         ctn.alpha = 0;
         loadImg(imgData, ()=> {
             var noticeImg = this.loadNoticeImg(imgData);
@@ -59,18 +60,28 @@ export class NoticePanel {
             var noticeImgWidth = noticeImg.getBounds().width;
             var showSec = noticeImgWidth / 100 * 1000;
 
+            var laba = ()=> {
+                createjs.Tween.get(ctn)
+                    .to({alpha: 1}, 200)
+                    .call(() => {
+                        createjs.Tween.get(noticeImg)
+                            .to({x: -noticeImgWidth}, showSec)
+                            .call(()=> {
+                                count--;
+                                console.log('notice end', count);
+                                if (count == 0)
+                                    createjs.Tween.get(ctn)
+                                        .wait(500)
+                                        .to({alpha: 0}, 200);
+                                else {
+                                    noticeImg.x = 800;
+                                    laba();
+                                }
+                            });
+                    });
+            };
+            laba();
 
-            createjs.Tween.get(ctn)
-                .to({alpha: 1}, 200)
-                .call(() => {
-                    createjs.Tween.get(noticeImg)
-                        .to({x: -noticeImgWidth}, showSec)
-                        .call(()=> {
-                            createjs.Tween.get(ctn)
-                                .wait(500)
-                                .to({alpha: 0}, 200)
-                        });
-                });
         });
 
     }
