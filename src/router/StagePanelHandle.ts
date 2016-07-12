@@ -116,6 +116,10 @@ export class StagePanelHandle {
                 this.gameInfo.resetTimer();
                 this.io.emit(`${CommandId.resetTimer}`);
             };
+            cmdMap[`${CommandId.cs_setGameTh}`] = (param) => {
+                this.gameInfo.gameTh = param.gameTh;
+                this.io.emit(`${CommandId.setGameTh}`,ScParam(param));
+            };
 
             cmdMap[`${CommandId.cs_updatePlayer}`] = (param) => {
                 if (this.gameInfo.gameState == GameInfo.GAME_STATE_ING) {

@@ -32,10 +32,18 @@ import {ScorePanel} from "./ScorePanel";
             required: true,
             default: 0
         },
+        gameTh: {
+            type: Number,
+            required: true,
+            default: 1
+        },
         playerInfoArr: {
             type: Array,
             default: [1, 2, 3, 4, 5, 6, 7, 8]
         }
+    },
+    watch: {
+        gameTh: 'onGameThChanged'
     }
 })
 export class StagePanelView extends BasePanelView {
@@ -48,6 +56,7 @@ export class StagePanelView extends BasePanelView {
     isInit:boolean;
     gameId:number;
     playerInfoArr:any;
+
 
     isSubmited:boolean = false;
 
@@ -129,6 +138,10 @@ export class StagePanelView extends BasePanelView {
             })
             .on(`${CommandId.updatePlayerBackNum}`, (param) => {
                 this.playerPanel.playerCardArr[param.idx].setBackNumber(param.backNum);
+            })
+            .on(`${CommandId.setGameTh}`, (param) => {
+                var gameTh = param.gameTh;
+                this.scorePanel.setGameTh(gameTh);
             })
     }
 
@@ -234,6 +247,11 @@ export class StagePanelView extends BasePanelView {
     onMinLeftScore() {
         console.log('onMinLeftScore');
         this.opReq(`${CommandId.cs_minLeftScore}`);
+    }
+
+    onGameThChanged(val) {
+        console.log('onGameThChanged', val);
+        this.opReq(`${CommandId.cs_setGameTh}`, {gameTh: val});
     }
 
     onShowWin() {

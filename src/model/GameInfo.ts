@@ -35,6 +35,7 @@ export class GameInfo {
     gameState:number = 0;//0 未确认胜负 1 确认胜负未录入数据 2确认胜负并录入数据
     unLimitScore:number = 0;///
     mvpPlayerId:number;
+    gameTh:number;//第几场
 
     _winTeam:TeamInfo;
     _loseTeam:TeamInfo;

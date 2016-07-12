@@ -45,6 +45,8 @@ export enum CommandId{
     cs_fadeInNotice,
     cs_resetGame,//重置比分 时间 player
     cs_unLimitScore,//不限制比分显示
+    cs_setGameTh,//设置比赛场次
+    setGameTh,
     unLimitScore,//不限制比分显示
     //-----------------win panel
     fadeInWinPanel,

@@ -12,6 +12,8 @@ export class ScorePanel {
     timeText:Text;
     leftAvgEloScoreText:Text;
     rightAvgEloScoreText:Text;
+    gameThText:Text;
+
     leftScoreText:BitmapText;
     rightScoreText:BitmapText;
     leftScoreTextX:number;
@@ -125,6 +127,13 @@ export class ScorePanel {
         rTxt.y = lTxt.y;
         this.rightAvgEloScoreText = rTxt;
         scoreCtn.addChild(rTxt);
+
+        var gameThText = new createjs.Text("第x场", "23px Arial", "#fff");
+        gameThText.textAlign = 'center';
+        gameThText.x = 964;
+        gameThText.y = 59;
+        scoreCtn.addChild(gameThText);
+        this.gameThText = gameThText;
     }
 
     get isBlueWin():boolean {
@@ -152,6 +161,8 @@ export class ScorePanel {
                 //circleArr[i].alpha = 0;
             }
         }
+
+
         // console.log(leftScore);
     }
 
@@ -241,10 +252,15 @@ export class ScorePanel {
         }
     }
 
+    setGameTh(th:number) {
+        this.gameThText.text = `第${th}场`;
+    }
+
     init(gameInfo:any) {
         this.setLeftScore(gameInfo.leftScore);
         this.setRightScore(gameInfo.rightScore);
         var gameInfoClone:GameInfo = new GameInfo(gameInfo);
         this.setAvgEloScore(gameInfoClone.getAvgEloScore());
+        this.setGameTh(gameInfo.gameTh);
     }
 }
