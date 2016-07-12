@@ -120,6 +120,9 @@ export class StagePanelView extends BasePanelView {
                 var mvpIdx = param.mvpIdx;
                 var mvpId = param.mvpId;
                 this.eventPanel.fadeInWinPanel(teamInfo, mvpIdx, mvpId);
+                setTimeout(()=> {
+                    this.onHideWin();
+                }, 20000)
             })
             .on(`${CommandId.fadeOutWinPanel}`, (param) => {
                 this.eventPanel.fadeOutWinPanel();

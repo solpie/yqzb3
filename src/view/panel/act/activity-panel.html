@@ -1,10 +1,10 @@
 <style>
     #act-panel {
         position: absolute;
-        width: 950px;
-        left: 100px;
+        width: 1400px;
+        left: 20px;
         opacity: .8;
-        top: 50px;
+        top: 20px;
 
     }
 </style>
@@ -39,8 +39,18 @@
         <a class="waves-effect waves-light btn" @click="onStartGame">start game</a>
         <a class="waves-effect waves-light btn" @click="onResetGame">reset game</a>
         <a class="waves-effect waves-light btn" @click="onPickExGamePlayer">pick ex game player</a>
+        <a class="waves-effect waves-light btn" @click="onShowPickPlayer">show pick player</a>
         <a id="delDialogTrigger" class="waves-effect waves-light btn modal-trigger" @click="onDeleteGame">delete
             game</a>
+        <div class="row">
+            <div class="col" v-for="playerDoc in playerDocArr">
+                <div class="col" style="width: 85px">
+                    <img src="{{playerDoc.avatar}}" id="playerImg{{$index}}" style="width: 80px">
+                    {{playerDoc.id}}<br>
+                    {{playerDoc.name}}
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row">

@@ -1,4 +1,31 @@
 <div>
+    <span>activity：</span>
+    <div class="row" style="width: 100%;display: inline-flex;">
+        赛事：
+        <select class="browser-default" v-model="activitySelected" @change="onActivitySelected"
+                style="width: 150px">
+            <option v-for="option in activityOptionArr" v-bind:value="option.value">
+                {{ option.text }}
+            </option>
+        </select>
+
+        轮次：
+        <select class="browser-default" v-model="roundSelected" @change="onRoundSelected"
+                style="width: 150px">
+            <option v-for="option in roundOptionArr" v-bind:value="option.value">
+                {{ option.text }}
+            </option>
+        </select>
+
+        场次：
+        <select class="browser-default" v-model="gameSelected" @change="onGameSelected"
+                style="width: 150px">
+            <option v-for="option in gameOptionArr" v-bind:value="option.value">
+                {{ option.text }}
+            </option>
+        </select>
+    </div>
+
     <input id="playerId" type="text" v-model="playerId" @change="onQueryPlayer($event)"
            @keyup.enter="onQueryPlayer($event)" style="width: 75px">
     <a class="waves-effect waves-light btn" @click="onAddPlayer">Add</a>

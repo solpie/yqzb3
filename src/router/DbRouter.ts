@@ -42,7 +42,8 @@ dbRouter.post('/game/player', function (req:any, res:any) {
     for (var gameDoc of gameDocArr) {
         playerIdArr = playerIdArr.concat(gameDoc.playerIdArr);
     }
-    res.send({playerIdArr: playerIdArr});
+    var playerDocArr = db.player.getDocArr(playerIdArr);
+    res.send({playerIdArr: playerIdArr, playerDocArr: playerDocArr});
 });
 
 

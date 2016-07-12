@@ -49,6 +49,7 @@ import {arrUniqueFilter} from "../../../utils/JsFunc";
         },
         gameSelected: {},
         pickExGameIdArr: {},
+        playerDocArr: {type: Array, default: []},
         cdText: {type: String, default: '下一场比赛：'},
         noticeText: {type: String, default: ''},
         noticeCount: {type: Number, default: 1},
@@ -85,6 +86,8 @@ export class ActivityPanelView extends BasePanelView {
 
     pickExGameIdArr:number[];
     exGamePlayerIdArr:number[];
+
+    playerDocArr:any = [];
 
     ready() {
         var io = super.ready(PanelId.actPanel);
@@ -154,7 +157,7 @@ export class ActivityPanelView extends BasePanelView {
             .on(`${CommandId.fadeInNotice}`, (param)=> {
                 var img = param.img;
                 var count = param.count;
-                this.noticePanel.fadeInNoticePanel(img,count);
+                this.noticePanel.fadeInNoticePanel(img, count);
             });
 
         if (this.op) {
@@ -281,7 +284,13 @@ export class ActivityPanelView extends BasePanelView {
         this.post('/db/game/player', {gameIdArr: this.pickExGameIdArr}, (res)=> {
             console.log('ex playerIdArr:', res);
             this.exGamePlayerIdArr = res.playerIdArr;
+            this.playerDocArr  =res.playerDocArr;
         })
+    }
+
+    onShowPickPlayer() {
+        console.log('onShowPickPlayer');
+
     }
 
     get curActivityPlayerIdArr() {
@@ -317,7 +326,6 @@ export class ActivityPanelView extends BasePanelView {
 
     onRankNext() {
         this.opReq(`${CommandId.cs_fadeInNextRank}`);
-
     }
 
     onRankOut() {
@@ -388,7 +396,7 @@ export class ActivityPanelView extends BasePanelView {
     }
 
     onNoticeIn() {
-        console.log('onNoticeIn:', this.noticeText,this.noticeCount);
+        console.log('onNoticeIn:', this.noticeText, this.noticeCount);
         this.opReq(`${CommandId.cs_fadeInNotice}`,
             {notice: this.noticeText, count: this.noticeCount});
 
