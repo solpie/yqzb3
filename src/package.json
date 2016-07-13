@@ -4,6 +4,7 @@
   "description": "YuanQiTV2",
   "main": "main.js",
   "server": {
+    "autoIP":true,
     "port": 80,
     "host": "192.168.1.73",
     "wsPort": "6969"

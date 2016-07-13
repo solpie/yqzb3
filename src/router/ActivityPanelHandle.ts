@@ -79,6 +79,7 @@ export class ActivityPanelHandle {
                     var gameDocArr = db.game.getDocArr(gameIdArr);
                     console.log('cs_fadeInActivityPanel', gameIdArr, gameDocArr);
                     for (var gameDoc of gameDocArr) {
+                        console.log('gameDoc', gameDoc.id);
                         gameDoc.playerDocArr = [];
                         for (var playerId of gameDoc.playerIdArr) {
                             gameDoc.playerDocArr.push(db.player.dataMap[playerId]);

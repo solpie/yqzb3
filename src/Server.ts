@@ -7,6 +7,7 @@ import {panelRouter} from "./router/PanelRouter";
 import {getIPAddress} from "./utils/NodeJsFunc";
 import {mobileRouter} from "./router/MobileRouter";
 var colors = require('colors');
+let localhost;
 
 var dataObj:any;
 /**
@@ -18,8 +19,6 @@ export class WebServer {
     socketIO:SocketIOSrv;
 
     constructor(callback?:any) {
-        let localhost = getIPAddress();
-        console.log("localhost:", localhost);
         this.initEnv(callback);
         this.initGlobalFunc();
         this.initNedb();
@@ -48,18 +47,28 @@ export class WebServer {
             if (err) throw err;
             dataObj = JSON.parse(data);
             ServerConf.port = dataObj.server.port;
-            ServerConf.host = dataObj.server.host;
             ServerConf.wsPort = dataObj.server.wsPort;
+            if (dataObj.server.autoIP) {
+                getIPAddress((ip)=> {
+                    localhost = ip;
+                    ServerConf.host = ip;
+                    console.log("autoIP:", ip);
+                    this.initServer();
+                });
+            }
+            else {
+                ServerConf.host = dataObj.server.host;
+                this.initServer();
+            }
             this.serverConf = ServerConf;
             console.log("server config:", ServerConf);
-            this.initServer();
             if (callback)
                 callback(dataObj);
         });
     }
 
     initServer() {
-        var express = require('express');
+        var express:any = require('express');
         var app = express();
         // view engine setup
         app.set('views', _path("./app/view"));
@@ -93,7 +102,7 @@ export class WebServer {
             res.redirect('/admin');
         });
 
-        
+
         app.use('/admin', adminRouter);
         app.use('/panel', panelRouter);
         app.use('/db', dbRouter);
@@ -102,7 +111,7 @@ export class WebServer {
         app.listen(ServerConf.port, () => {
             this.initSocketIO();
             //and... we're live
-            console.log("server on:  ws port:");
+            console.log(`server on ${ServerConf.host}:${ServerConf.port}  ws port:`);
         });
     }
 
