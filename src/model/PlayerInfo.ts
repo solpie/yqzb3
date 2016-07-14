@@ -1,8 +1,9 @@
 /// <reference path="./BaseInfo.ts"/>
 import {BaseInfo, obj2Class, prop} from "./BaseInfo";
-class PlayerDoc {
+export class PlayerDoc {
     id:number = 0;
     name:string = '';
+    realName:string = '';
     phone:number = 0;
     eloScore:number = 0;
     style:number = 0;//风林火山 1 2 3 4
@@ -106,12 +107,23 @@ export class PlayerInfo extends BaseInfo {
         return (PlayerInfo.winPercent(playerDoc) * 100).toFixed(1) + "%"
     }
 
+    static setStyleFromStr(playerDoc, str:string) {
+        if (str == '风')
+            playerDoc.style = 1;
+        else if (str == '林')
+            playerDoc.style = 2;
+        else if (str == '火')
+            playerDoc.style = 3;
+        else if (str == '山')
+            playerDoc.style = 4;
+    }
+
     winpercent(val?:any) {
         return this.winGameCount() / this.gameCount();
     }
 
     static gameCount(playerDoc) {
-        return (playerDoc.loseGameCount + playerDoc.winGameCount)||0;
+        return (playerDoc.loseGameCount + playerDoc.winGameCount) || 0;
     }
 
     gameCount() {

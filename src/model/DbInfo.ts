@@ -84,6 +84,8 @@ export class BaseDB {
     }
 
     create(doc, callback?) {
+        if (doc.id == 0)
+            doc.id = this.config.idUsed;
         this.ds().insert(doc, (err, newDoc)=> {
             if (!err) {
                 this.saveIdUsed();
@@ -137,7 +139,7 @@ class ActivityDB extends BaseDB {
     //             callback(err, newDoc);
     //     })
     // }
-    addActivity(activityId,  playerIdArr, callback) {
+    addActivity(activityId, playerIdArr, callback) {
         var roundId = this.config.idUsed;
         var data:any = {activityId: activityId, round: roundId, date: ''};
         this.dataStore.insert(data, (err, newDoc) => {
@@ -509,7 +511,7 @@ export function initDB() {
 
     db = {};
     db.player = new PlayerDB({filename: playerDb, autoload: true});
-    db.activity = new ActivityDB({filename: activityDb, autoload: true,indexName: '_id'});
+    db.activity = new ActivityDB({filename: activityDb, autoload: true, indexName: '_id'});
     db.game = new GameDB({filename: gameDbPath, autoload: true});
     //hui ti
     db.gameHuiTi = new BaseDB({filename: huitiDbPath, autoload: true, indexName: '_id'});

@@ -12,8 +12,23 @@ adminRouter.get('/', function (req:any, res:any) {
 //     res.render('admin/admin-player', {playerDataArr: []});
 // });
 // post /admin/player/add
-adminRouter.post('/player/wx/add', function (req:any, res:any) {
-
+adminRouter.post('/player/xlsx/add', function (req:any, res:any) {
+    if (!req.body) return res.sendStatus(400);
+    var playerDocArr = req.body.playerDocArr;
+    console.log('/admin/player/xlsx/add', req.body);
+    var insertPlayerDoc = (playerDoc)=> {
+        db.player.create(playerDoc, function (err, newDoc) {
+            if (!err) {
+                if (playerDocArr.length)
+                    insertPlayerDoc(playerDocArr.pop());
+                else
+                    res.sendStatus(200);
+            }
+            else
+                res.sendStatus(400);
+        });
+    };
+    insertPlayerDoc(playerDocArr.pop());
 });
 
 adminRouter.post('/player/add', function (req:any, res:any) {

@@ -17,6 +17,19 @@
                 <search></search>
                 <!-- Modaler Trigger -->
                 <a class="modal-trigger waves-effect waves-light btn" @click="onAddPlayer">添加球员</a>
+
+
+
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>从excel导入球员</span>
+                        <input type="file" id="fileExcel" @change="onAddPlayerFromExcel($event)"/>
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+
                 <p class="lead">
                 </p>
                 <hr class="m-y-md">

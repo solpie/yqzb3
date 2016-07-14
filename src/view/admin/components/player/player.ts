@@ -4,6 +4,9 @@ import {Search} from "./search";
 import {Profile} from "./profile";
 import {VueEx} from "../../../VueEx";
 import {ViewEvent} from "../../../../event/Const";
+import {NewPlayerXLSX} from "../../../../model/external/NewPlayerXLSX";
+declare var XLSX:any;
+
 @Component({
     template: require('./player.html'),
     components: {Search, Profile},
@@ -110,6 +113,38 @@ export class Player extends VueEx {
         this.$broadcast(ViewEvent.PLAYER_EDIT, playerId);
     }
 
+    onAddPlayerFromExcel(e) {
+        var fr = new FileReader();
+
+        console.log("showFile", e.target.files[0]);
+        fr.readAsBinaryString(e.target.files[0]);
+        fr.onload = (e) => {
+            var data = (e.target as any).result;
+
+            /* if binary string, read with type 'binary' */
+            var workbook = XLSX.read(data, {type: 'binary'});
+            var playerSheet = workbook.Sheets['Sheet1'];
+            var playerDocArr = [];
+            for (var i = 1; ; i++) {
+                var playerXLSX:NewPlayerXLSX = new NewPlayerXLSX(playerSheet, i);
+                if (!playerXLSX.isEmpty) {
+                    playerDocArr.push(playerXLSX.toJson());
+                    console.log(playerXLSX);
+                }
+                else
+                    break;
+            }
+            console.log('playerDocArr:', playerDocArr);
+            this.$http.post('/admin/player/xlsx/add', {playerDocArr: playerDocArr}, (res)=> {
+                if (res) {
+                    window.location.reload();
+                }
+            });
+            /* if binary string, read with type 'binary' */
+            console.log('load excel:', e.target, workbook);
+        };
+    }
+
     onAddActivity() {
         if (this.pickPlayerIdArrArr.length == 4) {
             var playerIdArr = [];
@@ -119,10 +154,9 @@ export class Player extends VueEx {
             this.$http.post('/admin/act/add', {activityId: 2, playerIdArr: playerIdArr}).then((res)=> {
             })
         }
-        else{
+        else {
             alert('诶？？哪里不对？！');
         }
-
     }
 
     get today():string {
