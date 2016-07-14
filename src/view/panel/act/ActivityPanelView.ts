@@ -12,9 +12,10 @@ import {PlayerInfo} from "../../../model/PlayerInfo";
 import {Modaler} from "../../admin/components/modal/modal";
 import {NoticePanel} from "./NoticePanel";
 import {arrUniqueFilter} from "../../../utils/JsFunc";
+import {StartingLine} from "../component/startingLine/StartingLine";
 @Component({
     template: require('./activity-panel.html'),
-    components: {OpLinks, Modaler},
+    components: {OpLinks, Modaler,StartingLine},
     props: {
         op: {
             type: Boolean,

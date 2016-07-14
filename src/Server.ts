@@ -61,7 +61,7 @@ export class WebServer {
                 this.initServer();
             }
             this.serverConf = ServerConf;
-            console.log("server config:", ServerConf);
+            console.log("server config:", ServerConf, "data:", dataObj);
             if (callback)
                 callback(dataObj);
         });

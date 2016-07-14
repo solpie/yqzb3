@@ -1,56 +1,66 @@
 <style>
     #act-panel {
         position: absolute;
-        width: 1400px;
-        left: 20px;
+        width: 1800px;
+        left: 0px;
         opacity: .8;
-        top: 20px;
+        top: 0px;
 
     }
 </style>
 <div id="act-panel" class="card-panel grey lighten-3" v-if="op">
     <div class="row" style="width: 100%;display: inline-flex;">
-        赛事：
-        <select class="browser-default" v-model="activitySelected" @change="onActivitySelected"
-                style="width: 150px">
-            <option v-for="option in activityOptionArr" v-bind:value="option.value">
-                {{ option.text }}
-            </option>
-        </select>
+        <div class="col s6" style="display: inherit">
+            赛事：
+            <select class="browser-default" v-model="activitySelected" @change="onActivitySelected"
+                    style="width: 150px">
+                <option v-for="option in activityOptionArr" v-bind:value="option.value">
+                    {{ option.text }}
+                </option>
+            </select>
 
-        轮次：
-        <select class="browser-default" v-model="roundSelected" @change="onRoundSelected"
-                style="width: 150px">
-            <option v-for="option in roundOptionArr" v-bind:value="option.value">
-                {{ option.text }}
-            </option>
-        </select>
+            轮次：
+            <select class="browser-default" v-model="roundSelected" @change="onRoundSelected"
+                    style="width: 150px">
+                <option v-for="option in roundOptionArr" v-bind:value="option.value">
+                    {{ option.text }}
+                </option>
+            </select>
 
-        场次：
-        <select class="browser-default" v-model="gameSelected" @change="onGameSelected"
-                style="width: 150px">
-            <option v-for="option in gameOptionArr" v-bind:value="option.value">
-                {{ option.text }}
-            </option>
-        </select>
+            场次：
+            <select class="browser-default" v-model="gameSelected" @change="onGameSelected"
+                    style="width: 150px">
+                <option v-for="option in gameOptionArr" v-bind:value="option.value">
+                    {{ option.text }}
+                </option>
+            </select>
+        </div>
+        <div class="col s6">
+            <a class="waves-effect waves-light btn" @click="onStartGame">start game</a>
+            <a class="waves-effect waves-light btn" @click="onResetGame">reset game</a>
+            <p>
+                <a class="waves-effect waves-light btn" @click="onPickExGamePlayer">pick ex game player</a>
+                <a class="waves-effect waves-light btn" @click="onShowPickPlayer">show pick player</a>
+                <a class="waves-effect waves-light btn" @click="onActivityInExGameIn">Ex Game in</a>
+                ：：：：：
+                <a id="delDialogTrigger" class="waves-effect waves-light btn modal-trigger" @click="onDeleteGame">delete
+                    game</a>
+        </div>
     </div>
-
     <div class="row">
-        <a class="waves-effect waves-light btn" @click="onStartGame">start game</a>
-        <a class="waves-effect waves-light btn" @click="onResetGame">reset game</a>
-        <a class="waves-effect waves-light btn" @click="onPickExGamePlayer">pick ex game player</a>
-        <a class="waves-effect waves-light btn" @click="onShowPickPlayer">show pick player</a>
-        <a id="delDialogTrigger" class="waves-effect waves-light btn modal-trigger" @click="onDeleteGame">delete
-            game</a>
-        <div class="row">
-            <div class="col" v-for="playerDoc in playerDocArr">
-                <div class="col" style="width: 85px">
-                    <img src="{{playerDoc.avatar}}" id="playerImg{{$index}}" style="width: 80px">
-                    {{playerDoc.id}}<br>
-                    {{playerDoc.name}}
-                </div>
+        <div class="col" v-for="playerDoc in playerDocArr">
+            <div class="col" style="width: 85px">
+                <img src="{{playerDoc.avatar}}" id="playerImg{{$index}}" style="width: 80px">
+                {{playerDoc.id}}<br>
+                {{playerDoc.name}}
             </div>
         </div>
+    </div>
+    <div class="row">
+        <a class="waves-effect waves-light btn" @click="onActivityIn">Activity in</a>
+        <a class="waves-effect waves-light btn" @click="onActivityNextIn">next page</a>
+        <a class="waves-effect waves-light btn" @click="onActivityOut">activity out</a>
+        <a class="waves-effect waves-light btn" @click="onActivityComing">Game coming</a>
     </div>
 
     <div class="row">
@@ -60,26 +70,24 @@
     </div>
 
     <div class="row">
-        <input id="cdText" v-model="cdText" style="width: 100px">
-        <input id="cdSec" v-model="cdSec" style="width: 100px">
-        <a class="waves-effect waves-light btn" @click="onCountDownIn">count down in</a>
-        <a class="waves-effect waves-light btn" @click="onCountDownOut">count down out</a>
+        倒计时：
+        <br>
+        提示文字（最多五个字）：<input id="cdText" v-model="cdText" style="width: 100px">
+        计时多少秒：<input id="cdSec" v-model="cdSec" style="width: 100px">
+        <br>
+        <a class="waves-effect waves-light btn" @click="onCountDownIn">倒计时面板淡入</a>
+        <a class="waves-effect waves-light btn" @click="onCountDownOut">倒计时面板淡出</a>
     </div>
 
-    <div class="row">
-        <a class="waves-effect waves-light btn" @click="onActivityIn">Activity in</a>
-        <a class="waves-effect waves-light btn" @click="onActivityNextIn">next page</a>
-        <a class="waves-effect waves-light btn" @click="onActivityOut">activity out</a>
-        <a class="waves-effect waves-light btn" @click="onActivityComing">Game coming</a>
-        ：：：：：
-        <a class="waves-effect waves-light btn" @click="onActivityInExGameIn">Ex Game in</a>
-    </div>
 
     <div class="row">
+        小喇叭：
+        <br>
         <input id="notice" style="width: 100%" v-model="noticeText" placeholder="小喇叭广播" class="validate" length="99">
-        <input placeholder="播放次数" id="noticeCount" v-model="noticeCount" style="width: 100px" Number>
+        播放次数：<input placeholder="播放次数" id="noticeCount" v-model="noticeCount" style="width: 100px" Number>
+        <br>
         <a class="waves-effect waves-light btn" @click="onNoticeIn">发送 ctrl+enter</a>
-        <a class="waves-effect waves-light btn" @click="onNoticeOut">fade out</a>
+        <a class="waves-effect waves-light btn" @click="onNoticeOut">小喇叭淡出</a>
     </div>
 </div>
 <modaler id="delDialog" title="确定删除?" :is-open="isDeleteDialog" style="width: 30%;height: 20%">

@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col" v-for="playerInfo in playerInfoArr">
+        <div class="col" style="width: 85px">
+            <img src="/img/panel/stage/blue.png" id="playerImg{{$index}}" style="width: 80px">
+            <input id="player{{$index}}" type="text" @keyup.enter="onQueryPlayer($index)" style="width: 75px">
+            <input id="playerNum{{$index}}" type="text" @keyup.enter="onUpdatePlayerNum($index)"
+                   style="width: 35px">
+            <a class="waves-effect waves-light btn" style="width: 75px;height: 25px"
+               @click="onUpdatePlayer($index)">↓</a>
+            <p>
+                <input name="mvp" type="radio" id="mvp{{$index}}" value="{{$index}}" v-model="mvpIdx"/>
+                <label for="mvp{{$index}}">mvp{{$index}}</label>
+                <!--<input id="eloScore{{$index}}" type="text" @keyup.enter="onSetEloScore($index)" style="width: 75px">-->
+        </div>
+    </div>
+</div>
