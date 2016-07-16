@@ -87,7 +87,7 @@ adminRouter.post('/player/update', function (req:any, res:any) {
     var playerDoc = db.player.dataMap[playerDocUpdate.id];
     if (playerDoc) {
         var avatarPathOld = playerDoc.avatar;
-        if (avatarPathOld == ServerConst.DEF_AVATAR)
+        if (avatarPathOld == ServerConst.DEF_AVATAR || !avatarPathOld)
             avatarPathOld = '/' + 'img/player/' + playerDocUpdate.id + '.png';
 
         function updatePlayer() {

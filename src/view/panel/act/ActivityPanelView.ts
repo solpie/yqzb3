@@ -15,7 +15,7 @@ import {arrUniqueFilter} from "../../../utils/JsFunc";
 import {StartingLine} from "../component/startingLine/StartingLine";
 @Component({
     template: require('./activity-panel.html'),
-    components: {OpLinks, Modaler,StartingLine},
+    components: {OpLinks, Modaler, StartingLine},
     props: {
         op: {
             type: Boolean,
@@ -55,7 +55,10 @@ import {StartingLine} from "../component/startingLine/StartingLine";
         noticeText: {type: String, default: ''},
         noticeCount: {type: Number, default: 1},
         cdSec: {type: Number, default: 300},
-        isDeleteDialog: {type: Boolean, default: false, twoWay: true}
+
+        isDeleteDialog: {type: Boolean, default: false, twoWay: true},
+        isStartingLineDialog: {},
+        playerDocArrSL: {}
     }
 })
 export class ActivityPanelView extends BasePanelView {
@@ -80,6 +83,7 @@ export class ActivityPanelView extends BasePanelView {
     cdText:string;
     cdSec:number;
     isDeleteDialog:boolean;
+    isStartingLineDialog:boolean;
 
 
     noticeText:string;
@@ -89,6 +93,8 @@ export class ActivityPanelView extends BasePanelView {
     exGamePlayerIdArr:number[];
 
     playerDocArr:any = [];
+    //换人
+    playerDocArrSL:any;
 
     ready() {
         var io = super.ready(PanelId.actPanel);
@@ -174,6 +180,8 @@ export class ActivityPanelView extends BasePanelView {
             this.$on('closeModal', ()=> {
                 if (this.isDeleteDialog)
                     this.isDeleteDialog = false;
+                if (this.isStartingLineDialog)
+                    this.isStartingLineDialog = false;
             });
 
             this.post('/db/act/combine', function (param) {
@@ -276,6 +284,28 @@ export class ActivityPanelView extends BasePanelView {
             })
     }
 
+    onEditStartingLine() {
+        console.log('onEditStartingLine');
+        if (!this.gameSelected)
+            alert(`no game selected`);
+        else
+            this.post('/db/game/player', {gameIdArr: [this.gameSelected]}, (res)=> {
+                this.isStartingLineDialog = true;
+                this.playerDocArrSL = res.playerDocArr;
+                console.log(res);
+            })
+    }
+
+    onUpdatePlayer(val) {
+        var playerId = Number(this.getElem("#playerSL" + val).value);
+        console.log('onUpdatePlayer', val, 'player id', playerId);
+        this.post(`/panel/stage/${CommandId.cs_updatePlayer}`, {
+            gameId: this.gameSelected,
+            idx: val,
+            playerId: playerId
+        })
+    }
+
     onPickExGamePlayer() {
         if (!this.pickExGameIdArr)
             this.pickExGameIdArr = [];
@@ -285,13 +315,12 @@ export class ActivityPanelView extends BasePanelView {
         this.post('/db/game/player', {gameIdArr: this.pickExGameIdArr}, (res)=> {
             console.log('ex playerIdArr:', res);
             this.exGamePlayerIdArr = res.playerIdArr;
-            this.playerDocArr  =res.playerDocArr;
+            this.playerDocArr = res.playerDocArr;
         })
     }
 
     onShowPickPlayer() {
         console.log('onShowPickPlayer');
-
     }
 
     get curActivityPlayerIdArr() {

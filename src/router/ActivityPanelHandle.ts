@@ -89,7 +89,6 @@ export class ActivityPanelHandle {
                         ScParam({gameDocArr: gameDocArr}));
                 })
             };
-
             cmdMap[`${CommandId.cs_fadeOutActivityPanel}`] = (param)=> {
                 this.io.emit(`${CommandId.fadeOutActivityPanel}`);
             };

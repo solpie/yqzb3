@@ -5,6 +5,9 @@ import {VueEx, Component} from "../../../VueEx";
     template: require('./starting-line.html')
 })
 export class StartingLine extends VueEx {
+    $els:{
+        StartingLine:HTMLElement
+    };
     ready() {
 
     }

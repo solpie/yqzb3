@@ -118,21 +118,19 @@ export class StagePanelHandle {
             };
             cmdMap[`${CommandId.cs_setGameTh}`] = (param) => {
                 this.gameInfo.gameTh = param.gameTh;
-                this.io.emit(`${CommandId.setGameTh}`,ScParam(param));
+                this.io.emit(`${CommandId.setGameTh}`, ScParam(param));
             };
 
             cmdMap[`${CommandId.cs_updatePlayer}`] = (param) => {
+                var playerId = param.playerId;
+                var playerIdx = param.idx;
                 if (this.gameInfo.gameState == GameInfo.GAME_STATE_ING) {
-                    var playerId = param.playerId;
-                    var playerIdx = param.idx;
-
                     param.playerDoc = db.player.dataMap[playerId];
                     this.gameInfo.setPlayerInfoByIdx(playerIdx, db.player.getPlayerInfoById(playerId));
                     db.game.updatePlayerByPos(this.gameInfo.id, playerIdx, playerId);
                     param.avgEloScore = this.gameInfo.getAvgEloScore();
                     this.io.emit(`${CommandId.updatePlayer}`, ScParam(param))
                 }
-
             };
 
             cmdMap[`${CommandId.cs_startingLine}`] = (param) => {
