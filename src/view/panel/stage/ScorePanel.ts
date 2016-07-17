@@ -253,6 +253,8 @@ export class ScorePanel {
     }
 
     setGameTh(th:number) {
+        if (th == null)
+            th = 0;
         this.gameThText.text = `第${th}场`;
     }
 

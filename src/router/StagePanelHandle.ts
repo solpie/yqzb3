@@ -129,7 +129,8 @@ export class StagePanelHandle {
                     this.gameInfo.setPlayerInfoByIdx(playerIdx, db.player.getPlayerInfoById(playerId));
                     db.game.updatePlayerByPos(this.gameInfo.id, playerIdx, playerId);
                     param.avgEloScore = this.gameInfo.getAvgEloScore();
-                    this.io.emit(`${CommandId.updatePlayer}`, ScParam(param))
+                    this.io.emit(`${CommandId.updatePlayer}`, ScParam(param));
+                    return res.send(ScParam(param));
                 }
             };
 

@@ -152,7 +152,8 @@ export class ActivityPanelView extends BasePanelView {
                 }
                 this.selActivityInfo.addGame(gameDocArr, roundId);
                 console.log('fade in ex game:', gameDocArr, this.selActivityInfo);
-                this.activityRender.fadeIn(gameDocArr);
+                alert('ex game!!');
+                // this.activityRender.fadeIn(gameDocArr);
             })
             .on(`${CommandId.fadeOutActivityPanel}`, (param)=> {
                 this.activityRender.fadeOut();
@@ -303,6 +304,9 @@ export class ActivityPanelView extends BasePanelView {
             gameId: this.gameSelected,
             idx: val,
             playerId: playerId
+        }, (res)=> {
+            console.log(res);
+            this.playerDocArrSL[res.idx] = res.playerDoc;
         })
     }
 
