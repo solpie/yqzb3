@@ -7,6 +7,7 @@ import Container = createjs.Container;
 import Text = createjs.Text;
 export class EventPanel {
     ctn:Container;
+    fireFx:any;
 
     constructor(parent:StagePanelView) {
         var ctn = new createjs.Container();
@@ -101,21 +102,47 @@ export class EventPanel {
         if (!isBlue) {
             // start = 4;
         }
+
+        if (!this.fireFx) {
+            var imgArr = [];
+            var drop = 3;
+            for (var i = 0; i < 90 / drop; i++) {
+                imgArr.push('/img/panel/stage/win/fx/fire_' + pad(i * drop, 5) + '.png');
+            }
+            console.log(imgArr[0]);
+            var sheet = new createjs.SpriteSheet({
+                images: imgArr,
+                frames: {width: 599, height: 850},
+                // framerate: 1,
+                animations: {
+                    loop: [0, (90 / drop) - 1]
+                }
+            });
+            this.fireFx = new createjs.Sprite(sheet, "loop");
+            this.fireFx.x = -132;
+            this.fireFx.y = -135;
+        }
+
         for (var i = start; i < start + 4; i++) {
             var pInfo;
             pInfo = new PlayerInfo(teamInfo.playerInfoArr[i].playerData);
             pInfo.isRed = teamInfo.playerInfoArr[i].isRed;
             pInfo.isBlue = isBlue;
             pInfo.isMvp = pInfo.id() == mpvId;
-            var playerCard = this.getWinPlayerCard(pInfo, ()=> {
+            var playerCard = this.getWinPlayerCard(pInfo, (isMvp)=> {
                 var bound = playerCard.getBounds();
-                
+
                 if (bound)
                     playerCard.cache(bound.x, bound.y, bound.width, bound.height);
+                if (isMvp) {
+                    this.fireFx.parent.addChild(this.fireFx);
+                }
             });
             playerCard.x = i * 390;
-            if (pInfo.isMvp)
+            if (pInfo.isMvp) {
                 playerCard.y = -30;
+                playerCard.addChild(this.fireFx)
+            }
             else
                 playerCard.y = 0;
             // console.log("new player card", paramDataArr[i], playerCard.x, playerCard.y, mvp);
@@ -125,14 +152,21 @@ export class EventPanel {
             playerCard.scaleX = playerCard.scaleY = 0.01;
             createjs.Tween.get(playerCard)
                 .to({x: playerCard.px, scaleX: 1.1, scaleY: 1.1}, 200)
-                .to({scaleX: 1, scaleY: 1}, 60);
+                .to({scaleX: 1, scaleY: 1}, 60).call(()=> {
+            });
             playerCtn.addChild(playerCard);
             prePlayerIsMvp = pInfo.isMvp;
         }
-        // }
-        // else {
-        //     alert("球员数据不完整！");
-        // }
+        function pad(num, n) {
+            var len = num.toString().length;
+            while (len < n) {
+                num = "0" + num;
+                len++;
+            }
+            return num;
+        }
+
+
     }
 
     getWinPlayerCard(p:PlayerInfo, callback):any {
@@ -217,7 +251,6 @@ export class EventPanel {
             eloScoreDt.y = 260 + 30;
             if (isMvp) {
                 eloScoreDt.x += 30;
-
                 eloScoreDt.y += 30;
             }
             ctn.addChild(eloScoreDt);
@@ -246,12 +279,8 @@ export class EventPanel {
                 style.y += 45;
             }
             ctn.addChild(style);
-
-
-            callback();
+            callback(p.isMvp);
         });
-
-
         return ctn;
     }
 

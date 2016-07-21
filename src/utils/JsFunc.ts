@@ -39,17 +39,29 @@ export function arrCountSame(arrA:Array<any>, arrB:Array<any>) {
     }
     return n;
 }
+//混合数组
+export function arrMix2Elem(arrA:Array<any>, arrB:Array<any>) {
+    var idx = Math.floor(Math.random() * 4) % 4;
+    var tmp = arrA[idx];
+    arrA[idx] = arrB[idx];
+    arrB[idx] = tmp;
+    var idx2 = (idx + 1) % 4;
+    tmp = arrA[idx2];
+    arrA[idx2] = arrB[idx2];
+    arrB[idx2] = tmp;
+}
 // Array.sort().filter(arrUniqueFilter)
 export function arrUniqueFilter(el, i, a):boolean {
     return i == a.indexOf(el);
 }
+
 export function arrMaxElem(arr) {
     return Math.max.apply(Math, arr);
 }
-export function arrMixElem(arr) {
+
+export function arrMinElem(arr) {
     return Math.min.apply(Math, arr);
 }
-
 
 export function loadImg(path1, callback) {
     var img = new Image();

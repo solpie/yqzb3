@@ -161,9 +161,6 @@ export class ScorePanel {
                 //circleArr[i].alpha = 0;
             }
         }
-
-
-        // console.log(leftScore);
     }
 
     setRightScore(rightScore) {
@@ -228,17 +225,9 @@ export class ScorePanel {
         else {
             if (this.timerId) {
                 pauseTimer();
-                // clearInterval(this.timerId);
-                // this.timerId = 0;
-                // this.timerState = TimerState.PAUSE;
             }
             else {
                 playTimer();
-                // this.timerId = setInterval(()=> {
-                //     this.timeOnSec++;
-                //     this.timeText.text = formatSecond(this.timeOnSec);
-                // }, 1000);
-                // this.timerState = TimerState.RUNNING;
             }
         }
 

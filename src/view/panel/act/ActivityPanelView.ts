@@ -11,7 +11,7 @@ import {ActivityRender} from "../render/ActivityRender";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {Modaler} from "../../admin/components/modal/modal";
 import {NoticePanel} from "./NoticePanel";
-import {arrUniqueFilter} from "../../../utils/JsFunc";
+import {arrUniqueFilter, arrMinElem, arrMix2Elem} from "../../../utils/JsFunc";
 import {StartingLine} from "../component/startingLine/StartingLine";
 @Component({
     template: require('./activity-panel.html'),
@@ -158,6 +158,7 @@ export class ActivityPanelView extends BasePanelView {
             .on(`${CommandId.fadeOutActivityPanel}`, (param)=> {
                 this.activityRender.fadeOut();
             })
+
             .on(`${CommandId.setGameComing}`, (param)=> {
                 this.activityRender.setComing(param.gameId);
             })
@@ -308,6 +309,25 @@ export class ActivityPanelView extends BasePanelView {
             console.log(res);
             this.playerDocArrSL[res.idx] = res.playerDoc;
         })
+    }
+
+    onReverseTeam() {
+        console.log('onReverseTeam');
+        this.isStartingLineDialog = false;
+        this.playerDocArrSL = this.playerDocArrSL.reverse();
+        this.isStartingLineDialog = true;
+    }
+
+    onMix2() {
+        this.isStartingLineDialog = false;
+        // this.playerDocArrSL; arrMinElem()
+        // arrMinElem()
+        var teamA = this.playerDocArrSL.slice(0, 4);
+        var teamB = this.playerDocArrSL.slice(4, 8);
+        console.log('teamA', teamA.length, 'teamB', teamB.length);
+        arrMix2Elem(teamA, teamB);
+        this.playerDocArrSL = teamA.concat(teamB);
+        this.isStartingLineDialog = true;
     }
 
     onPickExGamePlayer() {
