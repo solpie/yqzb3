@@ -13,6 +13,7 @@ export class NewPlayerXLSX extends BaseXLSX {
             this.playerDoc.height = this.col('D').v;
             PlayerInfo.setStyleFromStr(this.playerDoc, this.col('E').v);
             this.playerDoc.size = this.col('F').v;
+            this.playerDoc.eloScore = 2000;
         }
     }
 

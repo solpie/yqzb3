@@ -43,6 +43,8 @@ export class Rank extends VueEx {
                         playerDoc.section = sobj[1];
                         break;
                     }
+                    else//D-
+                        playerDoc.section = sobj[1];
                 }
             }
         });
