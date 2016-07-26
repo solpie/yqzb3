@@ -17,9 +17,14 @@ export class Rank extends VueEx {
         this.post('/db/player', {}, (data)=> {
             var playerMap = data.PlayerMap;
             this.playerDocArr = mapToArr(playerMap).sort(descendingProp('eloScore'));
+            var p3 = [];
             for (var i = 0; i < this.playerDocArr.length; i++) {
                 var playerDoc = this.playerDocArr[i];
                 var s = playerDoc.eloScore;
+                playerDoc.gameCount = PlayerInfo.gameCount(playerDoc);
+                if (playerDoc.gameCount > 3) {
+                    p3.push(playerDoc);
+                }
                 var sections = [
                     [2624, 'S+'],
                     [2528, 'S'],
@@ -47,6 +52,7 @@ export class Rank extends VueEx {
                         playerDoc.section = sobj[1];
                 }
             }
+            this.playerDocArr = p3;
         });
     }
 

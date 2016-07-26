@@ -31,7 +31,6 @@ export class RankRender {
             this.ctn.addChild(title);
         }
 
-
         var curRoundTitle = new createjs.Bitmap('/img/panel/act/rankTitle.png');
         curRoundTitle.x = (this.stageWidth - 1200) * .5;
         curRoundTitle.y = 20;
@@ -58,8 +57,10 @@ export class RankRender {
                 var avatar = new createjs.Bitmap(playerData.avatar);
                 avatar.x = item.x + 10;
                 avatar.y = item.y + 10;
-                var scale = 70 / avatar.getBounds().height;
-                avatar.scaleX = avatar.scaleY = scale;
+                if (avatar.getBounds()) {
+                    var scale = 70 / avatar.getBounds().height;
+                    avatar.scaleX = avatar.scaleY = scale;
+                }
                 this.ctn.addChild(avatar);
 
                 var nameLabel = new createjs.Text(playerData.name, "28px Arial", "#fff");
@@ -97,7 +98,6 @@ export class RankRender {
                 rankPos.y = nameLabel.y;
                 this.ctn.addChild(rankPos);
             }
-
         });
 
         createjs.Tween.get(this.ctn)

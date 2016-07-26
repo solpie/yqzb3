@@ -104,23 +104,23 @@ export class EventPanel {
         }
 
         if (!this.fireFx) {
-            var imgArr = [];
-            var drop = 3;
-            for (var i = 0; i < 90 / drop; i++) {
-                imgArr.push('/img/panel/stage/win/fx/fire_' + pad(i * drop, 5) + '.png');
-            }
-            console.log(imgArr[0]);
-            var sheet = new createjs.SpriteSheet({
-                images: imgArr,
-                frames: {width: 599, height: 850},
-                // framerate: 1,
-                animations: {
-                    loop: [0, (90 / drop) - 1]
-                }
-            });
-            this.fireFx = new createjs.Sprite(sheet, "loop");
-            this.fireFx.x = -132;
-            this.fireFx.y = -135;
+            // var imgArr = [];
+            // var drop = 3;
+            // for (var i = 0; i < 90 / drop; i++) {
+            //     imgArr.push('/img/panel/stage/win/fx/fire_' + pad(i * drop, 5) + '.png');
+            // }
+            // console.log(imgArr[0]);
+            // var sheet = new createjs.SpriteSheet({
+            //     images: imgArr,
+            //     frames: {width: 599, height: 850},
+            //     // framerate: 1,
+            //     animations: {
+            //         loop: [0, (90 / drop) - 1]
+            //     }
+            // });
+            // this.fireFx = new createjs.Sprite(sheet, "loop");
+            // this.fireFx.x = -132;
+            // this.fireFx.y = -135;
         }
 
         for (var i = start; i < start + 4; i++) {
@@ -135,13 +135,13 @@ export class EventPanel {
                 if (bound)
                     playerCard.cache(bound.x, bound.y, bound.width, bound.height);
                 if (isMvp) {
-                    this.fireFx.parent.addChild(this.fireFx);
+                    // this.fireFx.parent.addChild(this.fireFx);
                 }
             });
             playerCard.x = i * 390;
             if (pInfo.isMvp) {
                 playerCard.y = -30;
-                playerCard.addChild(this.fireFx)
+                // playerCard.addChild(this.fireFx)
             }
             else
                 playerCard.y = 0;

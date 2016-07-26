@@ -55,6 +55,14 @@ export function arrUniqueFilter(el, i, a):boolean {
     return i == a.indexOf(el);
 }
 
+export function arrUniqueProp(arr, prop):Array<any> {
+    var m:any = {};
+    for (var i = 0; i < arr.length; i++) {
+        m[arr[i][prop]] = arr[i];
+    }
+    return mapToArr(m);
+}
+
 export function arrMaxElem(arr) {
     return Math.max.apply(Math, arr);
 }
@@ -68,6 +76,7 @@ export function loadImg(path1, callback) {
     img.onload = callback;
     img.src = path1;
 }
+
 
 export function loadImgArr(pathArr, callback) {
     var count = pathArr.length;
@@ -85,6 +94,7 @@ export function loadImgArr(pathArr, callback) {
         img.src = p;
     }
 }
+
 export function combineArr(arr, num) {
     var r = [];
     (function f(t, a, n) {

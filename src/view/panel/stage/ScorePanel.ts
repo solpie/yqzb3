@@ -207,6 +207,8 @@ export class ScorePanel {
         };
 
         var playTimer = ()=> {
+            if (this.timerId)
+                clearInterval(this.timerId);
             this.timerId = setInterval(()=> {
                 this.timeOnSec++;
                 this.timeText.text = formatSecond(this.timeOnSec);

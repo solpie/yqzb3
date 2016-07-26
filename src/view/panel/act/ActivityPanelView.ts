@@ -11,7 +11,7 @@ import {ActivityRender} from "../render/ActivityRender";
 import {PlayerInfo} from "../../../model/PlayerInfo";
 import {Modaler} from "../../admin/components/modal/modal";
 import {NoticePanel} from "./NoticePanel";
-import {arrUniqueFilter, arrMinElem, arrMix2Elem} from "../../../utils/JsFunc";
+import {arrUniqueFilter, arrMix2Elem, arrUniqueProp} from "../../../utils/JsFunc";
 import {StartingLine} from "../component/startingLine/StartingLine";
 @Component({
     template: require('./activity-panel.html'),
@@ -92,6 +92,7 @@ export class ActivityPanelView extends BasePanelView {
     pickExGameIdArr:number[];
     exGamePlayerIdArr:number[];
 
+    //pick player doc arr
     playerDocArr:any = [];
     //换人
     playerDocArrSL:any;
@@ -142,7 +143,6 @@ export class ActivityPanelView extends BasePanelView {
             .on(`${CommandId.fadeInNextActivity}`, (param)=> {
                 this.activityRender.nextPage();
             })
-
 
             .on(`${CommandId.fadeInActivityExGame}`, (param)=> {
                 var gameDocArr = param.gameDocArr;
@@ -260,12 +260,10 @@ export class ActivityPanelView extends BasePanelView {
         this.$http.get(`/admin/game/delete/${this.gameSelected}`, (sus)=> {
             if (sus) {
                 alert("删除成功 ")
-
             }
             else {
                 alert("删除失败")
             }
-
         });
         this.isDeleteDialog = false;
     }
@@ -307,7 +305,9 @@ export class ActivityPanelView extends BasePanelView {
             playerId: playerId
         }, (res)=> {
             console.log(res);
+            this.isStartingLineDialog = false;
             this.playerDocArrSL[res.idx] = res.playerDoc;
+            this.isStartingLineDialog = true;
         })
     }
 
@@ -334,12 +334,12 @@ export class ActivityPanelView extends BasePanelView {
         if (!this.pickExGameIdArr)
             this.pickExGameIdArr = [];
         this.pickExGameIdArr.push(this.gameSelected);
-        this.pickExGameIdArr = this.pickExGameIdArr.filter(arrUniqueFilter);
+        this.pickExGameIdArr = this.pickExGameIdArr.sort().filter(arrUniqueFilter);
         console.log('ex pickGameIdArr:', this.pickExGameIdArr);
         this.post('/db/game/player', {gameIdArr: this.pickExGameIdArr}, (res)=> {
             console.log('ex playerIdArr:', res);
             this.exGamePlayerIdArr = res.playerIdArr;
-            this.playerDocArr = res.playerDocArr;
+            this.playerDocArr = arrUniqueProp(res.playerDocArr, 'id');
         })
     }
 
@@ -376,6 +376,27 @@ export class ActivityPanelView extends BasePanelView {
         else {
             alert('没有选择比赛');
         }
+    }
+
+    onRankInPickPlayer() {
+        var playerIdArr = [];
+        for (var i = 0; i < this.playerDocArr.length; i++) {
+            var obj = this.playerDocArr[i];
+            playerIdArr.push(obj.id);
+        }
+        console.log('onRankIn pick player', playerIdArr);
+
+        if (playerIdArr.length) {
+            this.opReq(`${CommandId.cs_fadeInRankPanel}`,
+                {playerIdArr: playerIdArr},
+                (param)=> {
+                    console.log(param);
+                });
+        }
+        else {
+            alert('没有选择球员');
+        }
+
     }
 
     onRankNext() {
