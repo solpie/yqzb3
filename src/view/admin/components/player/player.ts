@@ -5,6 +5,7 @@ import {Profile} from "./profile";
 import {VueEx} from "../../../VueEx";
 import {ViewEvent} from "../../../../event/Const";
 import {NewPlayerXLSX} from "../../../../model/external/NewPlayerXLSX";
+import {ActPlayerXLSX} from "../../../../model/external/ActPlayerXLSX";
 declare var XLSX:any;
 
 @Component({
@@ -111,6 +112,45 @@ export class Player extends VueEx {
         ($('#modal-player') as any).openModal();
         this.message = "编辑球员";
         this.$broadcast(ViewEvent.PLAYER_EDIT, playerId);
+    }
+
+    onAddActivityFromExcel(e) {
+        var getPlayerIdByName = (name:string)=> {
+            for (var i = 0; i < this.playerArr.length; i++) {
+                var obj = this.playerArr[i];
+                if (obj['name'] == name) {
+                    return obj['id']
+                }
+            }
+            return null
+        };
+
+        var fr = new FileReader();
+        fr.readAsBinaryString(e.target.files[0]);
+        fr.onload = (e) => {
+            var data = (e.target as any).result;
+            var workbook = XLSX.read(data, {type: 'binary'});
+            var playerSheet = workbook.Sheets['Sheet1'];
+            var playerIdArr = [];
+            for (var i = 1; ; i++) {
+                var playerXLSX:ActPlayerXLSX = new ActPlayerXLSX(playerSheet, i);
+                if (!playerXLSX.isEmpty) {
+                    var playerId = getPlayerIdByName(playerXLSX.playerDoc.name);
+                    if (playerId) {
+                        playerIdArr.push(playerId);
+                        if (playerIdArr.length == 4) {
+                            this.pickPlayerIdArrArr.push(playerIdArr);
+                            playerIdArr = [];
+                        }
+                        console.log(playerXLSX.playerDoc.name, playerId);
+                    }
+                }
+                else
+                    break;
+            }
+
+
+        }
     }
 
     onAddPlayerFromExcel(e) {

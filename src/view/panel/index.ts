@@ -14,6 +14,8 @@ export class Panel extends VueEx {
     pid:string;
     isOp:boolean;
     panel:any;
+    is2v2:boolean;
+
 
     connect() {
         var wsUrl = `http://${host}:${wsPort}/${this.pid}`;
@@ -38,6 +40,10 @@ router.map({
         component: OpLinks,
         name: 'OpLinks'
     },
+    '/stage/2v2/:op': {
+        component: StagePanelView,
+        name: 'stage'
+    },
     '/stage/:op': {
         component: StagePanelView,
         name: 'stage'
@@ -53,11 +59,17 @@ router.map({
 router.afterEach((transition) => {
     var toPath = transition.to.path;
     router.app.isOp = /\/op/.test(toPath);
-    if (/\/stage/.test(toPath)) {
+    if (/\/stage\/2v2/.test(toPath)) {
         router.app.pid = PanelId.stagePanel;
-    } else if (/\/act/.test(toPath)) {
+        router.app.is2v2 = true;
+    }
+    else if (/\/stage/.test(toPath)) {
+        router.app.pid = PanelId.stagePanel;
+    }
+    else if (/\/act/.test(toPath)) {
         router.app.pid = PanelId.actPanel;
-    } else if (/\/screen/.test(toPath)) {
+    }
+    else if (/\/screen/.test(toPath)) {
         router.app.pid = PanelId.screenPanel;
     }
     console.log('after each!!!', toPath);

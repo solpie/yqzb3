@@ -480,4 +480,10 @@ export class ActivityPanelView extends BasePanelView {
     onNoticeOut() {
         console.log('onNoticeOut');
     }
+
+    onTimerToggle(){
+        console.log('onTimerToggle');
+        this.$http.post(`/panel/stage/${CommandId.cs_toggleTimer}`);
+    }
+
 }

@@ -66,6 +66,7 @@ export class StagePanelView extends BasePanelView {
             pid = PanelId.stagePanel;
         var io = super.ready(pid, isInitCanvas);
         this.initIO(io);
+        console.log('is2v2:', (this.$parent as any).is2v2);
     }
 
     initIO(io:any) {

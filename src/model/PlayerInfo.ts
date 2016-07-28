@@ -2,19 +2,19 @@
 import {BaseInfo, obj2Class, prop} from "./BaseInfo";
 export class PlayerDoc {
     id:number = 0;
-    name:string = '';
+    name:string = '';//昵称
     realName:string = '';
     phone:number = 0;
-    eloScore:number = 0;
+    eloScore:number = 0;//天梯分
     style:number = 0;//风林火山 1 2 3 4
     avatar:string = "";
-    height:number = 0;
-    weight:number = 0;
+    height:number = 0;//身高
+    weight:number = 0;//体重
     dtScore:number = 0;//最近一场天梯分变化
     activityId:number = 0;//赛事id
     gameRec:Array<number> = [];//比赛记录
-    loseGameCount:number = 0;
-    winGameCount:number = 0;
+    loseGameCount:number = 0;//输场
+    winGameCount:number = 0;//胜场
     size:string;//衣服尺寸
     backNumber:number = 0;//当场球衣号码
 }
@@ -98,13 +98,44 @@ export class PlayerInfo extends BaseInfo {
     }
 
     static winPercent(playerDoc) {
-        var p = playerDoc.winGameCount / PlayerInfo.gameCount(playerDoc)
+        var p = playerDoc.winGameCount / PlayerInfo.gameCount(playerDoc);
         if (!p)p = 0;
         return p;
     }
 
     static winPercentStr(playerDoc) {
         return (PlayerInfo.winPercent(playerDoc) * 100).toFixed(1) + "%"
+    }
+
+    static sections = [
+        [2624, 'S+'],
+        [2528, 'S'],
+        [2448, 'S-'],
+        [2368, 'A+'],
+        [2288, 'A'],
+        [2224, 'A-'],
+        [2160, 'B+'],
+        [2096, 'B'],
+        [2048, 'B-'],
+        [2000, 'C+'],
+        [1968, 'C'],
+        [1936, 'C-'],
+        [1904, 'D+'],
+        [1888, 'D'],
+        [1872, 'D-']
+    ];
+
+    static section(playerDoc) {
+        var sections = PlayerInfo.sections;
+        for (var j = 0; j < sections.length; j++) {
+            var sobj = sections[j];
+            if (playerDoc.eloScore > sobj[0]) {
+                playerDoc.section = sobj[1];
+                break;
+            }
+            else//D-
+                playerDoc.section = sobj[1];
+        }
     }
 
     static setStyleFromStr(playerDoc, str:string) {

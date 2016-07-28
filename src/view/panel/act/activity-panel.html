@@ -73,6 +73,8 @@
     </div>
 
     <div class="row">
+        <a class="waves-effect waves-light btn" @click="onTimerToggle">时间开关</a>
+        <br>
         倒计时：
         <br>
         提示文字（最多五个字）：<input id="cdText" v-model="cdText" style="width: 100px">
@@ -116,7 +118,8 @@
                     <img src="{{playerInfo.avatar}}" style="width: 200px">
                     {{playerInfo.name}}
                     <br>
-                    <input  id="playerSL{{$index}}" value="{{playerInfo.id}}" type="text" @keyup.enter="onQueryPlayer($index)" style="width: 75px">
+                    <input id="playerSL{{$index}}" value="{{playerInfo.id}}" type="text"
+                           @keyup.enter="onQueryPlayer($index)" style="width: 75px">
                     <br>
                     <input value="{{playerInfo.backNumber}}" type="text" @keyup.enter="onUpdatePlayerNum($index)"
                            style="width: 35px">

@@ -1,5 +1,6 @@
 import {db} from "../model/DbInfo";
 import {ExternalInfo} from "../model/external/ExternalInfo";
+import {PlayerInfo} from "../model/PlayerInfo";
 // import {Act619} from "../event/Const";
 export var dbRouter = require('express').Router();
 
@@ -16,7 +17,27 @@ dbRouter.post('/player/:playerId', function (req:any, res:any) {
         res.send({playerDoc: db.player.dataMap[playerId]});
     }
 });
+dbRouter.get('/player/wx', function (req:any, res:any) {
+    console.log('/player/wx');
+    var playerDataArr = [];
+    for (var id in db.player.dataMap) {
+        var playerDoc = db.player.dataMap[id];
+        var playerObj:any = {};
+        playerObj.phone = playerDoc.phone;
+        playerObj.name = playerDoc.name;
+        playerObj.eloScore = playerDoc.eloScore;
+        playerObj.gameCount = PlayerInfo.gameCount(playerDoc);
+        playerObj.winPercent = PlayerInfo.winPercentStr(playerDoc);
+        playerObj.section = PlayerInfo.section(playerDoc);
 
+        playerDataArr.push(playerObj);
+    }
+    var playerJson:string = JSON.stringify(playerDataArr);
+    var fs = require('fs');
+    fs.writeFile('player.json', playerJson, null, null);
+    res.sendStatus(200);
+});
+///////////////
 dbRouter.post('/act/', function (req:any, res:any) {
     if (!req.body) return res.sendStatus(400);
     res.send({activityMap: db.activity.dataMap});

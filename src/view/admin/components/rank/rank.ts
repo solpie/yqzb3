@@ -56,15 +56,23 @@ export class Rank extends VueEx {
         });
     }
 
-    onSortWinPercent() {
-        console.log('onSortWinPercent');
-    }
-
     onSortGameCount() {
         for (var p of this.playerDocArr) {
             p.gameCount = PlayerInfo.gameCount(p);
         }
         this.playerDocArr.sort(descendingProp('gameCount'));
         console.log('onSortGameCount');
+    }
+
+    onSortEloscore() {
+        this.playerDocArr.sort(descendingProp('eloScore'));
+        console.log('onSortEloscore');
+    }
+
+    onSortWinPercent() {
+        for (var p of this.playerDocArr) {
+            p.winPercent = PlayerInfo.winPercent(p);
+        }
+        this.playerDocArr.sort(descendingProp('winPercent'));
     }
 }
