@@ -3,7 +3,7 @@ import {BaseXLSX} from "./BaseXLSX";
 import {PlayerInfo} from "../PlayerInfo";
 import {EloUtil, EloConf} from "../../utils/EloUtil";
 import {db} from "../DbInfo";
-var XLSX = require('xlsx');
+export var XLSX = require('xlsx');
 class PlayerXLSX extends BaseXLSX {
     id:string;
     userName:string;
@@ -47,21 +47,21 @@ class PlayerXLSX extends BaseXLSX {
         return playerMap;
     }
 }
-class Team {
+export class Team {
     id:string;
     playerIdArr:string[] = [];
     playerInfoArr:PlayerInfo[] = [];
     isFake:boolean = false;//找不到playerid
 
-    beat(loseTeam:Team) {
+    beat(loseTeam:Team, gameId:string) {
         if (!this.isFake) {
             var winScore = EloUtil.classicMethod(this.teamEloScore(), loseTeam.teamEloScore());
-            this.saveScore(winScore, true);
-            loseTeam.saveScore(-winScore, false);
+            this.saveScore(winScore, true, gameId);
+            loseTeam.saveScore(-winScore, false, gameId);
         }
     }
 
-    saveScore(dtScore:number, isWin:boolean) {
+    saveScore(dtScore:number, isWin:boolean, gameId) {
         for (var i = 0; i < this.playerInfoArr.length; i++) {
             var playerInfo:PlayerInfo = this.playerInfoArr[i];
             playerInfo.eloScore(playerInfo.eloScore() + dtScore);
@@ -70,6 +70,10 @@ class Team {
             }
             else {
                 playerInfo.loseGameCount(playerInfo.loseGameCount() + 1);
+            }
+            playerInfo.playerData.gameRec.push(gameId);
+            if (playerInfo.name() == "卜恺") {
+                console.log('save score', playerInfo);
             }
             // if (playerInfo.gameCount() > 0) {
             //     console.log('saveScore', playerInfo.name());
@@ -198,10 +202,10 @@ export class ExternalInfo {
                     var homeTeam:Team = teamMap[gameXLSX.homeTeamId];
                     var guestTeam:Team = teamMap[gameXLSX.guestTeamId];
                     if (Number(gameXLSX.homeTeamScore) > Number(gameXLSX.guestTeamScore)) {
-                        homeTeam.beat(guestTeam);
+                        homeTeam.beat(guestTeam, gameXLSX.gameId);
                     }
                     else
-                        guestTeam.beat(homeTeam);
+                        guestTeam.beat(homeTeam, gameXLSX.gameId);
                 }
 
                 var playerInfoMap:any = {};
@@ -240,10 +244,10 @@ export class ExternalInfo {
                 }
                 // console.log("homeTeam", homeTeam, homeTeam.teamEloScore(), 'guestTeam', guestTeam, guestTeam.teamEloScore());
                 if (gameXLSX.homeTeamScore > gameXLSX.guestTeamScore) {
-                    homeTeam.beat(guestTeam);
+                    homeTeam.beat(guestTeam, gameXLSX.gameId);
                 }
                 else
-                    guestTeam.beat(homeTeam);
+                    guestTeam.beat(homeTeam, gameXLSX.gameId);
                 // console.log("homeTeam", homeTeam.teamEloScore(), 'guestTeam', guestTeam.teamEloScore());
                 var gameDoc = {
                     id: gameXLSX.id,

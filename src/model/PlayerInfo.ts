@@ -16,6 +16,7 @@ export class PlayerDoc {
     loseGameCount:number = 0;//输场
     winGameCount:number = 0;//胜场
     size:string;//衣服尺寸
+    section:string;
     backNumber:number = 0;//当场球衣号码
 }
 export class PlayerInfo extends BaseInfo {

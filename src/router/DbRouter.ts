@@ -1,6 +1,7 @@
 import {db} from "../model/DbInfo";
 import {ExternalInfo} from "../model/external/ExternalInfo";
 import {PlayerInfo} from "../model/PlayerInfo";
+import {Hp3x3} from "../model/external/3x3/Hp3x3";
 // import {Act619} from "../event/Const";
 export var dbRouter = require('express').Router();
 
@@ -76,5 +77,11 @@ dbRouter.get('/external/import', function (req:any, res:any) {
     //https://github.com/SheetJS/js-xlsx
     console.log('/db/external');
     ExternalInfo.importHuiTi();
+    res.sendStatus(200);
+});
+dbRouter.get('/external/import/3x3', function (req:any, res:any) {
+    //https://github.com/SheetJS/js-xlsx
+    console.log('/db/external/import/3x3');
+    Hp3x3.importXLSX();
     res.sendStatus(200);
 });

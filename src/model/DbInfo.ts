@@ -5,6 +5,7 @@ import {EloConf} from "../utils/EloUtil";
 import {ExternalInfo} from "./external/ExternalInfo";
 import {GameInfo} from "./GameInfo";
 import {TeamInfo} from "./TeamInfo";
+import {Hp3x3} from "./external/3x3/Hp3x3";
 export var db:any;
 var Datastore = require('nedb');
 
@@ -518,6 +519,10 @@ export function initDB() {
     db.playerHuiTi = new BaseDB({filename: huitiPlayerDbPath, autoload: true, indexName: '_id'});
 
     db.externalInfo = new ExternalInfo();
+    db.externalInfo.setup3x3();
+
+    ///3x3
+
     // var ProtoBuf = require('protobufjs');
     // var builder = ProtoBuf.loadProtoFile(_path('app/proto/player.proto'));
     // var Player:any = builder.build('Player');
