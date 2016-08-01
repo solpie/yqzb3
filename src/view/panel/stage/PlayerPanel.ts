@@ -5,23 +5,34 @@ import {StagePlayerCard} from "../render/PlayerRender";
 export class PlayerPanel {
     playerCardArr:StagePlayerCard[];
 
-    constructor(parent:StagePanelView) {
+    constructor(parent:StagePanelView, is2v2:boolean = false) {
         this.playerCardArr = [];
         var ctn = parent.scorePanel.ctn;
         var playerInfo = new PlayerInfo();
         var px = 24;
         var py = 12;
         var invert = 150;
-        for (var i = 0; i < 4; i++) {
+        var playerAmount;
+        if (is2v2)
+            playerAmount = 2;
+        else
+            playerAmount = 4;
+
+        for (var i = 0; i < playerAmount; i++) {
             var playerCard = new StagePlayerCard(playerInfo, 1, true, true);
             playerCard.delayShow(i * 600);
             playerCard.x = px + i * invert;
             playerCard.y = py;
+
+            if(is2v2)
+            {
+                playerCard.x += 300;
+            }
             this.playerCardArr.push(playerCard);
             ctn.addChild(playerCard)
         }
         px = 1247;
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < playerAmount; i++) {
             var playerCard = new StagePlayerCard(playerInfo, 1, false, true);
             playerCard.delayShow((3 - i) * 600);
             playerCard.x = px + i * invert;

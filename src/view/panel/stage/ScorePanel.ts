@@ -26,7 +26,7 @@ export class ScorePanel {
     timerState:number;
     ctn:Container;
 
-    constructor(parent:StagePanelView) {
+    constructor(parent:StagePanelView, is2v2:boolean = false) {
         this.timeOnSec = 0;
 
         var scoreCtn = new createjs.Container();
@@ -35,7 +35,12 @@ export class ScorePanel {
 
         parent.stage.addChild(scoreCtn);
 
-        var bg = new createjs.Bitmap('/img/panel/stage/scoreBg.png');
+        var bg;
+        if (is2v2)
+            bg = new createjs.Bitmap('/img/panel/stage/scoreBg2v2.png');
+        else
+            bg = new createjs.Bitmap('/img/panel/stage/scoreBg.png');
+
         bg.x = 1;
         scoreCtn.addChild(bg);
 

@@ -66,7 +66,6 @@ export class StagePanelView extends BasePanelView {
             pid = PanelId.stagePanel;
         var io = super.ready(pid, isInitCanvas);
         this.initIO(io);
-        console.log('is2v2:', (this.$parent as any).is2v2);
     }
 
     initIO(io:any) {
@@ -147,10 +146,12 @@ export class StagePanelView extends BasePanelView {
     }
 
     initStage(gameDoc:any) {
+        console.log('is2v2:', (this.$parent as any).is2v2);
+        var is2v2 = (this.$parent as any).is2v2;
         this.isInit = true;
-        this.scorePanel = new ScorePanel(this);
+        this.scorePanel = new ScorePanel(this, is2v2);
         this.scorePanel.init(gameDoc);
-        this.playerPanel = new PlayerPanel(this);
+        this.playerPanel = new PlayerPanel(this,is2v2);
         this.playerPanel.init(gameDoc);
         this.gameId = gameDoc.id;
         this.eventPanel = new EventPanel(this);
@@ -218,6 +219,10 @@ export class StagePanelView extends BasePanelView {
         this.opReq(`${CommandId.cs_startingLine}`,
             {playerIdArr: playerIdArr, backNumArr: backNumArr}
         );
+    }
+
+    on2v2() {
+        console.log('is2v2:', (this.$parent as any).is2v2);
     }
 
     onSetEloScore(idx) {

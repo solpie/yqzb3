@@ -22,6 +22,8 @@ export class Panel extends VueEx {
         console.log("init panel!!!", this.pid, this.isOp, wsUrl);
         return io.connect(wsUrl)
     }
+
+
 }
 
 //router
