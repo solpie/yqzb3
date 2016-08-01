@@ -28,6 +28,7 @@ dbRouter.get('/player/wx', function (req:any, res:any) {
         playerObj.name = playerDoc.name;
         playerObj.eloScore = playerDoc.eloScore;
         playerObj.gameCount = PlayerInfo.gameCount(playerDoc);
+        playerObj.winAmount = playerDoc.winGameCount;
         playerObj.winPercent = PlayerInfo.winPercentStr(playerDoc);
         playerObj.section = PlayerInfo.section(playerDoc);
 

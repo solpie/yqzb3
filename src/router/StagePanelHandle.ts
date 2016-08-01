@@ -77,6 +77,10 @@ export class StagePanelHandle {
                 this.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
                 screenPanelHanle.io.emit(`${CommandId.updateRightScore}`, ScParam({rightScore: this.gameInfo.rightScore}));
             };
+            cmdMap[`${CommandId.cs_unLimitScore}`] = (param) => {
+                this.gameInfo.unLimitScore = param.unLimitScore;
+                this.io.emit(`${CommandId.unLimitScore}`, ScParam({unLimitScore: this.gameInfo.unLimitScore}));
+            };
 
             //// foul
             cmdMap[`${CommandId.cs_addRightFoul}`] = () => {
@@ -95,6 +99,7 @@ export class StagePanelHandle {
                 var leftFoul:number = this.gameInfo.minLeftFoul();
                 screenPanelHanle.io.emit(`${CommandId.updateLeftFoul}`, ScParam({leftFoul: leftFoul}));
             };
+
 
             // cmdMap[`${CommandId.cs_fadeInComingActivity}`] = () => {
             //     screenPanelHanle.io.emit(`${CommandId.fadeInComingActivity}`);

@@ -137,6 +137,7 @@ export class PlayerInfo extends BaseInfo {
             else//D-
                 playerDoc.section = sobj[1];
         }
+        return playerDoc.section;
     }
 
     static setStyleFromStr(playerDoc, str:string) {

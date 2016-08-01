@@ -18,27 +18,33 @@ export class PlayerPanel {
         else
             playerAmount = 4;
 
-        for (var i = 0; i < playerAmount; i++) {
+        for (var i = 0; i < 4; i++) {
             var playerCard = new StagePlayerCard(playerInfo, 1, true, true);
             playerCard.delayShow(i * 600);
             playerCard.x = px + i * invert;
             playerCard.y = py;
 
-            if(is2v2)
-            {
-                playerCard.x += 300;
-            }
+
             this.playerCardArr.push(playerCard);
-            ctn.addChild(playerCard)
+            ctn.addChild(playerCard);
+            if (is2v2) {
+                playerCard.x += 300;
+                if (i > 1)
+                    playerCard.parent.removeChild(playerCard);
+            }
         }
         px = 1247;
-        for (var i = 0; i < playerAmount; i++) {
+        for (var i = 0; i < 4; i++) {
             var playerCard = new StagePlayerCard(playerInfo, 1, false, true);
             playerCard.delayShow((3 - i) * 600);
             playerCard.x = px + i * invert;
             playerCard.y = py;
             this.playerCardArr.push(playerCard);
-            ctn.addChild(playerCard)
+            ctn.addChild(playerCard);
+            if (is2v2) {
+                if (i > 1)
+                    playerCard.parent.removeChild(playerCard);
+            }
         }
         // parent.scorePanel.ctn.addChild(ctn);
     }

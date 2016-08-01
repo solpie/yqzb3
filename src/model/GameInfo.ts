@@ -57,7 +57,7 @@ export class GameInfo {
         var leftPlayerArr = this.getLeftTeam();
         for (var i = 0; i < leftPlayerArr.length; i++) {
             var obj:PlayerInfo = leftPlayerArr[i];
-            if (obj) {
+            if (obj && obj.eloScore()) {
                 count++;
                 sum += obj.eloScore();
             }
@@ -68,7 +68,7 @@ export class GameInfo {
         var playerArr = this.getRightTeam();
         for (var i = 0; i < playerArr.length; i++) {
             var obj:PlayerInfo = playerArr[i];
-            if (obj) {
+            if (obj && obj.eloScore()) {
                 count++;
                 sum += obj.eloScore();
             }

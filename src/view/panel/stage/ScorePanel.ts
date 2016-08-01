@@ -189,8 +189,8 @@ export class ScorePanel {
     }
 
     setAvgEloScore(data) {
-        this.leftAvgEloScoreText.text = data.left + "";
-        this.rightAvgEloScoreText.text = data.right + "";
+        this.leftAvgEloScoreText.text = (data.left || 0) + "";
+        this.rightAvgEloScoreText.text = (data.right || 0) + "";
 
         // this.leftAvgEloScoreText.text = "1969";
         // this.rightAvgEloScoreText.text = data.right + "";

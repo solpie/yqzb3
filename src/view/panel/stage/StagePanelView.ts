@@ -37,12 +37,14 @@ import {ScorePanel} from "./ScorePanel";
             required: true,
             default: 1
         },
+        isUnlimitScore: {},
         playerInfoArr: {
             type: Array,
             default: [1, 2, 3, 4, 5, 6, 7, 8]
         }
     },
     watch: {
+        isUnlimitScore: 'onIsUnlimitScoreChanged',
         gameTh: 'onGameThChanged'
     }
 })
@@ -59,6 +61,8 @@ export class StagePanelView extends BasePanelView {
 
 
     isSubmited:boolean = false;
+    isUnlimitScore:boolean = false;
+    is2v2:boolean = false;
 
 
     ready(pid?:string, isInitCanvas:boolean = true) {
@@ -128,7 +132,11 @@ export class StagePanelView extends BasePanelView {
                 var teamInfo = param.teamInfo;
                 var mvpIdx = param.mvpIdx;
                 var mvpId = param.mvpId;
-                this.eventPanel.fadeInWinPanel(teamInfo, mvpIdx, mvpId);
+                if (this.is2v2)
+                    this.eventPanel.fadeInWinPanel2v2(teamInfo, mvpIdx, mvpId);
+                else
+                    this.eventPanel.fadeInWinPanel(teamInfo, mvpIdx, mvpId);
+
                 setTimeout(()=> {
                     this.onHideWin();
                 }, 20000)
@@ -147,11 +155,11 @@ export class StagePanelView extends BasePanelView {
 
     initStage(gameDoc:any) {
         console.log('is2v2:', (this.$parent as any).is2v2);
-        var is2v2 = (this.$parent as any).is2v2;
+        this.is2v2 = (this.$parent as any).is2v2;
         this.isInit = true;
-        this.scorePanel = new ScorePanel(this, is2v2);
+        this.scorePanel = new ScorePanel(this, this.is2v2);
         this.scorePanel.init(gameDoc);
-        this.playerPanel = new PlayerPanel(this,is2v2);
+        this.playerPanel = new PlayerPanel(this, this.is2v2);
         this.playerPanel.init(gameDoc);
         this.gameId = gameDoc.id;
         this.eventPanel = new EventPanel(this);
@@ -221,10 +229,6 @@ export class StagePanelView extends BasePanelView {
         );
     }
 
-    on2v2() {
-        console.log('is2v2:', (this.$parent as any).is2v2);
-    }
-
     onSetEloScore(idx) {
         var eloScore = Number(this.getElem("#eloScore" + idx).value);
         this.playerPanel.setEloScore(idx, eloScore);
@@ -258,6 +262,12 @@ export class StagePanelView extends BasePanelView {
     onGameThChanged(val) {
         console.log('onGameThChanged', val);
         this.opReq(`${CommandId.cs_setGameTh}`, {gameTh: val});
+    }
+
+    onIsUnlimitScoreChanged(val) {
+        var unLimitScore = Number(val);
+        console.log('onIsUnlimitScoreChanged', val, unLimitScore);
+        this.opReq(`${CommandId.cs_unLimitScore}`, {unLimitScore: unLimitScore});
     }
 
     onShowWin() {

@@ -297,9 +297,8 @@ class GameDB extends BaseDB {
                 }
             });
         }
-        else {
+        else
             console.log('closed game can not modify!!!', gameId);
-        }
     }
 
     submitGame(gameId, isBlueWin, mvp, blueScore, redScore, playerRecArr, callback) {
