@@ -13,6 +13,7 @@ export class OpLinks {
             links: [
                 {title: "activity op", url: "/panel/#!/act/op"},
                 {title: "stage op", url: "/panel/#!/stage/op"},
+                {title: "stage 2v2 op", url: "/panel/#!/stage/2v2/op"},
                 {title: "screen ob", url: "/panel/#!/screen/ob"}
             ]
         };

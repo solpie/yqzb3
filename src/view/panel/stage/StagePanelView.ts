@@ -157,6 +157,8 @@ export class StagePanelView extends BasePanelView {
         console.log('is2v2:', (this.$parent as any).is2v2);
         this.is2v2 = (this.$parent as any).is2v2;
         this.isInit = true;
+        if(this.is2v2)
+            this.isUnlimitScore = true;
         this.scorePanel = new ScorePanel(this, this.is2v2);
         this.scorePanel.init(gameDoc);
         this.playerPanel = new PlayerPanel(this, this.is2v2);

@@ -21,10 +21,12 @@ dbRouter.post('/player/:playerId', function (req:any, res:any) {
 dbRouter.get('/player/wx', function (req:any, res:any) {
     console.log('/player/wx');
     var playerDataArr = [];
-    for (var id in db.player.dataMap) {
-        var playerDoc = db.player.dataMap[id];
+    // db.playerHuiTi.dataMap
+    for (var id in db.playerHuiTi.dataMap) {
+    // for (var id in db.player.dataMap) {
+        var playerDoc = db.playerHuiTi.dataMap[id];
         var playerObj:any = {};
-        playerObj.phone = playerDoc.phone;
+        playerObj.phone = playerDoc.phone + "";
         playerObj.name = playerDoc.name;
         playerObj.eloScore = playerDoc.eloScore;
         playerObj.gameCount = PlayerInfo.gameCount(playerDoc);

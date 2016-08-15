@@ -4,7 +4,7 @@ import {base64ToPng} from "../utils/NodeJsFunc";
 import {ServerConst} from "../event/Const";
 export var adminRouter = require('express').Router();
 
-adminRouter.get('/', function (req:any, res:any) {
+adminRouter.get('/', function (req: any, res: any) {
     res.render('admin/index');
 });
 
@@ -12,7 +12,7 @@ adminRouter.get('/', function (req:any, res:any) {
 //     res.render('admin/admin-player', {playerDataArr: []});
 // });
 // post /admin/player/add
-adminRouter.post('/player/xlsx/add', function (req:any, res:any) {
+adminRouter.post('/player/xlsx/add', function (req: any, res: any) {
     if (!req.body) return res.sendStatus(400);
     var playerDocArr = req.body.playerDocArr;
     console.log('/admin/player/xlsx/add', req.body);
@@ -31,7 +31,7 @@ adminRouter.post('/player/xlsx/add', function (req:any, res:any) {
     insertPlayerDoc(playerDocArr.pop());
 });
 
-adminRouter.post('/player/add', function (req:any, res:any) {
+adminRouter.post('/player/add', function (req: any, res: any) {
     if (!req.body) return res.sendStatus(400);
 
     var playerData = req.body.playerData;
@@ -65,7 +65,7 @@ adminRouter.post('/player/add', function (req:any, res:any) {
 
 });
 
-adminRouter.post('/player/delete', function (req:any, res:any) {
+adminRouter.post('/player/delete', function (req: any, res: any) {
     if (!req.body) return res.sendStatus(400);
     var playerId = req.body.id;
     db.player.remove({id: playerId}, function (err, numRemoved) {
@@ -79,9 +79,9 @@ adminRouter.post('/player/delete', function (req:any, res:any) {
     });
 });
 
-adminRouter.post('/player/update', function (req:any, res:any) {
+adminRouter.post('/player/update', function (req: any, res: any) {
     if (!req.body) return res.sendStatus(400);
-    var playerDocUpdate:any = req.body.playerDoc;
+    var playerDocUpdate: any = req.body.playerDoc;
     console.log('/player/update', playerDocUpdate);
 
     var playerDoc = db.player.dataMap[playerDocUpdate.id];
@@ -117,7 +117,7 @@ adminRouter.post('/player/update', function (req:any, res:any) {
 });
 
 ////////////// game admin 
-adminRouter.get('/game/delete/:gameId', function (req:any, res:any) {
+adminRouter.get('/game/delete/:gameId', function (req: any, res: any) {
     var gameId = Number(req.params.gameId);
     console.log('/admin/game/delete/', gameId);
     db.game.remove({id: gameId});
@@ -126,8 +126,108 @@ adminRouter.get('/game/delete/:gameId', function (req:any, res:any) {
     });
 });
 
+adminRouter.get('/test', function (req: any, res: any) {
+    var unirest = require('unirest');
+    // var jsss = JSON.stringify({
+    //     "winUsers": [10082, 10082, 10082, 10082],
+    //     "loseUsers": [10082, 10082, 10082, 10082],
+    //     "mvp": [10082]
+    // });
+
+    // var jsss = JSON.stringify({
+    //     "winUsers": ["15502168938"],
+    //     "loseUsers": ["15692173023"],
+    //     "key": '140fe1da9eab651944c',
+    //     "secret": 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=',
+    //     "mvp": ["10082"]
+    // });
+
+    var jsss = JSON.stringify({
+        "winUsers": ["13616542277"],
+        "loseUsers": ["15692173023"],
+        "key": '140fe1da9eab651944c',
+        "secret": 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI='
+    });
+    unirest.post('http://api.yuanqi.tv/ladder/enroll_result')
+        .headers({'Accept': 'application/json', 'Content-Type': 'application/json'})
+        .send({
+            "content": jsss
+        })
+        .end(function (response) {
+            console.log(response, response.body);
+        });
+
+    var submitGame = (winPhoneArr: Array<string>, losePhoneArr: Array<string>, mvpPhone: string)=> {
+        var jsss = JSON.stringify({
+            "winUsers": winPhoneArr,
+            "loseUsers": losePhoneArr,
+            "key": '140fe1da9eab651944c',
+            "mvp": [mvpPhone],
+            "secret": 'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI='
+        });
+        unirest.post('http://api.yuanqi.tv/ladder/enroll_result')
+            .headers({'Accept': 'application/json', 'Content-Type': 'application/json'})
+            .send({
+                "content": jsss
+            })
+            .end(function (response) {
+                console.log(response, response.body);
+            });
+    };
+
+
+    /////////////
+    var isNoPhone = false;
+    var gameArr = [];
+    var getBluePhoneArr = (playerDocArr, start = 0)=> {
+        var a = [];
+        for (var i = start; i < 4 + start; i++) {
+            var playerDoc = playerDocArr[i];
+            if (!playerDoc['phone']) {
+                isNoPhone = true;
+                console.log('no phone ', playerDoc.name);
+            }
+            else
+                a.push(playerDoc.phone + "");
+        }
+        return a;
+    };
+
+    var getRedPhoneArr = (playerDocArr)=> {
+        return getBluePhoneArr(playerDocArr, 4);
+    };
+
+    for (var i = 0; i < 14; i++) {
+        var gameDoc = db.game.dataMap[43001 + i];
+        var winPhoneArr = [];
+        var losePhoneArr = [];
+        var playerDocArr = db.player.getDocArr(gameDoc.playerIdArr);
+        console.log('playerDocArr ', playerDocArr);
+        if (gameDoc.isBlue) {
+            winPhoneArr = getBluePhoneArr(playerDocArr);
+            losePhoneArr = getRedPhoneArr(playerDocArr);
+        }
+        else {
+            losePhoneArr = getBluePhoneArr(playerDocArr);
+            winPhoneArr = getRedPhoneArr(playerDocArr);
+        }
+        var mvpPhone;
+        if (db.player.dataMap[gameDoc.mvp]['phone'])
+            mvpPhone = db.player.dataMap[gameDoc.mvp].phone + "";
+
+        console.log('winPhoneArr', winPhoneArr, 'losePhoneArr', losePhoneArr, 'mvp', mvpPhone);
+        gameArr.push(gameDoc);
+        // submitGame(winPhoneArr, losePhoneArr, mvpPhone);
+    }
+    console.log(gameArr);
+    if (isNoPhone)
+        res.send('no phone');
+    else
+        res.send("ok")
+});
+
 //////////////////activity admin
-adminRouter.post('/act/add', function (req:any, res:any) {
+adminRouter.post('/act/add', function (req: any, res: any) {
     var activityId = req.body.activityId;
     var playerIdArr = db.player.getPlayerIdArrRank(req.body.playerIdArr);
     //组合球员
@@ -149,7 +249,7 @@ adminRouter.post('/act/add', function (req:any, res:any) {
         res.sendStatus(200);
     });
 });
-adminRouter.post('/act/19', function (req:any, res:any) {
+adminRouter.post('/act/19', function (req: any, res: any) {
     // if (!req.body) return res.sendStatus(400);
     // var act:any = Act619;
     // for (var gameDoc of act.gameDataArr) {
